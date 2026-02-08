@@ -1,0 +1,83 @@
+{{ define "main" }}
+  <div class="page-head">
+    <h1 class="title">{{ .Title }}</h1>
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </div>
+
+  {{/* Collect all tags from the pages in this section */}}
+  {{ $tags := slice }}
+  {{ range .Pages }}
+    {{ if .Params.tags }}
+      {{ $tags = $tags | append .Params.tags }}
+    {{ end }}
+  {{ end }}
+  {{ $tags = $tags | uniq | sort }}
+
+  <div class="lab-interface">
+    {{/* Filter Controls */}}
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-filter="all">All</button>
+      {{ range $tags }}
+        <button class="filter-btn" data-filter="{{ lower . }}">{{ . | humanize }}</button>
+      {{ end }}
+    </div>
+    <div class="lab-legend">
+      <img src="/stickers/CC0-Marmalade-Eye.png" alt="CC0 eye" class="lab-legend-icon" />
+      <span>Eye mark = CC0 / public domain</span>
+    </div>
+
+    <div class="mini-grid" id="lab-grid">
+      {{ range .Pages.ByDate.Reverse }}
+        {{/* Create a space-separated string of tags for the data attribute */}}
+        {{ $pageTags := "" }}
+        {{ if .Params.tags }}
+          {{ $lowerTags := slice }}
+          {{ range .Params.tags }}
+            {{ $lowerTags = $lowerTags | append (lower .) }}
+          {{ end }}
+          {{ $pageTags = delimit $lowerTags " " }}
+        {{ end }}
+
+        <a class="mini-card lab-item" href="{{ .RelPermalink }}" data-tags="{{ $pageTags }}">
+          {{ partial "license-stamp.html" (dict "license" .Params.license) }}
+
+          {{/* Thumbnail: prefer a bundled *thumb* resource, fallback to .Params.image */}}
+          {{ $thumb := "" }}
+          {{ if .Params.image }}
+            {{ $thumb = .Params.image }}
+          {{ end }}
+          
+          {{ $resources := .Resources.Match "*thumb*" }}
+          {{ if gt (len $resources) 0 }}
+             {{ $thumb = ($resources.GetMatch "*thumb*").RelPermalink }}
+          {{ end }}
+
+          {{ partial "thumb-placeholder.html" (dict "src" $thumb "alt" .Title "variant" "thumb-placeholder--lab" "fit" "contain") }}
+          
+          <div class="mini-meta">
+            <div class="mini-title">{{ .Title }}</div>
+            <div class="mini-date">{{ .Date.Format "Jan 2, 2006" }}</div>
+            <div class="mini-note">{{ .Summary | truncate 60 }}</div>
+            <div class="mini-tags">
+              {{ range .Params.tags }}
+                <span class="mini-tag">#{{ . }}</span>
+              {{ end }}
+            </div>
+          </div>
+        </a>
+      {{ end }}
+    </div>
+    
+    {{ if eq (len .Pages) 0 }}
+      <div class="empty-state">
+        <p>The lab is currently empty. Check back soon for starter fuel!</p>
+      </div>
+    {{ end }}
+  </div>
+
+{{ $labJs := resources.Get "js/lab-filter.js" | minify | fingerprint }}
+<script defer src="{{ $labJs.RelPermalink }}" integrity="{{ $labJs.Data.Integrity }}"></script>
+{{ end }}

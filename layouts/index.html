@@ -1,0 +1,27 @@
+{{ define "main" }}
+  {{ $home := .Site.Params.home }}
+  <section class="hero">
+    <h1 class="title">Marmalade</h1>
+    <div class="hero-box">
+      {{ $lede := $home.lede }}
+      {{ $sublede := $home.sublede }}
+      <p class="lede">{{ $lede | markdownify }}</p>
+      <p class="sublede">{{ $sublede | markdownify }}</p>
+      <div class="hero-actions">
+        <a class="btn" href="{{ .Site.Params.home.panels.source.href }}">Get the Source Files →</a>
+        <a class="btn" href="{{ .Site.Params.home.panels.community.href }}">See Community Submissions →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    {{ partial "home-panel-source.html" . }}
+    {{ partial "home-panel-community.html" . }}
+  </section>
+
+  <section class="note-row">
+    <div class="note">
+      <p>Marmalade is CC0. She belongs to everyone.</p>
+    </div>
+  </section> 
+{{ end }}

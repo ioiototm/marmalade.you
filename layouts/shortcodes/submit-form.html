@@ -1,0 +1,31 @@
+{{- $endpoint := .Get "endpoint" -}}
+{{- if not $endpoint -}}
+  {{- $endpoint = site.Params.submit.endpoint -}}
+{{- end -}}
+{{- $turnstileKey := site.Params.submit.turnstilekey -}}
+
+<form class="form submit-form" data-submit-endpoint="{{ $endpoint }}">
+  <div class="submit-honeypot" aria-hidden="true">
+    <label>Do not fill this field</label>
+    <input type="text" name="nickname" autocomplete="off" tabindex="-1" />
+  </div>
+
+  <label>Link to your work (optional)</label>
+  <input type="url" name="link" placeholder="https://..." />
+
+  <label>Your Name / Handle (optional)</label>
+  <input type="text" name="name" placeholder="@marmalade_fan" maxlength="80" />
+
+  <label>Short Note</label>
+  <textarea name="message" placeholder="What did you make? If you have no link, tell me how I can get the file." maxlength="2000"></textarea>
+
+  {{- if $turnstileKey }}
+  <div class="cf-turnstile" data-sitekey="{{ $turnstileKey }}" data-theme="light"></div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  {{- end }}
+
+  <button class="btn" type="submit">
+    Send Submission
+  </button>
+  <p class="submit-status" data-submit-status hidden></p>
+</form>

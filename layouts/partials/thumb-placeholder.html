@@ -1,0 +1,25 @@
+{{- /*
+  Renders a standard thumbnail placeholder.
+
+  Params:
+    - src: image URL (string, optional)
+    - alt: alt text (string, optional)
+    - variant: extra class for sizing, e.g. "thumb-placeholder--home" or "thumb-placeholder--lab"
+    - fit: "cover" (default) or "contain"
+*/ -}}
+{{- $src := default "" .src -}}
+{{- $alt := default "" .alt -}}
+{{- $variant := default "" .variant -}}
+{{- $fit := default "cover" .fit -}}
+
+<div class="thumb-placeholder {{ $variant }}">
+  {{- if $src -}}
+    {{- if eq $fit "contain" -}}
+      <img class="thumb-image-contain" src="{{ $src }}" alt="{{ $alt }}" loading="lazy" />
+    {{- else -}}
+      <img class="thumb-image-cover" src="{{ $src }}" alt="{{ $alt }}" loading="lazy" />
+    {{- end -}}
+  {{- else -}}
+    <span class="thumb-emoji">📦</span>
+  {{- end -}}
+</div>

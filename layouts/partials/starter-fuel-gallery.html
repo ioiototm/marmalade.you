@@ -1,0 +1,31 @@
+{{/*
+  Optional starter-fuel gallery card (currently used for the Lab section list pages).
+  Expects a dict:
+    - title
+    - subtitle
+    - items: list of { title, note, image, href }
+*/}}
+
+<div class="card mt-24">
+  <div class="panel-head">
+    <h2 class="h2">{{ .title }}</h2>
+    <span class="muted">{{ .subtitle }}</span>
+  </div>
+
+  <div class="mini-grid">
+    {{ $items := default (slice) .items }}
+    {{ if eq (len $items) 0 }}
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet.</p>
+    {{ else }}
+    {{ range $items }}
+      <a class="mini-card" href="{{ .href }}">
+        <img class="thumb" src="{{ .image }}" alt="{{ .title }}" loading="lazy" />
+        <div class="mini-meta">
+          <div class="mini-title">{{ .title }}</div>
+          <div class="mini-note">{{ .note }}</div>
+        </div>
+      </a>
+    {{ end }}
+    {{ end }}
+  </div>
+</div>

@@ -1,0 +1,8 @@
+{{- $summary := .Get "summary" -}}
+
+<details>
+  <summary><strong>{{ $summary }}</strong></summary>
+  <div class="submit-details__body">
+    {{ .Inner | .Page.RenderString }}
+  </div>
+</details>

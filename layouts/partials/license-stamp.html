@@ -1,0 +1,5 @@
+{{- $license := upper (default "" .license) -}}
+{{- $src := default "/stickers/CC0-Marmalade-Eye.png" site.Params.cc0StampSrc -}}
+{{- if eq $license "CC0" -}}
+  <img class="license-stamp" src="{{ $src }}" alt="CC0 (public domain)" loading="lazy" />
+{{- end -}}

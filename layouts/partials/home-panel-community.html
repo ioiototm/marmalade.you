@@ -1,0 +1,39 @@
+{{- $p := site.Params.home.panels.community -}}
+{{- $href := default "/community/" $p.href -}}
+{{- $title := $p.title -}}
+{{- $subtitle := $p.subtitle -}}
+{{- $count := default 4 $p.count -}}
+
+<div class="card">
+  <div class="panel-head">
+    <h2 class="h2"><a class="panel-title-link" href="{{ $href }}">{{ $title }}</a></h2>
+    <span class="muted">{{ $subtitle }}</span>
+  </div>
+
+  <div class="thumb-grid">
+    {{/* Sort data items by date descending */}}
+    {{ $remixes := default (slice) site.Data.remixes.remixes }}
+    {{ if eq (len $remixes) 0 }}
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet. Be the first to <a class="about-cta-link" href="/submit">submit</a> something!</p>
+    {{ else }}
+    {{ $remixes = sort $remixes "date" "desc" }}
+    {{ range first $count $remixes }}
+      {{ $hasLink := and .link (ne (trim .link " ") "") }}
+      {{ if $hasLink }}
+      <a class="thumb-card" href="{{ .link }}" target="_blank" rel="noopener noreferrer">
+      {{ else }}
+      <div class="thumb-card">
+      {{ end }}
+          {{ partial "license-stamp.html" (dict "license" .license) }}
+          <img src="{{ .image }}" alt="{{ .title }}" loading="lazy" />
+          <div class="thumb-label">
+            {{ .title }}
+            {{ with .date }}
+            <div class="thumb-date">{{ dateFormat "Jan 2, 2006" . }}</div>
+            {{ end }}
+          </div>
+      {{ if $hasLink }}</a>{{ else }}</div>{{ end }}
+    {{ end }}
+    {{ end }}
+  </div>
+</div>

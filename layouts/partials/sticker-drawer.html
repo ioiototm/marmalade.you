@@ -1,0 +1,33 @@
+<aside class="sticker-drawer" data-drawer hidden>
+  <div class="drawer-head">
+    <div class="drawer-title">stickers</div>
+    <div class="drawer-actions">
+      <button class="btn btn--sm" type="button" data-action="lock-stickers">lock</button>
+      <button class="btn btn--sm" type="button" data-action="reset-stickers">reset</button>
+      <button class="btn btn--sm" type="button" data-action="close-drawer">close</button>
+    </div>
+  </div>
+
+  <div class="sticker-tray" data-sticker-tray>
+    {{/* Auto-list stickers from /static/stickers so adding files updates the tray */}}
+    {{ $exts := slice ".png" ".jpg" ".jpeg" ".webp" ".gif" ".svg" }}
+    {{ range (readDir "static/stickers") }}
+      {{ if and (not .IsDir) (not (hasPrefix .Name ".")) }}
+        {{ $ext := lower (path.Ext .Name) }}
+        {{ if in $exts $ext }}
+          {{ $src := printf "/stickers/%s" .Name }}
+          {{ $label := humanize (path.BaseName .Name) }}
+          <button class="sticker-btn" type="button" data-sticker-src="{{ $src }}" aria-label="{{ $label }}">
+            <img src="{{ $src }}" alt="" />
+          </button>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  </div>
+
+  <div class="drawer-hint">
+    Tap a sticker to place it. Drag to move. Your layout is saved locally.
+  </div>
+</aside>
+
+<div class="sticker-layer" data-sticker-layer aria-hidden="true"></div>

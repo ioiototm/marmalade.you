@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="page-head">
+  <h1 class="title">{{ .Title }}</h1>
+  <div class="prose">
+    {{ .Content }}
+  </div>
+</div>
+
+<div class="community-wall">
+  {{ $remixes := default (slice) site.Data.remixes.remixes }}
+  {{ if eq (len $remixes) 0 }}
+  <div class="empty-state">
+    <p>Nothing here yet. Be the first to <a class="about-cta-link" href="/submit">submit</a> something!</p>
+  </div>
+  {{ else }}
+  {{ $remixes = sort $remixes "date" "desc" }}
+  {{ range $remixes }}
+  {{ $hasLink := and .link (ne (trim .link " ") "") }}
+  {{ $author := default "Anonymous" .author }}
+  <div class="polaroid-wrapper">
+    {{ if $hasLink }}
+    <a href="{{ .link }}" target="_blank" rel="noopener noreferrer" class="polaroid">
+    {{ else }}
+    <div class="polaroid">
+    {{ end }}
+      {{ partial "license-stamp.html" (dict "license" .license) }}
+      <div class="polaroid-image-container">
+        <img src="{{ .image }}" alt="{{ .title }}" loading="lazy">
+        <div class="tape-strip"></div>
+      </div>
+      <div class="polaroid-caption">
+        <div class="remix-title">{{ .title }}</div>
+        <div class="remix-author">by {{ $author }}</div>
+        {{ with .date }}
+        <div class="remix-date">{{ dateFormat "Jan 2, 2006" . }}</div>
+        {{ end }}
+        {{ with .note }}<div class="remix-note">{{ . }}</div>{{ end }}
+        {{ with .type }}<span class="remix-type-badge">{{ . }}</span>{{ end }}
+      </div>
+    {{ if $hasLink }}</a>{{ else }}</div>{{ end }}
+  </div>
+  {{ end }}
+  {{ end }}
+</div>
+
+{{ end }}

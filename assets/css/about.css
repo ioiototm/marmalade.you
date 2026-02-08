@@ -1,0 +1,97 @@
+/* About Page Navigation */
+.about-nav {
+    background-color: #fff;
+    border: 2px solid var(--line);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--solid-shadow);
+    transform: rotate(-1deg);
+    max-width: 400px;
+    border-radius: var(--radius-sm);
+}
+
+.about-nav p {
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+}
+
+.about-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.about-nav a {
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 2px solid var(--accent);
+    font-weight: bold;
+    font-family: var(--font-body);
+}
+
+.about-nav a:hover {
+    background-color: var(--accent);
+    color: var(--ink);
+}
+
+/* About page CTA link */
+
+.cc0-inline {
+    height: 1em;
+    width: auto;
+    vertical-align: -0.12em;
+    margin: 0 0.2em;
+}
+
+/* Tape Divider */
+.tape-divider {
+    border: none;
+    height: 15px;
+    background: repeating-linear-gradient(
+        45deg,
+        #ddd,
+        #ddd 10px,
+        #eee 10px,
+        #eee 20px
+    );
+    opacity: 0.6;
+    margin: 2rem 0;
+    transform: rotate(-1deg);
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='black' /%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='black' /%3E%3C/svg%3E");
+    /* Rough edges via clip-path if mask doesn't work well, but let's try simple first */
+}
+
+/* Sticker Floats */
+.sticker-float-right {
+    float: right;
+    margin: 0 0 20px 20px;
+}
+
+.sticker-float-left {
+    float: left;
+    margin: 0 20px 20px 0;
+}
+
+@media (max-width: 600px) {
+    .sticker-float-right, .sticker-float-left {
+        float: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+    }
+}
+
+/* Anchor offset for in-page jumps */
+#who,
+#origin,
+#philosophy,
+#rules {
+    scroll-margin-top: 90px;
+}

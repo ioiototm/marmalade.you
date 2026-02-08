@@ -1,0 +1,51 @@
+{{ define "main" }}
+<div class="lab-single-container">
+  <a href="/lab/" class="back-link">← Back to Lab</a>
+
+  <article class="card lab-item-detail">
+    {{ partial "license-stamp.html" (dict "license" .Params.license) }}
+    <header class="lab-header">
+      <h1 class="h1">{{ .Title }}</h1>
+      <div class="lab-meta">
+        Published on {{ .Date.Format "January 2, 2006" }}
+      </div>
+      <div class="lab-tags">
+        {{ range .Params.tags }}
+          <span class="tag">{{ . }}</span>
+        {{ end }}
+      </div>
+    </header>
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    {{ if .Params.source }}
+    {{/* Preview gallery — filled dynamically from API */}}
+    {{ $api := site.Params.files.api }}
+    <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"></div>
+
+    {{/* Dynamic downloads from files API */}}
+    <div class="downloads-section" data-downloads="{{ .Params.source }}" data-api="{{ $api }}">
+      <h2 class="h2">Downloads</h2>
+      <p class="muted">Loading versions…</p>
+    </div>
+    {{ else if .Params.downloads }}
+    <div class="downloads-section">
+      <h2 class="h2">Downloads</h2>
+      <ul class="download-list">
+        {{ range .Params.downloads }}
+        <li>
+          <a href="{{ .url }}" class="download-button" download>
+            <span class="file-name">{{ .name }}</span>
+            {{ if .size }}<span class="file-size">({{ .size }})</span>{{ end }}
+            <span class="download-icon">↓</span>
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

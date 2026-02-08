@@ -1,0 +1,56 @@
+baseURL = "http://marmalade.you/"
+languageCode = "en-gb"
+title = "Marmalade"
+enableRobotsTXT = true
+
+[params]
+  tagline = "A CC0 mascot, starter files, and community remixes."
+  modeLabel = "decorate"
+  cc0StampSrc = "/stickers/CC0-Marmalade-Eye.png"
+
+  [params.home]
+    lede = "Marmalade is a CC0 mascot you can use in whatever you're making."
+    sublede = "Grab some starter files, remix her, or just get inspired."
+
+    [params.home.panels]
+      [params.home.panels.source]
+        title = "The Source"
+        subtitle = ""
+        href = "/lab/"
+        count = 4
+
+      [params.home.panels.community]
+        title = "In The Wild"
+        subtitle = ""
+        href = "/community/"
+        count = 4
+
+  [params.submit]
+    endpoint = "https://submit.marmalade.you/api/collections/submissions/records"
+    turnstilekey = "0x4AAAAAACY8Y0bNFvjGfGtf"
+
+  [params.files]
+    api = "https://files.marmalade.you/api"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[menu]
+  [[menu.main]]
+    name = "The Source"
+    url = "/lab/"
+    weight = 10
+  [[menu.main]]
+    name = "In The Wild"
+    url = "/community/"
+    weight = 20
+  [[menu.main]]
+    name = "Submit"
+    url = "/submit/"
+    weight = 30
+  [[menu.main]]
+    name = "Who Is She?"
+    url = "/about/"
+    weight = 40

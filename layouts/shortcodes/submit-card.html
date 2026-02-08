@@ -1,0 +1,14 @@
+{{- $title := .Get "title" -}}
+{{- $subtitle := .Get "subtitle" -}}
+{{- $class := .Get "class" -}}
+
+<section class="card{{ with $class }} {{ . }}{{ end }}">
+  <div class="panel-head">
+    <h2>{{ $title }}</h2>
+    {{ with $subtitle }}<span class="muted">{{ . }}</span>{{ end }}
+  </div>
+
+  <div class="submit-card__body">
+    {{ .Inner }}
+  </div>
+</section>

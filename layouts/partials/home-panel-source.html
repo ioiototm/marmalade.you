@@ -1,0 +1,44 @@
+{{- $p := site.Params.home.panels.source -}}
+{{- $href := default "/lab/" $p.href -}}
+{{- $title := default $p.title -}}
+{{- $subtitle := $p.subtitle -}}
+{{- $count := default 4 $p.count -}}
+
+<div class="card">
+  <div class="panel-head">
+    <h2 class="h2"><a class="panel-title-link" href="{{ $href }}">{{ $title }}</a></h2>
+    <span class="muted">{{ $subtitle }}</span>
+  </div>
+
+  <div class="mini-grid">
+    {{/* Show newest items (recently added/edited) */}}
+    {{ $labPages := (where .Site.RegularPages "Section" "lab").ByLastmod.Reverse }}
+    {{ if eq (len $labPages) 0 }}
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet.</p>
+    {{ else }}
+    {{ range first $count $labPages }}
+      <a class="mini-card" href="{{ .RelPermalink }}">
+        {{ partial "license-stamp.html" (dict "license" .Params.license) }}
+
+        {{/* Thumbnail */}}
+        {{ $thumb := "" }}
+        {{ if .Params.image }}
+          {{ $thumb = .Params.image }}
+        {{ end }}
+        {{ $resources := .Resources.Match "*thumb*" }}
+        {{ if gt (len $resources) 0 }}
+          {{ $thumb = ($resources.GetMatch "*thumb*").RelPermalink }}
+        {{ end }}
+
+        {{ partial "thumb-placeholder.html" (dict "src" $thumb "alt" .Title "variant" "thumb-placeholder--home" "fit" "cover") }}
+
+        <div class="mini-meta">
+          <div class="mini-title">{{ .Title }}</div>
+          <div class="mini-date">{{ .Lastmod.Format "Jan 2, 2006" }}</div>
+          <div class="mini-note">{{ .Summary | truncate 40 }}</div>
+        </div>
+      </a>
+    {{ end }}
+    {{ end }}
+  </div>
+</div>

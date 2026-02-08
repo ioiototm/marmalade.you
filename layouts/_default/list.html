@@ -1,0 +1,25 @@
+{{ define "main" }}
+  <article class="card">
+    <h1 class="h1">{{ .Title }}</h1>
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </article>
+
+  {{ if eq .Section "lab" }}
+    {{ $g := site.Data.gallery }}
+    {{ partial "starter-fuel-gallery.html" $g.starterFuel }}
+  {{ end }}
+
+  {{ if .Pages }}
+    <section class="grid">
+      {{ range .Pages }}
+        <a class="card card-link" href="{{ .RelPermalink }}">
+          <div class="kicker">{{ .Section }}</div>
+          <h2 class="h2">{{ .Title }}</h2>
+          <p class="muted">{{ .Summary }}</p>
+        </a>
+      {{ end }}
+    </section>
+  {{ end }}
+{{ end }}

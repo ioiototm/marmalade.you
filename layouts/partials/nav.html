@@ -1,0 +1,23 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <a class="brand-link" href="/" id="site-title">{{ .Site.Title }}</a>
+    </div>
+
+    <nav class="nav">
+      {{ range .Site.Menus.main }}
+        <a class="navlink" href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
+
+    <div class="actions">
+      <div class="identity-widget">
+        <span class="identity-label">Hello,</span>
+        <input type="text" id="identity-input" placeholder="Guest" maxlength="15" autocomplete="off">
+      </div>
+      <button class="decorate" type="button" data-action="toggle-decorate" aria-pressed="false">
+        ✏️ <span class="decorate-label">decorate</span>
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,21 @@
+# Hugo build output
+public/
+resources/_gen/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+*.bak
+
+# Node (if ever used for tooling)
+node_modules/
+
+
+# Hugo lock
+.hugo_build.lock
