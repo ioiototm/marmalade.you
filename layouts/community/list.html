@@ -34,7 +34,7 @@
         {{ with .date }}
         <div class="remix-date">{{ dateFormat "Jan 2, 2006" . }}</div>
         {{ end }}
-        {{ with .note }}<div class="remix-note">{{ . }}</div>{{ end }}
+        {{ with .note }}<div class="remix-note">{{ . | markdownify }}</div>{{ end }}
         {{ with .type }}<span class="remix-type-badge">{{ . }}</span>{{ end }}
       </div>
     {{ if $hasLink }}</a>{{ else }}</div>{{ end }}

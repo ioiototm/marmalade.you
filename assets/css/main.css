@@ -947,6 +947,16 @@ textarea { min-height: 100px; resize: vertical; }
   margin-bottom: 0.5rem;
 }
 
+.remix-note a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: inherit;
+}
+
+.remix-note a:hover {
+  color: #c0392b;
+}
+
 .remix-type-badge {
   display: inline-block;
   font-size: 0.7rem;
