@@ -22,7 +22,7 @@
       {{ if $hasLink }}
       <a class="thumb-card" href="{{ .link }}" target="_blank" rel="noopener noreferrer">
       {{ else }}
-      <div class="thumb-card">
+      <div class="thumb-card lightbox-trigger" data-full="{{ .image }}">
       {{ end }}
           {{ partial "license-stamp.html" (dict "license" .license) }}
           <img src="{{ .image }}" alt="{{ .title }}" loading="lazy" />

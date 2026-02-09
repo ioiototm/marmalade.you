@@ -21,7 +21,7 @@
     {{ if $hasLink }}
     <a href="{{ .link }}" target="_blank" rel="noopener noreferrer" class="polaroid">
     {{ else }}
-    <div class="polaroid">
+    <div class="polaroid lightbox-trigger" data-full="{{ .image }}">
     {{ end }}
       {{ partial "license-stamp.html" (dict "license" .license) }}
       <div class="polaroid-image-container">

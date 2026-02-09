@@ -18,3 +18,12 @@ remixes:
   #   note: "10-second loop."
   #   type: "Animation"
   #   date: "2026-01-11"
+
+  - title: "The First Marmalade Fanart"
+    author: "Stroyke"
+    link: ""
+    license: ""
+    image: "/images/remixes/Marmalade-Stroyke.png"
+    note: "A clean retraced lineart of one of the earliest Marmalade drawings."
+    type: "Art"
+    date: "2025-02-19"
