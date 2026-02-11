@@ -13,6 +13,12 @@
         {{ range .Params.tags }}
           <span class="tag">{{ . }}</span>
         {{ end }}
+        {{ range .Params.tools }}
+          <span class="tag tag-tool">{{ . }}</span>
+        {{ end }}
+        {{ range .Params.formats }}
+          <span class="tag tag-format">.{{ . }}</span>
+        {{ end }}
       </div>
     </header>
 
