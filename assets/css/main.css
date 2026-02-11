@@ -1346,6 +1346,49 @@ textarea { min-height: 100px; resize: vertical; }
   gap: 8px;
 }
 
+/* Blockquotes */
+.prose blockquote {
+  position: relative;
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: rgba(255,204,0,0.06);
+  border: none;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  padding: 1.2rem 1.8rem 1.2rem 2.4rem;
+  overflow: hidden;
+}
+
+.prose blockquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.15rem;
+  left: 0.4rem;
+  font-family: var(--font-head);
+  font-size: 3.5rem;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.prose blockquote::after {
+  content: "\201D";
+  position: absolute;
+  bottom: -0.6rem;
+  right: 0.6rem;
+  font-family: var(--font-head);
+  font-size: 3.5rem;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
 /* Inline links in content */
 /* Only bare links — skip anything with its own class or inside a styled wrapper */
 .prose > a:not([class]),
