@@ -13,7 +13,7 @@
   function icon(filename) {
     const e = ext(filename);
     if (['png','jpg','jpeg','webp','gif','bmp','tiff'].includes(e)) return '🖼️';
-    if (['clip','psd','kra','sai','sai2','xcf','procreate'].includes(e)) return '🎨';
+    if (['clip','psd','kra','sai','sai2','xcf','procreate', 'aseprite'].includes(e)) return '🎨';
     if (['svg','ai','eps'].includes(e)) return '✏️';
     if (['vrm','vroid','pngremix','pmx','glb','gltf','fbx','obj'].includes(e)) return '🧸';
     if (['mp4','mov','webm','avi'].includes(e)) return '🎬';
