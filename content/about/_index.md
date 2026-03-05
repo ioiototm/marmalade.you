@@ -1,6 +1,6 @@
 ---
 title: "Who is Marmalade?"
-description: "Marmalade is a CC0 character — no rules, no permission needed, no gatekeeping."
+description: "Marmalade is a CC0 character - no rules, no permission needed, no gatekeeping."
 ---
 
 <div class="about-nav">
@@ -21,28 +21,22 @@ description: "Marmalade is a CC0 character — no rules, no permission needed, n
 
 She's just your generic orange catgirl. That's it.
 
-What she *represents* matters way more than what she looks like.
+What she *represents* matters way more than what she looks like. She's a blank canvas. She wasn't *designed* so much as she just sort of... showed up, and she doesn't belong to anyone.
 
-> **Think of her as a blank canvas.**
-
-She wasn't *designed* so much as she just sort of... showed up. She doesn't belong to anyone, and that's the whole point!
-
-That's basically what **marmalade.you** means: she is yours.
+That's basically what **marmalade.you** means. She is yours.
 
 
 <div id="origin"></div>
 
 ### The Origin Story
 
-Marmalade actually started life as "Gothfield", a character LoRA I found on CivitAI. I wasn't trying to create a character or anything. I was just messing around with LoRAs, trying them, combining them with other stuff, seeing what happens. 
+Marmalade actually started life as "Gothfield", a character LoRA I found on CivitAI. I wasn't trying to create a character. I was just messing around with LoRAs, combining them with other stuff, seeing what happens.
 
-She never really felt like she was mine. Seeing her in different styles, different outfits, it made her feel bigger than "this one specific design".
+She never really felt like she was mine - seeing her in different styles and different outfits, it made her feel bigger than "this one specific design". She was always meant to be remixed.
 
-And that's kind of the point. She was always meant to be remixed and adapted. Later I wanted to make something I could release as CC0 without worrying about rights or ownership, as "Gothfield" was way too close to another orange cat. Once I renamed her to "Marmalade", she started feeling like her own thing. 
+Later I wanted to make something I could release as CC0 without worrying about rights or ownership, as "Gothfield" was way too close to another orange cat. Riding on the "goth" aesthetic, I was trying to come up with a new name. After some brainstorming with ChatGPT, the name "Marmalade" came up, or more importantly, her nickname, "Mal" - it just sounds **goth**, yet the full name is the opposite. Once the name was chosen, she started feeling like her own thing. I started drawing her myself, making stickers and variations, and slowly she got a bit of a personality.
 
-I started drawing her myself, making stickers, variations, that kind of stuff, and slowly she got a bit of a personality. 
-
-> ***But make no mistake: Marmalade isn't *my* character. She's for anyone who wants to use her.***
+> ***Marmalade isn't *my* character. She's for anyone who wants to use her.***
 
 <br>
 <hr class="tape-divider">
@@ -54,37 +48,34 @@ I started drawing her myself, making stickers, variations, that kind of stuff, a
 
 <img src="/stickers/marmalade-annoyed.png" alt="Eye roll" width="180" style="float: left; margin: 0 20px 20px 0; transform: rotate(-5deg);">
 
-I come from a coding background, where open source is normal. You learn from other people's work, you fork things, you build on top, and everyone benefits because sharing is the default.
+I come from a coding background where open source is normal. You learn from other people's work, you fork things, you build on top. That's just how it works.
 
-I got tired of seeing the opposite in some art spaces. Not just the "do not repost, my OC, do not steal" stuff - but watching people get shut out for *how* they create. I think art should be something we build *on* together, not lock away.
+I got tired of seeing the opposite in some art spaces. The "do not repost, my OC, do not steal" stuff, sure, but also watching people get shut out for *how* they create. Art should be something we build *on* together, not lock away. What happens if we stop being precious about it?
 
-I think the question worth asking is: **"What happens if we stop being precious about it?"**
-
-So, here she is, **CC0**. I'm sharing <a class="about-cta-link" href="/lab">*everything*</a> I can - CSP files, timelapses, code, project files - because it's way more fun when you can peek under the hood. I want you to be able to pick things apart and build on top of them, same way I do.
+So here she is, **CC0**. I'm sharing <a class="about-cta-link" href="/lab">*everything*</a> I can (CSP files, timelapses, code, project files) because it's way more fun when you can peek under the hood. I want you to be able to pick things apart and build on top of them, same way I do.
 
 ### She is CC0 (Public Domain)
 
 <img src="/stickers/CC0-Marmalade-Eye.png" alt="CC0" width="180" style="float: right; margin: 0 0 20px 20px; transform: rotate(5deg);">
 
-Simply put: Marmalade is **free** for you to use, remix, and share in any way you like. You don't need to ask for permission, give credit (though it's always appreciated!), or worry about copyright.
+Marmalade is **free** for you to use, remix, share, do whatever you want with. You don't need to ask permission or worry about copyright. Credit is always appreciated but never required.
 
-Use whatever tools you want. Code, paint, write, sculpt, remix, AI - all good. If you made something, it counts.
+Use whatever tools you want. Code, paint, write, sculpt, remix, AI, all good. If you made something, it counts.
 
 <p class="muted">You'll see that green eye pop up around the site, or on Marmalade herself. The vertical pupil is a little "0" and represents the CC0 symbol (<a href="https://creativecommons.org/public-domain/cc0/"><img src="/logos/Cc-zero_white.svg" alt="CC0" class="cc0-inline" /></a>). If it's there, the file's public domain and you're free to use it.</p>
 
 So:
 *   want to put her in your indie game? **Do it.**
 *   want to stream as her? **Go for it.**
-*   want to print stickers and sell them? **Yes.** (and give me a link, I want some too)
-*   want to redesign her completely? **Please do.**
+*   want to print stickers and sell them? **Yes.** (give me a link though, I want some too)
+*   want to completely redesign her? **Please.**
 
-This site is just a hub. One half is **The Source** (where I drop my files), and the other half is **In The Wild** (where you can show off what you've made with her).
+This site is a hub. **The Source** is where I drop my files. **In The Wild** is where you can show off what you've made with her.
 
 ### Share your Creations!
-Made something with Marmalade? I'd genuinely love to see it! Whether it's a game, a song, a drawing, a cosplay, or something I haven't even thought of, I'd love to feature it on the <a class="about-cta-link" href="/community">In The Wild</a> page. 
+Whether it's a game, a song, a drawing, a cosplay, or something I haven't even thought of, I'd genuinely love to see it and feature it on the <a class="about-cta-link" href="/community">In The Wild</a> page.
 
-<br style="clear: both;">
-<br>
+
 <hr class="tape-divider">
 <br>
 
@@ -94,8 +85,6 @@ Made something with Marmalade? I'd genuinely love to see it! Whether it's a game
 
 <img src="/stickers/marmalade-smug.png" alt="Marmalade rolling eyes" width="150" style="float: left; margin: 0 20px 20px 0;">
 
-Don't overthink it.
-
-Just make stuff. Share it if you want. Be kind to others.
+Don't overthink it. Just make stuff, share it if you want, and be kind to others along the way.
 
 Now go have fun with her!
