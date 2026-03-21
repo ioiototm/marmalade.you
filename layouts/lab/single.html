@@ -2,6 +2,14 @@
 <div class="lab-single-container">
   <a href="/lab/" class="back-link">← Back to Lab</a>
 
+  {{/* Page navigation — hidden links for keyboard arrow-key nav (visual tabs disabled for now) */}}
+  {{ with .PrevInSection }}
+    <a href="{{ .RelPermalink }}" class="page-nav page-nav--prev" aria-hidden="true" tabindex="-1"></a>
+  {{ end }}
+  {{ with .NextInSection }}
+    <a href="{{ .RelPermalink }}" class="page-nav page-nav--next" aria-hidden="true" tabindex="-1"></a>
+  {{ end }}
+
   <article class="card lab-item-detail">
     {{ partial "license-stamp.html" (dict "license" .Params.license) }}
     <header class="lab-header">
@@ -54,4 +62,8 @@
     {{ end }}
   </article>
 </div>
+
+{{/* Include lab navigation keyboard support */}}
+{{ $labNav := resources.Get "js/lab-navigation.js" }}
+<script src="{{ $labNav.RelPermalink }}" type="module"></script>
 {{ end }}

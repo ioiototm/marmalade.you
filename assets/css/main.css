@@ -605,6 +605,17 @@ textarea { min-height: 100px; resize: vertical; }
 .lab-single-container {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  overflow: visible;
+}
+
+.lab-single-container > .card {
+  position: relative;
+  z-index: 5;
+}
+
+.lab-single-container > .card::after {
+  z-index: 6;
 }
 
 .back-link {
@@ -725,6 +736,63 @@ textarea { min-height: 100px; resize: vertical; }
 
 .preview-nav--prev { left: 8px; }
 .preview-nav--next { right: 8px; }
+
+/* Page navigation — visual tabs disabled for now, keeping elements hidden for keyboard nav */
+.page-nav {
+  display: none;
+}
+
+/*
+
+.page-nav--prev:hover {
+  transform: translateX(-6px);
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: -3px 2px 0 rgba(0,0,0,0.1);
+}
+
+.page-nav--next:hover {
+  transform: translateX(6px);
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 3px 2px 0 rgba(0,0,0,0.1);
+}
+
+.page-nav--prev:active {
+  transform: translateX(-3px);
+}
+
+.page-nav--next:active {
+  transform: translateX(3px);
+}
+
+@media (max-width: 900px) {
+  .page-nav {
+    position: fixed;
+    top: auto;
+    bottom: 24px;
+    writing-mode: horizontal-tb;
+    padding: 10px 14px;
+    z-index: 50;
+  }
+  .page-nav--prev {
+    left: 16px;
+    border-radius: 6px;
+    border-right: 2px solid var(--line);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.06);
+  }
+  .page-nav--next {
+    right: 16px;
+    border-radius: 6px;
+    border-left: 2px solid var(--line);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.06);
+  }
+  .page-nav--prev:hover,
+  .page-nav--next:hover {
+    transform: translateY(-3px);
+  }
+}
+end commented out tab styles */
 
 .preview-dots {
   display: flex;
