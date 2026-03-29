@@ -30,25 +30,31 @@
         {{ range .Params.formats }}
           <span class="tag tag-format" {{ with index $formatNames . }}title="{{ . }}"{{ end }}>.{{ . }}</span>
         {{ end }}
+        {{ if or .Params.source .Params.downloads }}
+          <a href="#downloads" class="jump-downloads">↓ Downloads</a>
+        {{ end }}
       </div>
     </header>
+
+    {{ if .Params.source }}
+    {{/* Preview gallery — filled dynamically from API */}}
+    {{ $api := site.Params.files.api }}
+    <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"></div>
+    {{ end }}
 
     <div class="prose">
       {{ .Content }}
     </div>
 
     {{ if .Params.source }}
-    {{/* Preview gallery — filled dynamically from API */}}
-    {{ $api := site.Params.files.api }}
-    <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"></div>
-
     {{/* Dynamic downloads from files API */}}
-    <div class="downloads-section" data-downloads="{{ .Params.source }}" data-api="{{ $api }}">
+    {{ $api := site.Params.files.api }}
+    <div id="downloads" class="downloads-section" data-downloads="{{ .Params.source }}" data-api="{{ $api }}">
       <h2 class="h2">Downloads</h2>
       <p class="muted">Loading versions…</p>
     </div>
     {{ else if .Params.downloads }}
-    <div class="downloads-section">
+    <div id="downloads" class="downloads-section">
       <h2 class="h2">Downloads</h2>
       <ul class="download-list">
         {{ range .Params.downloads }}

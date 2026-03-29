@@ -278,13 +278,79 @@
     }
   }
 
+  /* ── Sticky mini-preview ── */
+
+  function initStickyPreview() {
+    const previewEl = document.querySelector('[data-preview]');
+    if (!previewEl) return;
+
+    const mini = document.createElement('a');
+    mini.className = 'preview-mini';
+    mini.href = '#';
+    mini.setAttribute('aria-label', 'Back to preview image');
+    document.body.appendChild(mini);
+
+    const miniImg = document.createElement('img');
+    miniImg.alt = '';
+    mini.appendChild(miniImg);
+
+    let showing = false;
+
+    mini.addEventListener('click', (e) => {
+      e.preventDefault();
+      previewEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    function syncSrc() {
+      const src = previewEl.querySelector('.preview-viewport img');
+      if (src && miniImg.src !== src.src) miniImg.src = src.src;
+    }
+
+    function show() {
+      if (showing) return;
+      showing = true;
+      syncSrc();
+      // Calculate where the preview is relative to viewport for the fly-down origin
+      const rect = previewEl.getBoundingClientRect();
+      const offsetY = Math.round(rect.bottom - window.innerHeight + 60);
+      mini.style.setProperty('--fly-from', offsetY + 'px');
+      mini.classList.remove('hiding');
+      mini.classList.add('visible');
+    }
+
+    function hide() {
+      if (!showing) return;
+      showing = false;
+      mini.classList.add('hiding');
+      mini.classList.remove('visible');
+      mini.addEventListener('animationend', () => {
+        mini.classList.remove('hiding');
+      }, { once: true });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) hide(); else show();
+    }, { threshold: 0.05 });
+
+    // Start observing once preview has loaded content
+    const wait = new MutationObserver(() => {
+      if (previewEl.querySelector('.preview-viewport')) {
+        wait.disconnect();
+        observer.observe(previewEl);
+      }
+    });
+    wait.observe(previewEl, { childList: true, subtree: true });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       init();
       initHoverPreviews();
+      initStickyPreview();
     });
   } else {
     init();
     initHoverPreviews();
+    initStickyPreview();
   }
 })();
