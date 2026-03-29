@@ -29,6 +29,10 @@
       <span>Eye mark = CC0 / public domain</span>
     </div>
 
+    {{/* Tool / format full-name lookup */}}
+    {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" }}
+    {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" }}
+
     <div class="mini-grid" id="lab-grid">
       {{ range .Pages.ByDate.Reverse }}
         {{/* Create a space-separated string of tags for the data attribute */}}

@@ -17,15 +17,18 @@
       <div class="lab-meta">
         Added {{ .Date.Format "January 2, 2006" }}
       </div>
+      {{/* Tool / format full-name lookup */}}
+      {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" }}
+      {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" }}
       <div class="lab-tags">
         {{ range .Params.tags }}
           <span class="tag">{{ . }}</span>
         {{ end }}
         {{ range .Params.tools }}
-          <span class="tag tag-tool">{{ . }}</span>
+          <span class="tag tag-tool" {{ with index $toolNames . }}title="{{ . }}"{{ end }}>{{ . }}</span>
         {{ end }}
         {{ range .Params.formats }}
-          <span class="tag tag-format">.{{ . }}</span>
+          <span class="tag tag-format" {{ with index $formatNames . }}title="{{ . }}"{{ end }}>.{{ . }}</span>
         {{ end }}
       </div>
     </header>

@@ -224,7 +224,13 @@ a { color: inherit; text-decoration: none; }
 
 .lightbox-close:hover { opacity: 1; }
 
-.lightbox-trigger { cursor: pointer; }
+.lightbox-trigger {
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+.lightbox-trigger:hover {
+  opacity: 0.85;
+}
 .btn:active, button.decorate:active {
   transform: translate(2px, 2px);
   box-shadow: 0 0 0 var(--line);
@@ -633,10 +639,49 @@ textarea { min-height: 100px; resize: vertical; }
 
 .downloads-section {
   margin-top: 3rem;
-  background: #f9f9f9;
+  background: rgba(255, 204, 0, 0.07);
   padding: 1.5rem;
   border: 2px solid var(--line);
   box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* Corner ribbon bow — two tails wrapping the top-right corner */
+.downloads-section::before,
+.downloads-section::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(255, 182, 193, 0.6);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 5px,
+    rgba(255,255,255,0.35) 5px,
+    rgba(255,255,255,0.35) 9px
+  );
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  pointer-events: none;
+  z-index: 10;
+}
+/* Tail going left along the top edge */
+.downloads-section::before {
+  top: -15px;
+  right: -10px;
+  width: 56px;
+  height: 14px;
+  transform: rotate(-20deg);
+  transform-origin: right center;
+  border-radius: 2px 3px 4px 1px;
+}
+/* Tail going down along the right edge */
+.downloads-section::after {
+  top: 18px;
+  right: -15px;
+  width: 50px;
+  height: 14px;
+  transform: rotate(50deg);
+  transform-origin: right center;
+  border-radius: 3px 1px 2px 4px;
 }
 
 /* Version selector */
@@ -1237,7 +1282,22 @@ end commented out tab styles */
 }
 
 /* Skip Link */
-.skip { display: none; }
+.skip {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+  font-family: var(--font-head);
+  border: 2px solid var(--line);
+  text-decoration: none;
+}
+.skip:focus {
+  left: 20px;
+  top: 10px;
+}
 
 /* Header Actions */
 .actions {
@@ -1412,6 +1472,13 @@ end commented out tab styles */
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* Clear floats (e.g. about page sticker images) */
+.prose::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 /* Blockquotes */
