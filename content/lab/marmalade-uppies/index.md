@@ -18,6 +18,6 @@ A tiny Marmalade sticker of her looking up and asking for her uppies.
 
 ## The Story
 
-This is just so cute! Mal as a tiny kitten, based on the other sticker [marmalade-curious](../marmalade-curious), she has her hands extended up, asking for her uppies. I just love how cute this one is! Originally drawn for [chuk_chan](https://www.twitch.tv/chuk_chan)'s stream custom stickers.
+This is just so cute! Mal as a tiny kitten, based on the other sticker of [Marmalade being curious](../marmalade-curious), she has her hands extended up, asking for her uppies. I just love how cute this one is! Originally drawn for [chuk_chan](https://www.twitch.tv/chuk_chan)'s stream custom stickers.
 
 
