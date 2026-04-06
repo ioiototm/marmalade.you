@@ -205,7 +205,10 @@ a { color: inherit; text-decoration: none; }
   border: 4px solid #fff;
   border-radius: 4px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-  cursor: default;
+  cursor: zoom-in;
+  user-select: none;
+  touch-action: none;
+  will-change: transform;
 }
 
 .lightbox-close {
@@ -953,6 +956,7 @@ textarea { min-height: 100px; resize: vertical; }
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .preview-viewport img {
@@ -960,6 +964,12 @@ textarea { min-height: 100px; resize: vertical; }
   max-height: 100%;
   object-fit: contain;
   display: block;
+  transition: transform 0.2s ease;
+}
+
+.preview-viewport img.lightbox-trigger:hover {
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .preview-nav {

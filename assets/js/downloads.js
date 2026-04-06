@@ -62,6 +62,8 @@
     const img = document.createElement('img');
     img.src = images[0].url;
     img.alt = images[0].path;
+    img.className = 'lightbox-trigger';
+    img.dataset.full = images[0].url;
     viewport.appendChild(img);
 
     container.innerHTML = '';
@@ -99,6 +101,7 @@
       idx = (i + images.length) % images.length;
       img.src = images[idx].url;
       img.alt = images[idx].path;
+      img.dataset.full = images[idx].url;
       dots.querySelectorAll('.preview-dot').forEach((d, j) => {
         d.classList.toggle('active', j === idx);
       });
