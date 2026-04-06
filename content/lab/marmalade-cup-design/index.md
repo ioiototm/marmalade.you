@@ -1,6 +1,7 @@
 ---
 title: "Bunny Girl Marmalade Cup Design"
 date: 2025-08-17T00:00:00+00:00
+lastmod: 2026-03-21T00:00:00+00:00
 draft: false
 tags: ["art", "stickers", "design"]
 tools: ["csp"]
@@ -10,8 +11,6 @@ summary: "Marmalade as... a bunny girl? A sticker/design for a cup."
 license: "CC0"
 source: "marmalade-cup-design"
 ---
-
-## What is this?
 
 This is my masterpiece, my magnum opus, the pinnacle of my artistic career... a design of Marmalade as a bunny girl for a cup. Her glasses are even removable!!!
 

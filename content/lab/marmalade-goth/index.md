@@ -11,7 +11,6 @@ license: "CC0"
 source: "marmalade-goth"
 ---
 
-## What is this?
 The original design of Marmalade, with a goth aesthetic. Well, she was Gothfield back then, but this was the first one.
 
 ## The Story
@@ -20,5 +19,4 @@ Submitted it to the [Loading Artist](https://loadingartist.com/) Art Critique ch
 
 Which made [this](https://www.youtube.com/clip/UgkxMo-wqb_G0AsgJulUIUg3-8aDQu0MnFc1) hilarious reaction from him.
 
-## What's included?
-The .clip file made from the exports from Penup, with nicely named layers (took so long), and two PNGs, with and without background (and apparently, one has a black bow and the other has a red one, too lazy to fix that).
+The .clip file has all the layers rebuilt from the Penup exports with nicely named layers (took ages), and you get PNG exports with and without background.

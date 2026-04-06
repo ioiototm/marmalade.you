@@ -176,9 +176,154 @@
     });
   }
 
+  /* ── Changelog parser ── */
+
+  function parseChangelog(raw) {
+    if (!raw) return [];
+    const entries = [];
+    let current = null;
+    let currentSection = null;
+
+    for (const line of raw.split('\n')) {
+      const trimmed = line.trim();
+
+      // ## vX.X — version heading
+      if (/^## /.test(trimmed)) {
+        if (current) entries.push(current);
+        current = { version: trimmed.slice(3).trim(), message: '', sections: [] };
+        currentSection = null;
+        continue;
+      }
+
+      if (!current) continue;
+
+      // ### Category heading
+      if (/^### /.test(trimmed)) {
+        currentSection = { category: trimmed.slice(4).trim(), items: [] };
+        current.sections.push(currentSection);
+        continue;
+      }
+
+      // - bullet item
+      if (/^[-*] /.test(trimmed) && currentSection) {
+        currentSection.items.push(trimmed.slice(2).trim());
+        continue;
+      }
+
+      // Plain text before first ### = freeform message
+      if (trimmed && !currentSection) {
+        current.message += (current.message ? ' ' : '') + trimmed;
+      }
+    }
+
+    if (current) entries.push(current);
+    return entries;
+  }
+
+  function findChangelogEntry(entries, version) {
+    return entries.find(e =>
+      e.version === version ||
+      e.version === 'v' + version ||
+      e.version.replace(/^v/, '') === version.replace(/^v/, '')
+    );
+  }
+
+  /* ── Changelog render — "What's New" card ── */
+
+  function renderChangelogLatest(container, entry) {
+    if (!container || !entry) return;
+
+    container.innerHTML = '';
+    container.className = 'changelog-latest';
+
+    const heading = document.createElement('h2');
+    heading.className = 'h2 changelog-heading';
+    heading.textContent = "What\u2019s New in " + entry.version;
+    container.appendChild(heading);
+
+    if (entry.message) {
+      const msg = document.createElement('p');
+      msg.className = 'changelog-message';
+      msg.textContent = entry.message;
+      container.appendChild(msg);
+    }
+
+    renderChangeSections(container, entry.sections);
+  }
+
+  function clearChangelogLatest(container) {
+    if (!container) return;
+    container.innerHTML = '';
+    container.className = '';
+  }
+
+  /* ── Changelog render — full log below downloads ── */
+
+  function renderChangelogFull(dlEl, entries) {
+    if (!entries.length) return;
+
+    const section = document.createElement('details');
+    section.className = 'changelog-full';
+
+    const heading = document.createElement('summary');
+    heading.className = 'changelog-toggle';
+    heading.textContent = 'Changelog';
+    section.appendChild(heading);
+
+    const inner = document.createElement('div');
+    inner.className = 'changelog-inner';
+
+    for (const entry of entries) {
+      const block = document.createElement('div');
+      block.className = 'changelog-entry';
+
+      const verHeading = document.createElement('h3');
+      verHeading.className = 'changelog-version';
+      verHeading.textContent = entry.version;
+      block.appendChild(verHeading);
+
+      if (entry.message) {
+        const msg = document.createElement('p');
+        msg.className = 'changelog-message';
+        msg.textContent = entry.message;
+        block.appendChild(msg);
+      }
+
+      renderChangeSections(block, entry.sections);
+      inner.appendChild(block);
+    }
+
+    section.appendChild(inner);
+    // Insert after the downloads section
+    dlEl.after(section);
+  }
+
+  function renderChangeSections(parent, sections) {
+    for (const sec of sections) {
+      const catLabel = document.createElement('span');
+      catLabel.className = 'changelog-category';
+      catLabel.textContent = sec.category;
+      parent.appendChild(catLabel);
+
+      if (sec.items.length) {
+        const ul = document.createElement('ul');
+        ul.className = 'changelog-items';
+        for (const item of sec.items) {
+          const li = document.createElement('li');
+          li.textContent = item;
+          ul.appendChild(li);
+        }
+        parent.appendChild(ul);
+      }
+    }
+  }
+
   /* ── Main render ── */
 
-  function render(dlEl, previewEl, data) {
+  function render(dlEl, previewEl, changelogEl, data) {
+    // Parse changelog (if present)
+    const changelogEntries = data.changelog ? parseChangelog(data.changelog) : [];
+
     if (!data.versions || !data.versions.length) {
       dlEl.innerHTML = '<h2 class="h2">Downloads</h2><p class="muted">No downloads available yet.</p>';
       if (previewEl) previewEl.innerHTML = '';
@@ -222,6 +367,49 @@
     fileArea.className = 'version-files';
     dlEl.appendChild(fileArea);
 
+    // Top version selector — injected inline into .lab-tags before the ↓Downloads button
+    let topSelect = null;
+    if (previewEl && data.versions.length > 1) {
+      const tagsEl = document.querySelector('.lab-tags');
+      if (tagsEl) {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'version-select-inline';
+
+        const topLabel = document.createElement('span');
+        topLabel.className = 'version-label';
+        topLabel.textContent = 'Version:';
+
+        topSelect = document.createElement('select');
+        topSelect.className = 'version-select version-select--compact';
+        data.versions.forEach((v, i) => {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = v.version + (v.version === data.latest ? ' (latest)' : '');
+          if (i === latestIdx) opt.selected = true;
+          topSelect.appendChild(opt);
+        });
+
+        wrapper.appendChild(topLabel);
+        wrapper.appendChild(topSelect);
+
+        // Insert before ↓ Downloads button (or append)
+        const jumpLink = tagsEl.querySelector('.jump-downloads');
+        if (jumpLink) {
+          // Shift the auto-margin from Downloads to our wrapper
+          jumpLink.style.marginLeft = '0';
+          tagsEl.insertBefore(wrapper, jumpLink);
+        } else {
+          tagsEl.appendChild(wrapper);
+        }
+
+        topSelect.addEventListener('change', () => {
+          const idx = parseInt(topSelect.value, 10);
+          select.value = idx;
+          showVersion(idx);
+        });
+      }
+    }
+
     // Render a version (updates both preview + file list)
     function showVersion(i) {
       const ver = data.versions[i];
@@ -240,13 +428,33 @@
 
       if (previewEl) renderPreview(previewEl, previews);
       renderFiles(fileArea, downloadables);
+
+      // Keep sticky mini in sync if it's already showing
+      if (syncMiniSrc) syncMiniSrc();
+
+      // Update "What's New" card for this version
+      if (changelogEntries.length) {
+        const entry = findChangelogEntry(changelogEntries, ver.version);
+        if (entry) {
+          renderChangelogLatest(changelogEl, entry);
+        } else {
+          clearChangelogLatest(changelogEl);
+        }
+      }
     }
 
     showVersion(latestIdx);
 
     select.addEventListener('change', () => {
-      showVersion(parseInt(select.value, 10));
+      const idx = parseInt(select.value, 10);
+      if (topSelect) topSelect.value = idx;
+      showVersion(idx);
     });
+
+    // Render full changelog below downloads
+    if (changelogEntries.length) {
+      renderChangelogFull(dlEl, changelogEntries);
+    }
   }
 
   /* ── Init ── */
@@ -260,14 +468,25 @@
       const apiBase = dlEl.dataset.api;
       if (!slug || !apiBase) continue;
 
-      // Find matching preview container (same slug)
+      // Find matching preview + changelog containers
       const previewEl = document.querySelector(`[data-preview="${slug}"]`);
+      const changelogEl = document.querySelector('[data-changelog]');
+
+      // Read changelog from Hugo-embedded script tag (page bundle) or fall back to API
+      const changelogScript = document.querySelector('script[data-changelog-raw]');
+      const changelogRaw = changelogScript ? changelogScript.textContent : null;
 
       try {
         const res = await fetch(`${apiBase}/list/${slug}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        render(dlEl, previewEl, data);
+
+        // Prefer Hugo-embedded changelog, fall back to API changelog
+        if (changelogRaw) {
+          data.changelog = changelogRaw;
+        }
+
+        render(dlEl, previewEl, changelogEl, data);
       } catch (err) {
         console.warn('Downloads fetch failed for', slug, err);
         const existing = dlEl.querySelector('.download-list');
@@ -277,6 +496,9 @@
       }
     }
   }
+
+  // Ref that initStickyPreview will fill in so render() can call syncSrc on version change
+  let syncMiniSrc = null;
 
   /* ── Sticky mini-preview ── */
 
@@ -305,6 +527,8 @@
       const src = previewEl.querySelector('.preview-viewport img');
       if (src && miniImg.src !== src.src) miniImg.src = src.src;
     }
+    // Expose so version switching can update the mini immediately
+    syncMiniSrc = syncSrc;
 
     function show() {
       if (showing) return;

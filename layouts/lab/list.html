@@ -34,7 +34,7 @@
     {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" }}
 
     <div class="mini-grid" id="lab-grid">
-      {{ range .Pages.ByDate.Reverse }}
+      {{ range .Pages.ByLastmod.Reverse }}
         {{/* Create a space-separated string of tags for the data attribute */}}
         {{ $allTags := slice }}
         {{ with .Params.tags }}{{ $allTags = $allTags | append . }}{{ end }}
@@ -62,7 +62,7 @@
           
           <div class="mini-meta">
             <div class="mini-title">{{ .Title }}</div>
-            <div class="mini-date">{{ .Date.Format "Jan 2, 2006" }}</div>
+            <div class="mini-date">{{ if ne .Lastmod .Date }}Updated {{ .Lastmod.Format "Jan 2, 2006" }}{{ else }}{{ .Date.Format "Jan 2, 2006" }}{{ end }}</div>
             <div class="mini-note">{{ .Summary | truncate 60 }}</div>
             <div class="mini-tags">
               {{ range .Params.tags }}

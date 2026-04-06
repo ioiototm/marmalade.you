@@ -11,10 +11,7 @@ license: "CC0"
 source: "marmalade-uppies"
 ---
 
-## What is this?
-
 A tiny Marmalade sticker of her looking up and asking for her uppies.
-
 
 ## The Story
 

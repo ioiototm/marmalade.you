@@ -3,6 +3,9 @@ languageCode = "en-gb"
 title = "Marmalade"
 enableRobotsTXT = true
 
+[frontmatter]
+  lastmod = ["lastmod", ":default"]
+
 [params]
   tagline = "A CC0 mascot, starter files, and community remixes."
   modeLabel = "decorate"

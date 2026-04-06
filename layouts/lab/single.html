@@ -16,6 +16,9 @@
       <h1 class="h1">{{ .Title }}</h1>
       <div class="lab-meta">
         Added {{ .Date.Format "January 2, 2006" }}
+        {{ if ne .Lastmod .Date }}
+          <span class="lab-meta-sep">·</span> Updated {{ .Lastmod.Format "January 2, 2006" }}
+        {{ end }}
       </div>
       {{/* Tool / format full-name lookup */}}
       {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" }}
@@ -45,6 +48,16 @@
     <div class="prose">
       {{ .Content }}
     </div>
+
+    {{ if .Params.source }}
+    {{/* Changelog — read raw CHANGES.md from page bundle if it exists */}}
+    {{ $changesPath := path.Join .File.Dir "CHANGES.md" }}
+    {{ if os.FileExists $changesPath }}
+    {{ $raw := os.ReadFile $changesPath }}
+    <div data-changelog="true"></div>
+    <script type="text/plain" data-changelog-raw>{{ $raw | safeHTML }}</script>
+    {{ end }}
+    {{ end }}
 
     {{ if .Params.source }}
     {{/* Dynamic downloads from files API */}}

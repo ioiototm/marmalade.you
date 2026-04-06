@@ -11,8 +11,6 @@ license: "CC0"
 source: "marmalade-smug"
 ---
 
-## What is this?
-
 A smug Marmalade sticker, nice and simple.
 
 ## The Story
