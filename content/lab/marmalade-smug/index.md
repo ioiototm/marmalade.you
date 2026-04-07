@@ -2,6 +2,7 @@
 title: "Smug Marmalade Sticker"
 date: 2025-11-30T14:30:00+00:00
 draft: false
+timelapse: "5n4D81AbxvQ"
 tags: ["art", "stickers"]
 tools: ["csp"]
 formats: ["png", "clip"]

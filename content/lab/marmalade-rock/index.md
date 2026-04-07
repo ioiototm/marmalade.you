@@ -2,6 +2,7 @@
 title: "Marmalade as Glam Rock-ish?"
 date: 2025-11-29T00:00:00+00:00
 draft: false
+timelapse: "veygJThhqoA"
 tags: ["art", "illustration", "card-design"]
 tools: ["csp"]
 formats: ["png", "clip"]

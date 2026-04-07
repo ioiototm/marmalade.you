@@ -2,6 +2,7 @@
 title: "Tiny Marmalade Lurking in a Crate"
 date: 2026-04-05T00:00:00+00:00
 draft: false
+timelapse: "NpPq-QKHp04"
 tags: ["art", "stickers"]
 tools: ["csp"]
 formats: ["png", "clip"]
