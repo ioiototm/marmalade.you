@@ -69,6 +69,21 @@
     container.innerHTML = '';
     container.appendChild(viewport);
 
+    // Timelapse play button
+    const timelapseId = container.dataset.timelapse;
+    if (timelapseId) {
+      const playBtn = document.createElement('button');
+      playBtn.className = 'timelapse-play';
+      playBtn.type = 'button';
+      playBtn.setAttribute('aria-label', 'Watch timelapse');
+      playBtn.innerHTML = '<span class="timelapse-play-icon">▶</span><span class="timelapse-play-label">Timelapse</span>';
+      playBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.dispatchEvent(new CustomEvent('lightbox:video', { detail: { id: timelapseId } }));
+      });
+      viewport.appendChild(playBtn);
+    }
+
     if (images.length === 1) return;
 
     // Navigation arrows

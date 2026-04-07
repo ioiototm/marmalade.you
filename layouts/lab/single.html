@@ -42,7 +42,7 @@
     {{ if .Params.source }}
     {{/* Preview gallery — filled dynamically from API */}}
     {{ $api := site.Params.files.api }}
-    <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"></div>
+    <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"{{ with .Params.timelapse }} data-timelapse="{{ . }}"{{ end }}></div>
     {{ end }}
 
     <div class="prose">

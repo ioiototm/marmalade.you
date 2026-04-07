@@ -227,6 +227,22 @@ a { color: inherit; text-decoration: none; }
 
 .lightbox-close:hover { opacity: 1; }
 
+.lightbox-video {
+  width: min(90vw, 960px);
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+
+.lightbox-video[hidden] { display: none; }
+
+.lightbox-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 .lightbox-trigger {
   cursor: zoom-in;
   transition: opacity 0.15s;
@@ -970,6 +986,42 @@ textarea { min-height: 100px; resize: vertical; }
 .preview-viewport img.lightbox-trigger:hover {
   opacity: 1;
   transform: scale(1.06);
+}
+
+/* Timelapse play button */
+.timelapse-play {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(0,0,0,0.65);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s, background 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.timelapse-play:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.8);
+}
+
+.timelapse-play-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.timelapse-play-label {
+  letter-spacing: 0.03em;
 }
 
 .preview-nav {

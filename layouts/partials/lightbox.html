@@ -2,11 +2,14 @@
 <div class="lightbox" id="lightbox" hidden>
   <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
   <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+  <div class="lightbox-video" id="lightbox-video" hidden></div>
 </div>
 <script>
 (function(){
-  var lb  = document.getElementById('lightbox');
-  var img = document.getElementById('lightbox-img');
+  var lb    = document.getElementById('lightbox');
+  var img   = document.getElementById('lightbox-img');
+  var vidWr = document.getElementById('lightbox-video');
+  var mode  = 'image'; // 'image' or 'video'
   var scale = 1, ox = 0, oy = 0;
   var dragging = false, didDrag = false, dragSX, dragSY;
 
@@ -18,12 +21,26 @@
     img.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
   }
 
-  function open(src, alt) {
+  function openImage(src, alt) {
+    mode = 'image';
     scale = 1; ox = 0; oy = 0;
     img.src = src;
     img.alt = alt || '';
+    img.hidden = false;
+    vidWr.hidden = true;
+    vidWr.innerHTML = '';
     applyTransform();
     updateCursor();
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openVideo(ytId) {
+    mode = 'video';
+    img.hidden = true;
+    img.src = '';
+    vidWr.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(ytId) + '?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    vidWr.hidden = false;
     lb.hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -31,10 +48,13 @@
   function close() {
     lb.hidden = true;
     img.src = '';
+    img.hidden = false;
+    vidWr.innerHTML = '';
+    vidWr.hidden = true;
     document.body.style.overflow = '';
   }
 
-  // Event delegation — works for both static and dynamically-rendered triggers
+  // Image triggers (event delegation)
   document.addEventListener('click', function(e) {
     if (!lb.hidden) return;
     var trigger = e.target.closest('.lightbox-trigger');
@@ -43,10 +63,15 @@
     var src = trigger.dataset.full || trigger.src || '';
     var inner = trigger.querySelector('img');
     var alt = trigger.dataset.alt || trigger.alt || (inner ? inner.alt : '') || '';
-    if (src) open(src, alt);
+    if (src) openImage(src, alt);
   });
 
-  // Close on backdrop click (not on image or its children)
+  // Video triggers (custom event from downloads.js)
+  document.addEventListener('lightbox:video', function(e) {
+    if (e.detail && e.detail.id) openVideo(e.detail.id);
+  });
+
+  // Close on backdrop
   lb.addEventListener('mouseup', function(e) {
     if (!didDrag && e.target === lb) close();
   });
@@ -61,8 +86,9 @@
     if (e.key === 'Escape' && !lb.hidden) close();
   });
 
-  // Wheel zoom toward cursor
+  // Wheel zoom (image mode only)
   lb.addEventListener('wheel', function(e) {
+    if (mode !== 'image') return;
     e.preventDefault();
     var r   = lb.getBoundingClientRect();
     var lcx = r.left + r.width  / 2;
