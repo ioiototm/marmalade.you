@@ -3,7 +3,7 @@ title: "Curious Tiny Marmalade Sticker"
 date: 2025-12-06T00:00:00+00:00
 draft: false
 timelapse: "6g0qfbrd56k"
-tags: ["art", "stickers"]
+tags: ["art", "stickers","timelapse"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/stickers/marmalade-curious.png"

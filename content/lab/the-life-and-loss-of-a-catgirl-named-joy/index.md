@@ -3,7 +3,7 @@ title: "The Life and Loss of a Catgirl Named Joy"
 date: 2025-04-01T00:00:00+00:00
 draft: false
 timelapse: "gpWa1Uly2Wg"
-tags: ["art", "poster"]
+tags: ["art", "poster","timelapse"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/images/The Life and Loss of a Catgirl Named Joy.png"

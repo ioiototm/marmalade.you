@@ -3,7 +3,7 @@ title: "Marmalade hugging another CC0 mascot, Mewes"
 date: 2026-03-21T00:00:00+00:00
 draft: false
 timelapse: "dx8WrtrcUBE"
-tags: ["art", "illustration"]
+tags: ["art", "illustration","timelapse"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/images/mal-mewes-hug.png"

@@ -3,7 +3,7 @@ title: "Tiny Marmalade Wants Her Uppies"
 date: 2026-04-04T00:00:00+00:00
 draft: false
 timelapse: "YhOBLMzP2ew"
-tags: ["art", "stickers"]
+tags: ["art", "stickers","timelapse"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/stickers/marmalade-uppies.png"
