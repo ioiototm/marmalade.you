@@ -106,10 +106,13 @@
 
     const docX = viewportX + window.scrollX;
     const docY = viewportY + window.scrollY;
-    const w = 120; // Slightly larger default
+    const w = 120;
+    const docH = document.documentElement.scrollHeight;
+    const xOff = (docX - w / 2) - layer.offsetWidth / 2;
     
-    el.style.left = (docX - w / 2) + "px";
-    el.style.top  = (docY - w / 2) + "px";
+    el.dataset.xOff = xOff;
+    el.style.left = 'calc(50% + ' + xOff + 'px)';
+    el.style.top  = ((docY - w / 2) / docH * 100) + "%";
     el.style.width = w + "px";
     
     updateTransform(el, r, 1);
@@ -124,25 +127,47 @@
   }
 
   function persistFromDom() {
-    const out = Array.from(layer.querySelectorAll(".placed-sticker")).map(el => ({
-      id: el.dataset.id,
-      src: el.querySelector(".sticker-image").getAttribute("src"),
-      left: el.style.left,
-      top: el.style.top,
-      width: el.style.width || "120px",
-      r: el.dataset.r || "0"
-    }));
+    const docH = document.documentElement.scrollHeight;
+    const out = Array.from(layer.querySelectorAll(".placed-sticker")).map(el => {
+      let topPct = parseFloat(el.style.top);
+      if (el.style.top.endsWith('px')) topPct = parseFloat(el.style.top) / docH * 100;
+      return {
+        id: el.dataset.id,
+        src: el.querySelector(".sticker-image").getAttribute("src"),
+        xOff: parseFloat(el.dataset.xOff),
+        topPct: topPct,
+        width: el.style.width || "120px",
+        r: el.dataset.r || "0"
+      };
+    });
     save(out);
   }
 
   function restore() {
     const items = load();
     layer.innerHTML = "";
+    const docH = document.documentElement.scrollHeight;
+    const halfW = layer.offsetWidth / 2;
     for (const it of items) {
       const el = createStickerElement(it.src, it.id || uid(), it.r || 0);
       
-      if (it.left) el.style.left = it.left;
-      if (it.top) el.style.top = it.top;
+      let xOff;
+      if (it.xOff !== undefined) {
+        // Current format: X offset from center + Y percentage
+        xOff = it.xOff;
+        el.style.top = it.topPct + "%";
+      } else if (it.leftPct !== undefined) {
+        // Migrate v2 percentage format
+        xOff = it.leftPct / 100 * layer.offsetWidth - halfW;
+        el.style.top = it.topPct + "%";
+      } else {
+        // Migrate v1 raw px format
+        xOff = parseFloat(it.left) - halfW;
+        el.style.top = (parseFloat(it.top) / docH * 100) + "%";
+      }
+      
+      el.dataset.xOff = xOff;
+      el.style.left = 'calc(50% + ' + xOff + 'px)';
       if (it.width) el.style.width = it.width;
       
       updateTransform(el, it.r || 0, 1);
@@ -176,8 +201,8 @@
       const p = getPoint(ev);
       startX = p.x; 
       startY = p.y;
-      originX = parseInt(el.style.left || "0", 10);
-      originY = parseInt(el.style.top || "0", 10);
+      originX = el.offsetLeft;
+      originY = parseFloat(el.style.top);
 
       el.classList.add("dragging");
       updateTransform(el, el.dataset.r, 1.05); // Slight lift
@@ -193,9 +218,10 @@
       const p = getPoint(ev);
       const dx = p.x - startX;
       const dy = p.y - startY;
+      const docH = document.documentElement.scrollHeight;
       
       el.style.left = (originX + dx) + "px";
-      el.style.top  = (originY + dy) + "px";
+      el.style.top  = ((originY / 100 * docH + dy) / docH * 100) + "%";
     }
 
     function onDragUp() {
@@ -206,6 +232,12 @@
       
       el.classList.remove("dragging");
       updateTransform(el, el.dataset.r, 1);
+      
+      // Convert pixel position back to center-relative calc()
+      const xOff = el.offsetLeft - layer.offsetWidth / 2;
+      el.dataset.xOff = xOff;
+      el.style.left = 'calc(50% + ' + xOff + 'px)';
+      
       persistFromDom();
     }
 

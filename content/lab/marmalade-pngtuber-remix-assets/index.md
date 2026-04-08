@@ -2,6 +2,7 @@
 title: "Marmalade PNG Tuber Assets for PNGTuber-Remix"
 date: 2026-02-06T00:00:00+00:00
 draft: false
+timelapse: "I2W2GBPx3yc"
 tags: ["art", "model"]
 tools: ["csp", "pngtube-remix"]
 formats: ["png", "clip", "pngremix"]
