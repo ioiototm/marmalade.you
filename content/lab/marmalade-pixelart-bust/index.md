@@ -16,4 +16,4 @@ A pixel art bust of Marmalade, rendered at 4x scale twice - a smaller and a bigg
 
 ## The Story
 
-Made for a request by a user on Twitch - I didn't have any pixel art of Marmalade, and they were asking if I had some for parler bead art. I based it on her current PNG tuber model, but simplified it a lot to fit the pixel art style. Work in progress, but I wanted to share it as soon as I had something that felt like a "complete" version of the bust, even if it's not perfect. I might make more pixel art of her in the future, but for now this is what I have.
+Made for a request by the user Nyctophii on Twitch - I didn't have any pixel art of Marmalade, and they were asking if I had some for parler bead art. I based it on her current PNG tuber model, but simplified it a lot to fit the pixel art style. Work in progress, but I wanted to share it as soon as I had something that felt like a "complete" version of the bust, even if it's not perfect. I might make more pixel art of her in the future, but for now this is what I have.
