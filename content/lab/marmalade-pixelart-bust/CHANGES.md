@@ -1,5 +1,5 @@
 ## v0.9
-Updated the size, hair and shading of the bigger version (180x160), all based on Nyctophii from Twitch, and their perler bead art version of the pixel art bust. 
+Updated the size, hair and shading of the bigger version (180x160), all based on Nyctophiii from Twitch, and their perler bead art version of the pixel art bust. 
 
 ### Changed
 - Size from 162x160 to 180x160, to better fit the proportions of her head and hair.
