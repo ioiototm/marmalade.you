@@ -1,6 +1,6 @@
 ---
 title: "Tiny Marmalade Sleeps Cozyly"
-date: 2026-04-24T00:00:00+00:00
+date: 2026-04-23T00:00:00+00:00
 draft: false
 timelapse: "xd1hUflGqzk"
 tags: ["art", "stickers","timelapse"]
