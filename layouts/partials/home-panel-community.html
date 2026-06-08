@@ -22,17 +22,20 @@
       {{ if $hasLink }}
       <a class="thumb-card" href="{{ .link }}" target="_blank" rel="noopener noreferrer">
       {{ else }}
-      <div class="thumb-card lightbox-trigger" data-full="{{ .image }}">
+      <a class="thumb-card" href="{{ $href }}">
       {{ end }}
           {{ partial "license-stamp.html" (dict "license" .license) }}
-          <img src="{{ .image }}" alt="{{ .title }}" loading="lazy" />
+          <div class="thumb-img-wrap">
+            <img src="{{ default .image .thumbnail }}" alt="{{ .title }}" loading="lazy" />
+            <span class="thumb-author-badge">{{ default "Anonymous" .author }}</span>
+          </div>
           <div class="thumb-label">
             {{ .title }}
             {{ with .date }}
             <div class="thumb-date">{{ dateFormat "Jan 2, 2006" . }}</div>
             {{ end }}
           </div>
-      {{ if $hasLink }}</a>{{ else }}</div>{{ end }}
+      </a>
     {{ end }}
     {{ end }}
   </div>

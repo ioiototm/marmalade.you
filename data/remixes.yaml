@@ -6,6 +6,7 @@ remixes:
   #   link: ""              # optional
   #   license: "CC0"        # optional (when "CC0", shows the CC0 stamp)
   #   image: "/images/remixes/sticker-sheet.png"  # add file under static/images/remixes/
+  #   thumbnail: "/images/remixes/sticker-sheet-thumb.png"  # optional still frame (for GIFs)
   #   note: "Scanned from paper, cleaned up in Krita."
   #   type: "Art"
   #   date: "2026-01-11"
@@ -27,3 +28,13 @@ remixes:
     note: "A clean retraced lineart of [one of the earliest Marmalade drawings](/lab/marmalade-origin/)."
     type: "Art"
     date: "2025-02-19"
+
+  - title: "Marmalade Bead Art"
+    author: "Nycto"
+    link: ""
+    license: ""
+    image: "/images/remixes/Marmalade-Nycto.webp"
+    thumbnail: "/images/remixes/Marmalade-Nycto-thumb.jpg"
+    note: "A slideshow of the bead art process Nycto made form start to finish (click to view). Based on the [original pixel art](/lab/marmalade-pixelart-bust)."
+    type: "Bead Art"
+    date: "2026-06-08"

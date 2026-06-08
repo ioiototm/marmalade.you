@@ -517,6 +517,44 @@ textarea { min-height: 100px; resize: vertical; }
   border-bottom: 2px solid var(--line);
 }
 
+.thumb-img-wrap {
+  position: relative;
+  display: block;
+}
+
+.thumb-img-wrap img {
+  display: block;
+}
+
+.thumb-author-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 8px;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.lightbox-author {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 .thumb-date {
   font-size: 0.7rem;
   font-weight: 400;
@@ -1173,7 +1211,8 @@ end commented out tab styles */
 /* Thumb Grid (Remixes) */
 .thumb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 .thumb-card { display: block; position: relative; }
-.thumb-card > img:not(.license-stamp) { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 2px solid var(--line); border-radius: 6px; margin-bottom: 6px; background: #ddd; }
+.thumb-card > img:not(.license-stamp),
+.thumb-img-wrap img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 2px solid var(--line); border-radius: 6px; margin-bottom: 6px; background: #ddd; }
 .thumb-label { font-size: 0.85rem; font-weight: 600; text-align: center; }
 
 /* License stamp (CC0) */

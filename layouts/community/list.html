@@ -21,11 +21,11 @@
     {{ if $hasLink }}
     <a href="{{ .link }}" target="_blank" rel="noopener noreferrer" class="polaroid">
     {{ else }}
-    <div class="polaroid lightbox-trigger" data-full="{{ .image }}">
+    <div class="polaroid lightbox-trigger" data-full="{{ .image }}" data-author="{{ default "Anonymous" .author }}">
     {{ end }}
       {{ partial "license-stamp.html" (dict "license" .license) }}
       <div class="polaroid-image-container">
-        <img src="{{ .image }}" alt="{{ .title }}" loading="lazy">
+        <img src="{{ default .image .thumbnail }}" alt="{{ .title }}" loading="lazy">
         <div class="tape-strip"></div>
       </div>
       <div class="polaroid-caption">
