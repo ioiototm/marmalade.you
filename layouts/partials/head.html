@@ -4,6 +4,29 @@
 <meta name="description" content="{{ with .Params.description }}{{ . }}{{ else }}{{ .Site.Params.tagline }}{{ end }}" />
 <link rel="icon" href="/logos/M.png" type="image/png" />
 
+{{/* ---- Open Graph / Discord embeds ---- */}}
+{{ $ogTitle := cond .IsHome .Site.Title (printf "%s · %s" .Title .Site.Title) }}
+{{ $ogDesc  := or .Params.description .Site.Params.tagline }}
+{{ $ogImage := "" }}
+{{/* 1. Page bundle image (lab pages only) */}}
+{{ if eq .Section "lab" }}
+  {{ $res := .Resources.GetMatch "*thumb*" }}
+  {{ if not $res }}{{ $res = .Resources.GetMatch "*.{png,jpg,jpeg,webp}" }}{{ end }}
+  {{ if $res }}{{ $ogImage = ($res.Fill "1200x630 center").Permalink }}{{ end }}
+{{ end }}
+{{ if and (not $ogImage) .Params.image }}
+{{/* 2. Static image param — use as-is, can't process static/ files */}}
+  {{ $ogImage = .Params.image | absURL }}
+{{ end }}
+<meta property="og:site_name"   content="{{ .Site.Title }}" />
+<meta property="og:type"        content="{{ if .IsHome }}website{{ else }}article{{ end }}" />
+<meta property="og:title"       content="{{ $ogTitle }}" />
+<meta property="og:description" content="{{ $ogDesc }}" />
+<meta property="og:url"         content="{{ .Permalink }}" />
+{{ with $ogImage }}<meta property="og:image" content="{{ . }}" />{{ end }}
+<meta name="twitter:card" content="summary_large_image" />
+{{/* ---- end Open Graph ---- */}}
+
 <!-- Webfonts for handwritten look -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
