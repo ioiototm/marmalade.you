@@ -466,8 +466,9 @@ textarea { min-height: 100px; resize: vertical; }
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
-  overflow: hidden;
+  overflow: clip;
   min-width: 0;
+  padding: 8px;
 }
 @media(min-width: 768px) {
   .split { grid-template-columns: 1fr 1fr; }
