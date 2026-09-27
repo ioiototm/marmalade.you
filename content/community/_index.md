@@ -3,5 +3,4 @@ title: "In the Wild"
 draft: false
 description: "Community remixes, fan art, and weird experiments with Marmalade."
 ---
-This is where Marmalade lives. Remixes, sightings, mutations, and weird experiments.
-If you made something, submit it. If you see something, share it.
+Stuff other people have made with Marmalade! If you made something with her, <a class="about-cta-link" href="/submit">send it in</a> and I'll add it here.

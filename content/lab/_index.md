@@ -2,6 +2,4 @@
 title: "The Source"
 draft: false
 ---
-This is the official stash. Everything here is CC0.
-Models, LoRAs, reference sheets, code snippets.
-Take it, break it, use it, sell it. No permission needed.
+All my Marmalade files live here, and everything is CC0. Drawings, stickers, the LoRA, project files, whatnot. Download whatever you want and do whatever you want with it, no need to ask.
