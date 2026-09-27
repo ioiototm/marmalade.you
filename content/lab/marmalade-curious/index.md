@@ -12,7 +12,7 @@ license: "CC0"
 source: "marmalade-curious"
 ---
 
-A tiny Marmalade sticker looking up at something with awe and wonder in her eyes.
+A tiny Marmalade sticker looking up at something, all curious and wide-eyed.
 
 ## The Story
 

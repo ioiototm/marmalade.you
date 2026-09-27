@@ -8,7 +8,7 @@ tags: ["art", "illustration", "card-design","timelapse"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/images/marmalade-close-up.png"
-summary: "A glam rock inspired Marmalade design, fishnets, skirt, and a leather jacket."
+summary: "A very cute Marmalade getting all up in your face."
 license: "CC0"
 source: "marmalade-close-up"
 ---

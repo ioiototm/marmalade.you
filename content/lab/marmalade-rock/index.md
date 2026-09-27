@@ -12,8 +12,8 @@ license: "CC0"
 source: "marmalade-rock"
 ---
 
-A glam rock inspired design of Marmalade, with fishnets, a skirt, and a leather jacket (and even glasses!). Notably, the first instance of the CC0 eye design, hanging off her belt.
+A glam rock inspired design of Marmalade, with fishnets, a skirt, and a leather jacket (and even glasses!). Fun fact, this is the first time the CC0 eye showed up, it's hanging off her belt!
 
 ## The Story
 
-She was created as the design on the loyalty card for the system that [chuk_chan](https://www.twitch.tv/chuk_chan) uses for his stream. People can chose their loyalty cards, and this is one of them. The .clip file is the complete card design - you can separate her out if you need just Marmalade on her own.
+She was created as the design on the loyalty card for the system that [chuk_chan](https://www.twitch.tv/chuk_chan) uses for his stream. People can choose their loyalty cards, and this is one of them. The .clip file is the complete card design - you can separate her out if you need just Marmalade on her own.

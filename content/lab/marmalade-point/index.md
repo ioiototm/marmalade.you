@@ -6,7 +6,7 @@ tags: ["art", "illustration", "wip"]
 tools: ["csp"]
 formats: ["png", "clip"]
 image: "/images/marmalade-point.png"
-summary: "Unfinished drawing of Marmalade pointing at towards you."
+summary: "Unfinished drawing of Marmalade pointing at you."
 license: "CC0"
 source: "marmalade-point"
 ---

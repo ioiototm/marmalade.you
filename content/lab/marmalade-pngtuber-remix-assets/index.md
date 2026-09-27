@@ -12,7 +12,7 @@ license: "CC0"
 source: "marmalade-pngtuber-assets"
 ---
 
-The PNG Tuber files I use for streaming, built with PNGTube-Remix. You can use these as a starting point for your own PNG Tube models, or just to peek under the hood and see how I set things up.
+The PNG Tuber files I use for streaming, built with PNGTube-Remix. You can use these as a starting point for your own PNG Tube models, or just to see how I set things up.
 
 ## The Story
 
