@@ -1,8 +1,8 @@
 # marmalade.you
 
-Marmalade is a CC0 catgirl mascot. No rules, no permission needed, no gatekeeping.
+Marmalade is a CC0 catgirl, so you can use her for basically anything, no need to ask!
 
-This is the source code for [marmalade.you](https://marmalade.you) - a hub for sharing everything related to her: sticker packs, character sheets, CSP files, PNGtuber models, and whatever else people make.
+This is the source code for [marmalade.you](https://marmalade.you), where I share everything Marmalade: stickers, CSP files, PNGtuber models, LoRAs, and whatever other people make with her.
 
 One half is **The Source** (where I drop my files), the other is **In The Wild** (where you can show off what you've made with her).
 

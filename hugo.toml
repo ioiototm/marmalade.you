@@ -7,13 +7,13 @@ enableRobotsTXT = true
   lastmod = ["lastmod", ":default"]
 
 [params]
-  tagline = "A CC0 mascot, starter files, and community remixes."
+  tagline = "Marmalade, a CC0 catgirl anyone can use for anything."
   modeLabel = "decorate"
   cc0StampSrc = "/stickers/CC0-Marmalade-Eye.png"
 
   [params.home]
     lede = "Marmalade is a CC0 mascot you can use in whatever you're making."
-    sublede = "Grab some starter files, remix her, or just get inspired."
+    sublede = "Grab some of my files and make something with her!"
 
     [params.home.panels]
       [params.home.panels.source]
