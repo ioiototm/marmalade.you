@@ -1,0 +1,48 @@
+{{- /*
+  Featured banner on the home page, between the hero and the two panels.
+
+  Put `featured: true` in a lab page's front matter to feature it.
+  Optional `featured_until: 2026-10-31` stops featuring it after that day (inclusive).
+  Optional `featured_image: banner.png` picks a different image from the page folder (default: the thumb).
+  Optional `featured_text: "..."` sets the blurb (default: `summary`, else the page's first paragraph).
+  If several pages are featured, the newest (by date) wins. With none, nothing is shown.
+  Expiry is checked when the site is built, so it takes effect on the next build.
+*/ -}}
+{{- $pick := false -}}
+{{- range (where (where site.RegularPages "Section" "lab") "Params.featured" true).ByDate.Reverse -}}
+  {{- $page := . -}}
+  {{- if not $pick -}}
+    {{- with .Params.featured_until -}}
+      {{- if now.Before ((time.AsTime .).AddDate 0 0 1) -}}{{- $pick = $page -}}{{- end -}}
+    {{- else -}}
+      {{- $pick = $page -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $pick -}}
+  {{- $img := "" -}}
+  {{- $res := false -}}
+  {{- with .Params.featured_image }}{{ $res = $pick.Resources.Get . }}{{ end -}}
+  {{- if not $res }}{{ $res = .Resources.GetMatch "*thumb*" }}{{ end -}}
+  {{- with $res -}}
+    {{- $img = (.Resize "1600x webp").RelPermalink -}}
+  {{- else -}}
+    {{- with $pick.Params.image }}{{ $img = . }}{{ end -}}
+  {{- end -}}
+<section class="featured" aria-label="Featured">
+  <a class="featured-card" href="{{ .RelPermalink }}">
+    <span class="featured-tape">★ Featured</span>
+    {{- with $img }}
+    <span class="featured-image"><img src="{{ . }}" alt="{{ $pick.Title }}" loading="eager" /></span>
+    {{- end }}
+    <span class="featured-body">
+      <span class="featured-title">{{ .Title }}</span>
+      {{- $text := .Params.featured_text | default .Params.summary -}}
+      {{- if not $text }}{{ with findRE `(?s)<p>.*?</p>` .Content 1 }}{{ $text = index . 0 }}{{ end }}{{ end }}
+      <span class="featured-summary">{{ $text | plainify | htmlUnescape | truncate 260 }}</span>
+      <span class="btn featured-btn">Take a look →</span>
+    </span>
+  </a>
+</section>
+{{- end -}}

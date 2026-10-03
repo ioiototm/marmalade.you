@@ -466,6 +466,86 @@ textarea { min-height: 100px; resize: vertical; }
   box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
 }
 
+/* Featured banner (home-featured.html): one hand-picked lab entry between hero and panels */
+.featured {
+  max-width: 1040px;
+  margin: -24px auto 48px;
+  padding: 8px;
+}
+.featured-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 2px 255px 3px 25px / 255px 5px 225px 3px;
+  box-shadow: var(--solid-shadow);
+  color: inherit;
+  text-decoration: none;
+  transform: rotate(-0.4deg);
+  transition: transform 0.2s ease;
+}
+.featured-card:hover { transform: rotate(0) scale(1.005); }
+.featured-tape {
+  position: absolute;
+  top: -16px;
+  left: 28px;
+  z-index: 2;
+  padding: 2px 16px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ink);
+  background-color: rgba(255, 204, 0, 0.55);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.35) 8px, rgba(255,255,255,0.35) 16px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transform: rotate(-3deg);
+}
+.featured-image {
+  display: block;
+  overflow: hidden;
+  border-bottom: 2px solid var(--line);
+  /* keep the image inside the card's wobbly top corners */
+  border-radius: 2px 255px 0 0 / 255px 5px 0 0;
+  background: #f4f4f4;
+}
+.featured-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featured-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px 24px 24px;
+}
+.featured-title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+.featured-summary { color: var(--muted); font-size: 1rem; line-height: 1.5; }
+.featured-btn { margin-top: 4px; }
+.featured-card:hover .featured-btn { transform: translateY(-2px); box-shadow: 3px 4px 0 var(--line); }
+
+@media (min-width: 768px) {
+  .featured-card { grid-template-columns: 3fr 2fr; }
+  .featured-image {
+    border-bottom: 0;
+    border-right: 2px solid var(--line);
+    border-radius: 2px 0 0 25px / 255px 0 0 3px;
+  }
+  .featured-body { justify-content: center; padding: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-card, .featured-card:hover { transform: none; transition: none; }
+}
+
 .split {
   display: grid;
   grid-template-columns: 1fr;

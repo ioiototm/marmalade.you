@@ -8,6 +8,8 @@ license: "Krea 2 Community License"
 source: "marmalade-krea2-lora"
 preview: false
 related_tag: "lora"
+# Home page banner. Optional: featured_until: 2026-11-30 (stops after that day)
+featured: true
 ---
 Generate Mal yourself! My very first LoRA, made for Krea 2. Grab it at the bottom, drop it into ComfyUI, and she's all yours. Memes, posters, conspiracy boards, whatever you can think of.
 
