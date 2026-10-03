@@ -1,0 +1,66 @@
+{{- with .Params.related_tag -}}
+  {{- $tag := . -}}
+  {{- $current := $ -}}
+  {{- $section := site.GetPage "/lab" -}}
+  {{- $related := slice -}}
+  {{- $entries := slice -}}
+  {{- range $section.RegularPages.ByLastmod.Reverse -}}
+    {{- if and (ne .File.Path $current.File.Path) (in .Params.tags $tag) -}}
+      {{- $related = $related | append . -}}
+      {{- $thumb := "" -}}
+      {{- if .Params.image -}}
+        {{- $thumb = .Params.image -}}
+      {{- end -}}
+      {{- $resources := .Resources.Match "*thumb*" -}}
+      {{- if gt (len $resources) 0 -}}
+        {{- $thumb = ($resources.GetMatch "*thumb*").RelPermalink -}}
+      {{- end -}}
+      {{- $entry := dict
+        "title" .Title
+        "date" (.Date.Format "Jan 2, 2006")
+        "url" .RelPermalink
+        "image" $thumb
+        "summary" (.Summary | plainify | htmlUnescape | truncate 200)
+        "generation" .Params.generation
+      -}}
+      {{- $entries = $entries | append $entry -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if gt (len $related) 0 -}}
+  <section class="related-entries" id="made-with-this" data-entries="{{ $entries | jsonify }}">
+    <div class="related-head">
+      <h2 class="h2">Made with this <span class="related-count">({{ len $related }})</span></h2>
+      {{/* shown by recipe-viewer.js only when the strip is wider than the page */}}
+      <div class="related-arrows" hidden>
+        <button class="related-arrow" type="button" data-dir="-1" aria-label="Scroll back">&lsaquo;</button>
+        <button class="related-arrow" type="button" data-dir="1" aria-label="Scroll forward">&rsaquo;</button>
+      </div>
+    </div>
+    <div class="related-tray-wrap">
+      <div class="related-tray">
+        {{- range $i, $page := $related -}}
+        {{- $thumb := "" -}}
+        {{- if .Params.image -}}
+          {{- $thumb = .Params.image -}}
+        {{- end -}}
+        {{- $resources := .Resources.Match "*thumb*" -}}
+        {{- if gt (len $resources) 0 -}}
+          {{- $thumb = ($resources.GetMatch "*thumb*").RelPermalink -}}
+        {{- end -}}
+        <button class="related-card" data-viewer="{{ $i }}" type="button">
+          <div class="related-thumb">
+            {{- if $thumb -}}
+              <img src="{{ $thumb }}" alt="{{ .Title }}" loading="lazy" />
+            {{- end -}}
+          </div>
+          <div class="related-meta">
+            <div class="related-title">{{ .Title }}</div>
+            <div class="related-date">{{ .Date.Format "Jan 2, 2006" }}</div>
+          </div>
+        </button>
+        {{- end -}}
+      </div>
+    </div>
+  </section>
+  {{- end -}}
+{{- end -}}

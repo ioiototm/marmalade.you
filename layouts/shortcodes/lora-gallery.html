@@ -1,0 +1,60 @@
+{{- $tag := .Get "tag" | default .Page.Params.related_tag -}}
+{{- $current := .Page -}}
+{{- $section := site.GetPage "/lab" -}}
+{{- $examples := slice -}}
+{{- range $section.RegularPages.ByLastmod.Reverse -}}
+  {{- if and (ne .File.Path $current.File.Path) (in .Params.tags $tag) .Params.generation -}}
+    {{- $examples = $examples | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $examples) 0 -}}
+<div class="sketchbook-gallery" id="examples">
+  {{- range $examples -}}
+  {{- $thumb := "" -}}
+  {{- $resources := .Resources.Match "*thumb*" -}}
+  {{- if gt (len $resources) 0 -}}
+    {{- $thumb = ($resources.GetMatch "*thumb*").RelPermalink -}}
+  {{- else -}}
+    {{- $first := .Resources.GetMatch "*.{png,jpg,jpeg,webp}" -}}
+    {{- if $first -}}{{- $thumb = $first.RelPermalink -}}{{- end -}}
+  {{- end -}}
+  <div class="sketch-card">
+    {{- if $thumb -}}
+    <div class="sketch-card-image lightbox-trigger" data-full="{{ $thumb }}">
+      <img src="{{ $thumb }}" alt="{{ .Title }}" loading="lazy" />
+    </div>
+    {{- end -}}
+    <div class="sketch-card-caption">{{ .Title }}</div>
+    {{ with .Params.generation }}
+    <details class="sketch-recipe">
+      <summary class="sketch-recipe-toggle">Settings</summary>
+      <div class="sketch-recipe-body">
+        <div class="recipe-prompt">
+          <div class="recipe-label">Prompt</div>
+          <code class="recipe-code">{{ .prompt }}</code>
+        </div>
+        {{ with .negative }}
+        <div class="recipe-prompt">
+          <div class="recipe-label">Negative</div>
+          <code class="recipe-code recipe-code--neg">{{ . }}</code>
+        </div>
+        {{ end }}
+        <div class="recipe-grid">
+          {{ with .model }}<div class="recipe-field"><span class="recipe-label">LoRA</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .base }}<div class="recipe-field"><span class="recipe-label">Base</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .sampler }}<div class="recipe-field"><span class="recipe-label">Sampler</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .scheduler }}<div class="recipe-field"><span class="recipe-label">Scheduler</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .steps }}<div class="recipe-field"><span class="recipe-label">Steps</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .cfg }}<div class="recipe-field"><span class="recipe-label">CFG</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .seed }}<div class="recipe-field"><span class="recipe-label">Seed</span><span class="recipe-value recipe-value--mono">{{ . }}</span></div>{{ end }}
+          {{ with .size }}<div class="recipe-field"><span class="recipe-label">Size</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+          {{ with .lora_weight }}<div class="recipe-field"><span class="recipe-label">Weight</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        </div>
+      </div>
+    </details>
+    {{ end }}
+    <a href="{{ .RelPermalink }}" class="sketch-card-link">View full page →</a>
+  </div>
+  {{- end -}}
+</div>
+{{- end -}}

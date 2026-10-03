@@ -1,0 +1,18 @@
+{{- /*
+  Collapsible section with a title and Markdown content inside.
+
+  {{< collapsible "My ComfyUI workflow" >}}
+  Anything in **Markdown**, images too: ![alt](screenshot.png)
+  {{< /collapsible >}}
+
+  Add `open=true` to have it start expanded:
+  {{< collapsible title="Notes" open=true >}} ... {{< /collapsible >}}
+*/ -}}
+{{- $title := .Get "title" | default (.Get 0) | default "More" -}}
+{{- $open := .Get "open" | default false -}}
+<details class="collapsible"{{ if $open }} open{{ end }}>
+  <summary class="collapsible-toggle">{{ $title }}</summary>
+  <div class="collapsible-body">
+    {{ .Inner | .Page.RenderString (dict "display" "block") }}
+  </div>
+</details>

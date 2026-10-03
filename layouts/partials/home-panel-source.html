@@ -10,35 +10,88 @@
     <span class="muted">{{ $subtitle }}</span>
   </div>
 
+  {{/*
+    Top row: the newest thing, plus the newest thing of the other kind (AI or not),
+    so a batch of LoRA pictures never pushes the latest drawing off the front page.
+    Bottom row: random picks, chosen in the browser on every visit (the script below).
+    AI never takes more than half the cards. Without JS it shows the next-newest instead.
+  */}}
+  {{ $labPages := (where .Site.RegularPages "Section" "lab").ByLastmod.Reverse }}
+  {{ if eq (len $labPages) 0 }}
   <div class="mini-grid">
-    {{/* Show newest items (recently added/edited) */}}
-    {{ $labPages := (where .Site.RegularPages "Section" "lab").ByLastmod.Reverse }}
-    {{ if eq (len $labPages) 0 }}
-      <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet.</p>
-    {{ else }}
-    {{ range first $count $labPages }}
-      <a class="mini-card" href="{{ .RelPermalink }}">
-        {{ partial "license-stamp.html" (dict "license" .Params.license) }}
-
-        {{/* Thumbnail */}}
-        {{ $thumb := "" }}
-        {{ if .Params.image }}
-          {{ $thumb = .Params.image }}
-        {{ end }}
-        {{ $resources := .Resources.Match "*thumb*" }}
-        {{ if gt (len $resources) 0 }}
-          {{ $thumb = ($resources.GetMatch "*thumb*").RelPermalink }}
-        {{ end }}
-
-        {{ partial "thumb-placeholder.html" (dict "src" $thumb "alt" .Title "variant" "thumb-placeholder--home" "fit" "cover") }}
-
-        <div class="mini-meta">
-          <div class="mini-title">{{ .Title }}</div>
-          <div class="mini-date">{{ .Lastmod.Format "Jan 2, 2006" }}</div>
-          <div class="mini-note">{{ .Summary | truncate 40 }}</div>
-        </div>
-      </a>
-    {{ end }}
-    {{ end }}
+    <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet.</p>
   </div>
+  {{ else }}
+    {{ $aiCap := div $count 2 }}
+    {{ $first := index $labPages 0 }}
+    {{ $firstAI := in $first.Params.tags "ai" }}
+    {{ $second := false }}
+    {{ range $labPages }}
+      {{ if and (not $second) (ne .RelPermalink $first.RelPermalink) (ne (in .Params.tags "ai") $firstAI) }}
+        {{ $second = . }}
+      {{ end }}
+    {{ end }}
+    {{ if and (not $second) (gt (len $labPages) 1) }}{{ $second = index $labPages 1 }}{{ end }}
+
+    {{ $top := slice $first }}
+    {{ with $second }}{{ $top = $top | append . }}{{ end }}
+    {{ $topLinks := slice }}
+    {{ $aiCount := 0 }}
+    {{ range $top }}
+      {{ $topLinks = $topLinks | append .RelPermalink }}
+      {{ if in .Params.tags "ai" }}{{ $aiCount = add $aiCount 1 }}{{ end }}
+    {{ end }}
+
+    {{/* everything else is the pool for the random slots; the no-JS fallback takes the newest from it */}}
+    {{ $pool := slice }}
+    {{ range $labPages }}
+      {{ if not (in $topLinks .RelPermalink) }}{{ $pool = $pool | append . }}{{ end }}
+    {{ end }}
+    {{ $fallback := slice }}
+    {{ $fallbackAI := $aiCount }}
+    {{ range $pool }}
+      {{ if lt (add (len $top) (len $fallback)) $count }}
+        {{ $isAI := in .Params.tags "ai" }}
+        {{ if or (not $isAI) (lt $fallbackAI $aiCap) }}
+          {{ $fallback = $fallback | append . }}
+          {{ if $isAI }}{{ $fallbackAI = add $fallbackAI 1 }}{{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+  <div class="mini-grid" data-source-grid data-ai-cap="{{ $aiCap }}">
+    {{ range $top }}{{ partial "source-mini-card.html" (dict "page" . "slot" "newest") }}{{ end }}
+    {{ range $fallback }}{{ partial "source-mini-card.html" (dict "page" . "slot" "random") }}{{ end }}
+  </div>
+
+    {{ if $pool }}
+  <template data-source-pool>
+    {{ range $pool }}{{ partial "source-mini-card.html" (dict "page" . "slot" "random") }}{{ end }}
+  </template>
+  <script>
+  (function () {
+    // Swap the bottom row for random picks, keeping AI to at most half of the panel.
+    var grid = document.querySelector('[data-source-grid]');
+    var pool = document.querySelector('template[data-source-pool]');
+    if (!grid || !pool) return;
+    var slots = grid.querySelectorAll('[data-slot="random"]');
+    var cap = parseInt(grid.getAttribute('data-ai-cap'), 10) || 0;
+    var ai = grid.querySelectorAll('[data-slot="newest"][data-ai="true"]').length;
+    var cards = Array.prototype.slice.call(pool.content.children);
+    for (var i = cards.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+    }
+    var n = 0;
+    for (var k = 0; k < cards.length && n < slots.length; k++) {
+      var isAI = cards[k].getAttribute('data-ai') === 'true';
+      if (isAI && ai >= cap) continue;
+      if (isAI) ai++;
+      slots[n].replaceWith(cards[k].cloneNode(true));
+      n++;
+    }
+  })();
+  </script>
+    {{ end }}
+  {{ end }}
 </div>

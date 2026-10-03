@@ -21,8 +21,8 @@
         {{ end }}
       </div>
       {{/* Tool / format full-name lookup */}}
-      {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" }}
-      {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" }}
+      {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" "comfyui" "ComfyUI" }}
+      {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" "md" "Markdown document" "pdf" "PDF document" "safetensors" "Safetensors model" }}
       <div class="lab-tags">
         {{ range .Params.tags }}
           <span class="tag">{{ . }}</span>
@@ -39,15 +39,72 @@
       </div>
     </header>
 
-    {{ if .Params.source }}
-    {{/* Preview gallery — filled dynamically from API */}}
+    {{ if .Params.generation }}
+    {{/* Generation image + recipe card */}}
+    {{ $genImg := .Resources.GetMatch "*thumb*" }}
+    {{ if not $genImg }}{{ $genImg = .Resources.GetMatch "*.{png,jpg,jpeg,webp}" }}{{ end }}
+    {{ with $genImg }}
+    <div class="gen-image-wrap">
+      <img class="gen-image lightbox-trigger" src="{{ .RelPermalink }}" alt="{{ $.Title }}" data-full="{{ .RelPermalink }}" />
+    </div>
+    {{ end }}
+    {{ $gen := .Params.generation }}
+    <div class="recipe-card">
+      <div class="recipe-header">Recipe</div>
+      <div class="recipe-prompt">
+        <div class="recipe-label">Prompt</div>
+        <code class="recipe-code">{{ $gen.prompt }}</code>
+      </div>
+      {{ with $gen.negative }}
+      <div class="recipe-prompt">
+        <div class="recipe-label">Negative</div>
+        <code class="recipe-code recipe-code--neg">{{ . }}</code>
+      </div>
+      {{ end }}
+      <div class="recipe-grid">
+        {{ with $gen.model }}<div class="recipe-field"><span class="recipe-label">LoRA</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.base }}<div class="recipe-field"><span class="recipe-label">Base</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.sampler }}<div class="recipe-field"><span class="recipe-label">Sampler</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.scheduler }}<div class="recipe-field"><span class="recipe-label">Scheduler</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.steps }}<div class="recipe-field"><span class="recipe-label">Steps</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.cfg }}<div class="recipe-field"><span class="recipe-label">CFG</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.seed }}<div class="recipe-field"><span class="recipe-label">Seed</span><span class="recipe-value recipe-value--mono">{{ . }}</span></div>{{ end }}
+        {{ with $gen.size }}<div class="recipe-field"><span class="recipe-label">Size</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+        {{ with $gen.lora_weight }}<div class="recipe-field"><span class="recipe-label">LoRA weight</span><span class="recipe-value">{{ . }}</span></div>{{ end }}
+      </div>
+    </div>
+    {{ else if and .Params.source (ne .Params.preview false) }}
+    {{/* Preview gallery — filled dynamically from API (set `preview: false` to use the bundle thumb instead) */}}
     {{ $api := site.Params.files.api }}
     <div data-preview="{{ .Params.source }}" data-api="{{ $api }}"{{ with .Params.timelapse }} data-timelapse="{{ . }}"{{ end }}></div>
+    {{ else }}
+    {{/* Static image fallback — show page bundle thumb */}}
+    {{ $heroImg := .Resources.GetMatch "*thumb*" }}
+    {{ if not $heroImg }}{{ $heroImg = .Resources.GetMatch "*.{png,jpg,jpeg,webp}" }}{{ end }}
+    {{ with $heroImg }}
+    <div class="gen-image-wrap">
+      <img class="gen-image lightbox-trigger" src="{{ .RelPermalink }}" alt="{{ $.Title }}" data-full="{{ .RelPermalink }}" />
+    </div>
     {{ end }}
+    {{ end }}
+
+    {{/* Gallery of everything made with this (only on pages with related_tag, e.g. the LoRA), pictures before the story */}}
+    {{ partial "related-carousel.html" . }}
 
     <div class="prose">
       {{ .Content }}
     </div>
+
+    {{ $config := .Resources.GetMatch "training-config*" }}
+    {{ with $config }}
+    <details class="collapsible">
+      <summary class="collapsible-toggle">Training Configuration</summary>
+      <div class="collapsible-body">
+        <pre class="training-config-code"><code>{{ .Content }}</code></pre>
+        <a href="{{ .RelPermalink }}" class="training-config-dl" download>Save config file ↓</a>
+      </div>
+    </details>
+    {{ end }}
 
     {{ if .Params.source }}
     {{/* Changelog — read raw CHANGES.md from page bundle if it exists */}}
@@ -84,8 +141,13 @@
     {{ end }}
   </article>
 </div>
+{{ partial "recipe-viewer-modal.html" . }}
 
 {{/* Include lab navigation keyboard support */}}
 {{ $labNav := resources.Get "js/lab-navigation.js" }}
 <script src="{{ $labNav.RelPermalink }}" type="module"></script>
+{{ with .Params.related_tag }}
+{{ $viewer := resources.Get "js/recipe-viewer.js" }}
+<script src="{{ $viewer.RelPermalink }}" defer></script>
+{{ end }}
 {{ end }}

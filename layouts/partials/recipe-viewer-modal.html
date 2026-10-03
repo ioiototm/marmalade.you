@@ -1,0 +1,9 @@
+{{- with .Params.related_tag -}}
+<div class="recipe-viewer" hidden>
+  <div class="recipe-viewer-overlay"></div>
+  <button class="recipe-viewer-close" type="button" aria-label="Close">&times;</button>
+  <button class="recipe-viewer-nav recipe-viewer-prev" type="button" aria-label="Previous">&lsaquo;</button>
+  <button class="recipe-viewer-nav recipe-viewer-next" type="button" aria-label="Next">&rsaquo;</button>
+  <div class="recipe-viewer-card"></div>
+</div>
+{{- end -}}

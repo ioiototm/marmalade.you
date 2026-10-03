@@ -1,0 +1,18 @@
+{{- /*
+  One card in the home page's "The Source" panel.
+  Expects: (dict "page" <lab page> "slot" "newest" | "random")
+  data-ai marks pages tagged "ai" so the panel can keep AI to at most half of the cards.
+*/ -}}
+{{- $p := .page -}}
+{{- $thumb := "" -}}
+{{- with $p.Params.image }}{{ $thumb = . }}{{ end -}}
+{{- with $p.Resources.GetMatch "*thumb*" }}{{ $thumb = .RelPermalink }}{{ end -}}
+<a class="mini-card" href="{{ $p.RelPermalink }}" data-ai="{{ in $p.Params.tags "ai" }}" data-slot="{{ .slot }}">
+  {{ partial "license-stamp.html" (dict "license" $p.Params.license) }}
+  {{ partial "thumb-placeholder.html" (dict "src" $thumb "alt" $p.Title "variant" "thumb-placeholder--home" "fit" "cover") }}
+  <div class="mini-meta">
+    <div class="mini-title">{{ $p.Title }}</div>
+    <div class="mini-date">{{ $p.Lastmod.Format "Jan 2, 2006" }}</div>
+    <div class="mini-note">{{ $p.Summary | truncate 40 }}</div>
+  </div>
+</a>

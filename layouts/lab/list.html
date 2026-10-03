@@ -30,8 +30,8 @@
     </div>
 
     {{/* Tool / format full-name lookup */}}
-    {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" }}
-    {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" }}
+    {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" "comfyui" "ComfyUI" }}
+    {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" "md" "Markdown document" "pdf" "PDF document" "safetensors" "Safetensors model" }}
 
     <div class="mini-grid" id="lab-grid">
       {{ range .Pages.ByLastmod.Reverse }}

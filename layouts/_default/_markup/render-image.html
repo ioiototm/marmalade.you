@@ -1,0 +1,5 @@
+{{- /* Markdown images: resolve page-bundle files, open in the lightbox like every other image */ -}}
+{{- $src := .Destination -}}
+{{- with .Page.Resources.Get .Destination -}}{{- $src = .RelPermalink -}}{{- end -}}
+<img class="prose-image lightbox-trigger" src="{{ $src }}" alt="{{ .Text }}" data-full="{{ $src }}" loading="lazy"{{ with .Title }} title="{{ . }}"{{ end }} />
+{{- /**/ -}}
