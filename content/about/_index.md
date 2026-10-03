@@ -70,7 +70,7 @@ So:
 *   want to print stickers and sell them? **Yes.** (give me a link though, I want some too)
 *   want to completely redesign her? **Please.**
 
-This site has two prats: **The Source** is where I drop my files, and **In The Wild** is where you can show off what you've made with her.
+This site has two parts: **The Source** is where I drop my files, and **In The Wild** is where you can show off what you've made with her.
 
 ### Show me what you made!
 If you made anything with her (and I mean *anything*), please send it to me! I'd love to see it, and I'll put it up on the <a class="about-cta-link" href="/community">In The Wild</a> page.

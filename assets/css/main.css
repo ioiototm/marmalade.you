@@ -15,6 +15,10 @@
   --grain-opacity: 0.25;
   --font-body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
   --font-head: "Kalam", "Segoe Print", "Comic Sans MS", cursive, sans-serif;
+  /* aliases used by the recipe card and the download hover preview */
+  --page-bg: var(--bg);
+  --card-bg: var(--card);
+  --text: var(--ink);
 }
 
 *{ box-sizing:border-box; }
@@ -581,6 +585,11 @@ textarea { min-height: 100px; resize: vertical; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* home panel cards are short and wide: aim the crop at the top, where the faces are */
+.thumb-placeholder--home .thumb-image-cover {
+  object-position: 50% 20%;
 }
 
 .thumb-image-contain {
@@ -1211,6 +1220,596 @@ end commented out tab styles */
   opacity: 0.7;
   margin-left: auto;
   margin-right: 1rem;
+}
+
+/* Generation recipe card */
+.gen-image-wrap {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.gen-image {
+  max-width: 100%;
+  max-height: 70vh;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: var(--card-bg);
+}
+
+/* Images placed in page text via Markdown (see _markup/render-image.html) */
+.prose-image {
+  display: block;
+  max-width: min(100%, 520px);
+  height: auto;
+  margin: 1.5rem auto;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: var(--card-bg);
+  cursor: zoom-in;
+}
+
+.recipe-card {
+  margin: 1.5rem 0;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+.recipe-header {
+  background: var(--ink);
+  color: var(--page-bg);
+  font-family: 'Kalam', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 6px 14px;
+}
+
+.recipe-prompt {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.recipe-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+
+.recipe-code {
+  display: block;
+  font-family: 'Atkinson Hyperlegible', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.recipe-code--neg {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--line);
+}
+
+/* fill the rest of an unfinished last row, otherwise the ink background shows as a black block */
+.recipe-grid::after {
+  content: "";
+  grid-column: auto / -1;
+  background: var(--card);
+}
+
+.recipe-field {
+  padding: 10px 14px;
+  background: var(--card);
+}
+
+.recipe-value {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.recipe-value--mono {
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+/* Related entries carousel (sits right under the hero, before the story) */
+.related-entries {
+  margin: 1.75rem 0 2rem;
+}
+
+.related-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.related-head .h2 { margin: 0; }
+
+.related-count {
+  font-size: 0.6em;
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+.related-arrows { display: flex; gap: 8px; flex-shrink: 0; }
+.related-arrows[hidden] { display: none; }
+
+/* phones swipe; the arrows are for mouse users */
+@media (hover: none) and (pointer: coarse) {
+  .related-arrows { display: none !important; }
+}
+
+.related-arrow {
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0 3px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+  transition: transform 0.12s, opacity 0.2s;
+}
+.related-arrow:hover:not(:disabled) { transform: translateY(-1px); }
+.related-arrow:disabled { opacity: 0.25; cursor: default; box-shadow: none; }
+
+/* faded edges hint that there's more to scroll */
+.related-tray-wrap { position: relative; }
+.related-tray-wrap::before,
+.related-tray-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 16px;
+  width: 48px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.related-tray-wrap::before { left: 0; background: linear-gradient(to right, var(--card), transparent); }
+.related-tray-wrap::after { right: 0; background: linear-gradient(to left, var(--card), transparent); }
+.related-tray-wrap.can-back::before,
+.related-tray-wrap.can-fwd::after { opacity: 1; }
+
+.related-tray {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px 2px 16px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.related-card {
+  flex: 0 0 190px;
+  scroll-snap-align: start;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  font: inherit;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.related-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+}
+
+.related-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.related-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%; /* most gens are tall portraits with the face up top */
+}
+
+.related-meta {
+  padding: 8px 10px;
+}
+
+.related-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.related-date {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+/* Collapsible sections (training config, and the `collapsible` shortcode) */
+.collapsible {
+  margin-top: 2rem;
+  border: 2px solid var(--line);
+  background: rgba(0,0,0,0.015);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.06);
+}
+.collapsible + .collapsible { margin-top: 1rem; }
+
+.collapsible-toggle {
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.collapsible-toggle::-webkit-details-marker { display: none; }
+
+.collapsible-toggle::after {
+  content: '+';
+  margin-left: auto;
+  font-size: 1.3rem;
+  font-weight: 400;
+  opacity: 0.5;
+  transition: transform 0.2s;
+}
+.collapsible[open] > .collapsible-toggle::after { content: '\2212'; }
+
+.collapsible[open] > .collapsible-toggle {
+  border-bottom: 2px dashed #eee;
+}
+
+.collapsible-body {
+  padding: 1rem 1.25rem;
+}
+.collapsible-body > :first-child { margin-top: 0; }
+.collapsible-body > :last-child { margin-bottom: 0; }
+
+.training-config-code {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 0;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.training-config-code code {
+  font-family: 'Atkinson Hyperlegible', monospace;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+  white-space: pre;
+}
+
+.training-config-dl {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--muted);
+  padding-bottom: 1px;
+}
+.training-config-dl:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* Sketchbook gallery (lora-gallery shortcode) */
+.sketchbook-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 2rem;
+  margin: 2rem 0;
+  padding: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .sketchbook-gallery { grid-template-columns: 1fr; }
+}
+
+.sketch-card {
+  background: #fff;
+  padding: 0.75rem 0.75rem 1rem;
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.sketch-card:nth-child(odd) { transform: rotate(0.8deg); }
+.sketch-card:nth-child(even) { transform: rotate(-0.6deg); }
+.sketch-card:nth-child(3n) { transform: rotate(1.2deg); }
+.sketch-card:hover { transform: rotate(0deg) scale(1.02) !important; z-index: 5; }
+
+.sketch-card::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px;
+  height: 22px;
+  background-color: rgba(240, 230, 140, 0.5);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 10px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  z-index: 5;
+  opacity: 0.9;
+}
+.sketch-card:nth-child(even)::before {
+  transform: translateX(-50%) rotate(3deg);
+  background-color: rgba(173, 216, 230, 0.5);
+}
+.sketch-card:nth-child(3n)::before {
+  background-color: rgba(255, 182, 193, 0.5);
+  width: 50px;
+}
+
+.sketch-card-image {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #eee;
+  border: 1px solid #eee;
+  margin-bottom: 0.75rem;
+  cursor: zoom-in;
+}
+
+.sketch-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.2s;
+  filter: grayscale(15%);
+}
+.sketch-card:hover .sketch-card-image img { filter: grayscale(0%); }
+
+.sketch-card-caption {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.sketch-recipe {
+  border-top: 1px dashed rgba(0,0,0,0.15);
+  margin-top: 0.5rem;
+}
+
+.sketch-recipe-toggle {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+}
+.sketch-recipe-toggle::-webkit-details-marker { display: none; }
+
+.sketch-recipe-toggle::after {
+  content: '+';
+  margin-left: auto;
+  font-size: 1.1rem;
+  font-weight: 400;
+  opacity: 0.5;
+  transition: transform 0.2s;
+}
+.sketch-recipe[open] .sketch-recipe-toggle::after { content: '\2212'; }
+
+.sketch-recipe-body {
+  padding-bottom: 0.5rem;
+}
+
+.sketch-recipe-body .recipe-prompt {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.sketch-recipe-body .recipe-grid {
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+.sketch-card-link {
+  display: block;
+  text-align: center;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  margin-top: 0.5rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  text-decoration: none;
+  background: rgba(255, 225, 170, 0.35);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.sketch-card-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+}
+
+/* Recipe viewer modal (carousel popup) */
+body.viewer-open { overflow: hidden; }
+
+.recipe-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.recipe-viewer[hidden] { display: none; }
+
+.recipe-viewer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+}
+
+.recipe-viewer-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  z-index: 3;
+  opacity: 0.8;
+  line-height: 1;
+}
+.recipe-viewer-close:hover { opacity: 1; }
+
+.recipe-viewer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  border: 2px solid var(--line);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  transition: background 0.15s;
+  line-height: 1;
+  padding: 0 0 2px 0;
+}
+.recipe-viewer-nav:hover { background: #fff; }
+
+.recipe-viewer-prev { left: 1rem; }
+.recipe-viewer-next { right: 1rem; }
+
+.recipe-viewer-card {
+  position: relative;
+  z-index: 2;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  max-width: 860px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.15);
+}
+
+.recipe-viewer-left {
+  flex: 0 0 45%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-right: 1px solid #eee;
+}
+
+.recipe-viewer-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.recipe-viewer-right {
+  flex: 1;
+  min-width: 0;
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: 85vh;
+}
+
+.recipe-viewer-title {
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.recipe-viewer-date {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.recipe-viewer-summary {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.recipe-viewer-card .sketch-recipe {
+  margin-top: 0;
+}
+
+.recipe-viewer-card .recipe-prompt {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.recipe-viewer-card .recipe-grid {
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+@media (max-width: 700px) {
+  .recipe-viewer { padding: 1rem; }
+  .recipe-viewer-nav { width: 36px; height: 36px; font-size: 1.2rem; }
+  .recipe-viewer-prev { left: 0.5rem; }
+  .recipe-viewer-next { right: 0.5rem; }
+  .recipe-viewer-card { flex-direction: column; max-width: 500px; }
+  .recipe-viewer-left { flex: none; max-height: 40vh; border-right: none; border-bottom: 1px solid #eee; }
+  .recipe-viewer-right { padding: 1rem; max-height: none; overflow-y: auto; }
 }
 
 /* Thumb Grid (Remixes) */

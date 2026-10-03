@@ -13,11 +13,31 @@
 
     // Keyboard navigation
     document.addEventListener('keydown', function(e) {
+      // leave browser shortcuts alone (Alt+Left is "back")
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
+        return;
+      }
+
+      // an open overlay owns the arrow keys (recipe viewer, lightbox)
+      if (document.body.classList.contains('viewer-open')) {
+        return;
+      }
+      const lightbox = document.getElementById('lightbox');
+      if (lightbox && !lightbox.hidden) {
+        return;
+      }
+
       const activeElement = document.activeElement;
-      if (activeElement && 
-          (activeElement.tagName === 'INPUT' || 
-           activeElement.tagName === 'TEXTAREA' || 
+      if (activeElement &&
+          (activeElement.tagName === 'INPUT' ||
+           activeElement.tagName === 'TEXTAREA' ||
+           activeElement.tagName === 'SELECT' ||
            activeElement.isContentEditable)) {
+        return;
+      }
+
+      // arrows scroll the gallery strip when you're in it
+      if (activeElement && activeElement.closest && activeElement.closest('.related-tray')) {
         return;
       }
 
