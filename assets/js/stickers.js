@@ -58,6 +58,28 @@
     return Math.random().toString(16).slice(2) + Date.now().toString(16);
   }
 
+  // Vertical positions are saved as a % of the page height, but drawn in px against
+  // refH: the height of the full page. While a lab filter hides cards the page gets
+  // shorter, so refH is frozen then and stickers stay where they were stuck.
+  let refH = document.documentElement.scrollHeight;
+
+  function filtered() {
+    return document.documentElement.dataset.filtered === "true";
+  }
+
+  function setTopPct(el, pct) {
+    el.dataset.topPct = pct;
+    el.style.top = (pct / 100 * refH) + "px";
+  }
+
+  function relayout() {
+    if (filtered()) return;
+    const h = document.documentElement.scrollHeight;
+    if (h === refH) return;
+    refH = h;
+    layer.querySelectorAll(".placed-sticker").forEach(el => setTopPct(el, parseFloat(el.dataset.topPct)));
+  }
+
   function updateTransform(el, r, s) {
     // Container handles 2D placement on the desk (Rotation + Scale)
     el.style.transform = `rotate(${r}deg) scale(${s})`;
@@ -107,12 +129,11 @@
     const docX = viewportX + window.scrollX;
     const docY = viewportY + window.scrollY;
     const w = 120;
-    const docH = document.documentElement.scrollHeight;
     const xOff = (docX - w / 2) - layer.offsetWidth / 2;
-    
+
     el.dataset.xOff = xOff;
     el.style.left = 'calc(50% + ' + xOff + 'px)';
-    el.style.top  = ((docY - w / 2) / docH * 100) + "%";
+    setTopPct(el, (docY - w / 2) / refH * 100);
     el.style.width = w + "px";
     
     updateTransform(el, r, 1);
@@ -127,15 +148,12 @@
   }
 
   function persistFromDom() {
-    const docH = document.documentElement.scrollHeight;
     const out = Array.from(layer.querySelectorAll(".placed-sticker")).map(el => {
-      let topPct = parseFloat(el.style.top);
-      if (el.style.top.endsWith('px')) topPct = parseFloat(el.style.top) / docH * 100;
       return {
         id: el.dataset.id,
         src: el.querySelector(".sticker-image").getAttribute("src"),
         xOff: parseFloat(el.dataset.xOff),
-        topPct: topPct,
+        topPct: parseFloat(el.dataset.topPct),
         width: el.style.width || "120px",
         r: el.dataset.r || "0"
       };
@@ -146,24 +164,24 @@
   function restore() {
     const items = load();
     layer.innerHTML = "";
-    const docH = document.documentElement.scrollHeight;
+    refH = document.documentElement.scrollHeight;
     const halfW = layer.offsetWidth / 2;
     for (const it of items) {
       const el = createStickerElement(it.src, it.id || uid(), it.r || 0);
-      
+
       let xOff;
       if (it.xOff !== undefined) {
         // Current format: X offset from center + Y percentage
         xOff = it.xOff;
-        el.style.top = it.topPct + "%";
+        setTopPct(el, it.topPct);
       } else if (it.leftPct !== undefined) {
         // Migrate v2 percentage format
         xOff = it.leftPct / 100 * layer.offsetWidth - halfW;
-        el.style.top = it.topPct + "%";
+        setTopPct(el, it.topPct);
       } else {
         // Migrate v1 raw px format
         xOff = parseFloat(it.left) - halfW;
-        el.style.top = (parseFloat(it.top) / docH * 100) + "%";
+        setTopPct(el, parseFloat(it.top) / refH * 100);
       }
       
       el.dataset.xOff = xOff;
@@ -199,10 +217,10 @@
       el.classList.add("selected");
 
       const p = getPoint(ev);
-      startX = p.x; 
+      startX = p.x;
       startY = p.y;
       originX = el.offsetLeft;
-      originY = parseFloat(el.style.top);
+      originY = parseFloat(el.dataset.topPct) / 100 * refH; // px
 
       el.classList.add("dragging");
       updateTransform(el, el.dataset.r, 1.05); // Slight lift
@@ -218,10 +236,9 @@
       const p = getPoint(ev);
       const dx = p.x - startX;
       const dy = p.y - startY;
-      const docH = document.documentElement.scrollHeight;
-      
+
       el.style.left = (originX + dx) + "px";
-      el.style.top  = ((originY / 100 * docH + dy) / docH * 100) + "%";
+      setTopPct(el, (originY + dy) / refH * 100);
     }
 
     function onDragUp() {
@@ -356,4 +373,8 @@
   restore();
   layer.style.pointerEvents = "none";
   setDrawer(false);
+
+  // Follow the page height as images load or the window resizes (but not while filtered)
+  if ("ResizeObserver" in window) new ResizeObserver(relayout).observe(document.body);
+  window.addEventListener("load", relayout);
 })();

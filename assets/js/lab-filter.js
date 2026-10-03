@@ -25,6 +25,9 @@ function initLabFilter() {
   }
 
   function applyFilter(filter) {
+    // Lets stickers.js keep measuring against the full (unfiltered) page height,
+    // so placed stickers don't slide around when the page gets shorter
+    document.documentElement.dataset.filtered = filter === "all" ? "" : "true";
     items.forEach((item) => {
       if (filter === "all") {
         item.style.display = "";
