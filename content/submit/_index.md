@@ -3,11 +3,11 @@ title: "Submit"
 description: "Share your Marmalade remix, fan art, or creation."
 ---
 
-{{< submit-intro >}}Share a remix, an asset, a clip, a model, a meme.{{< /submit-intro >}}
+{{< submit-intro >}}If you made something with Marmalade, or she inspired you, send it over!{{< /submit-intro >}}
 
 {{< submit-split >}}
 {{< submit-card title="Option 1: The Git Way" subtitle="For the coders" >}}
-This website is open source. The best way to submit is to add yourself to the database.
+The website is open source, so if you know Git, yuo can add your thing yourself!
 
 <ol class="list-decimal ml-5 mb-4">
 <li>Fork the repository on GitHub.</li>
@@ -70,11 +70,11 @@ remixes:
 {{< /submit-details >}}
 {{< /submit-card >}}
 
-{{< submit-card class="mt-32" title="Moderation" subtitle="Please follow these guidelines." >}}
+{{< submit-card class="mt-32" title="Moderation" subtitle="Just a few rules." >}}
 <ul class="list">
   <li>No hate/harassment.</li>
   <li>No stolen copyrighted work (remixes of CC0/Marmalade are fine!).</li>
   <li>No malware or dangerous files.</li>
-  <li><strong>Tool Agnostic:</strong> AI, traditional, digital, code, music. All welcome.</li>
+  <li><strong>Any</strong> tools are fine: AI, traditional, digital, code, music, whatever you like.</li>
 </ul>
 {{< /submit-card >}}
