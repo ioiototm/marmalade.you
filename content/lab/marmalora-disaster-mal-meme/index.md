@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+I love this one, it's a recreation of the funny Disaster Girl meme, and oh boy is it good. Mal with those little eyes and smirk, it captures the actual meme to a T.

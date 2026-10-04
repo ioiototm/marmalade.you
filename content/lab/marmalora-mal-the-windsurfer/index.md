@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+Made this during a meeting, while I was bored - don't tell anyone. I love the rough lines style, it looks so good! This is probably my new favourite style for Mal!

@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+Parody of the very funny Always Sunny in Philadelphia scene where Charlie has a whole conspiracy board ready, here Mal apparently thinks birds aren't real (maybe she has a point). I love her wild-eyed expression, and the messy hair and feathers stuck in it.

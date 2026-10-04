@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+This is a funny one, it's basically the thing where cats get their faces in a very long tube, and they look so funny, and this is what I tried to do.

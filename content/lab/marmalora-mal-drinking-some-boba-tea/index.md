@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+Mega cute Mal drinking some boba tea! I love her puffy cheeks, it looks just so cute!

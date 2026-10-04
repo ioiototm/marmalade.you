@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+My Marmalade? No, comrade, OUR Marmalade! This is a fun one, riffing on the style of old Soviet propaganda posters, with Mal standing heroically with a broken chain in her hand, and the words "OPEN SOURCE" across the top (the N is the cyrilic one, which looks like an English H).

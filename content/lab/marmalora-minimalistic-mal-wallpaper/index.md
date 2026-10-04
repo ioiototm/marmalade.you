@@ -20,4 +20,4 @@ generation:
   lora_weight: 0.9
 ---
 
-Seed is from a batch of 2.
+This is a minimalistic wallpaper, I use it on my phone as the main wallpaper, and it looks so good! The design is just perfect.
