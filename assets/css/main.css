@@ -2554,6 +2554,8 @@ a.license-stamp-wrap { cursor: pointer; }
 }
 
 /* Hover Preview Tooltip */
+.download-hover-preview[hidden] { display: none; }
+
 .download-hover-preview {
   position: fixed;
   z-index: 9999;

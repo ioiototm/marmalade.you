@@ -203,6 +203,8 @@
     document.addEventListener('mouseout', (e) => {
       const link = e.target.closest('[data-img-preview]');
       if (!link) return;
+      // Moving between bits inside the same row (name -> badge) isn't leaving it
+      if (e.relatedTarget && link.contains(e.relatedTarget)) return;
 
       tooltip.hidden = true;
       tooltip.src = ''; // Clear to stop loading/playing
