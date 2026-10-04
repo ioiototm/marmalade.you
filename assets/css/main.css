@@ -23,6 +23,18 @@
 
 *{ box-sizing:border-box; }
 html{ height:100%; overflow-x: hidden; }
+
+/* Any #anchor jump lands below the sticky top bar, on every page */
+[id] { scroll-margin-top: 110px; }
+
+/* A jumped-to paragraph gets a quick highlighter swipe so you can spot it */
+p:target {
+  animation: target-flash 2s ease-out;
+}
+@keyframes target-flash {
+  0%, 30% { background: rgba(255, 204, 0, 0.45); }
+  100% { background: transparent; }
+}
 body{
   min-height:100%;
   margin:0;

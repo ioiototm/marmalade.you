@@ -88,10 +88,4 @@
     }
 }
 
-/* Anchor offset for in-page jumps */
-#who,
-#origin,
-#philosophy,
-#rules {
-    scroll-margin-top: 90px;
-}
+/* Anchor offset for in-page jumps lives in main.css ([id] { scroll-margin-top }) */
