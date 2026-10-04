@@ -1,0 +1,8 @@
+{{/* One handwritten line under the Downloads heading. CC0 pages only.
+     identity.js swaps in the visitor's name from the "Hello, ___" box. */}}
+{{- if eq (upper (default "" .Params.license)) "CC0" -}}
+<p class="cc0-note">
+  <span data-identity-yours data-default="These are yours.">These are yours.</span>
+  <a class="cc0-note-link" href="/about/#can-i">public domain, no need to ask</a>
+</p>
+{{- end -}}

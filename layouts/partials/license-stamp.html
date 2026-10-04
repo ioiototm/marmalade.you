@@ -1,5 +1,14 @@
 {{- $license := upper (default "" .license) -}}
 {{- $src := default "/stickers/CC0-Marmalade-Eye.png" site.Params.cc0StampSrc -}}
+{{- $tip := "Public domain (CC0). It's yours, no need to ask." -}}
 {{- if eq $license "CC0" -}}
-  <img class="license-stamp" src="{{ $src }}" alt="CC0 (public domain)" loading="lazy" />
+  {{- if .link -}}
+  <a class="license-stamp-wrap" href="/about/#philosophy" data-tip="{{ $tip }}" data-identity-tip aria-label="{{ $tip }} Read why.">
+    <img class="license-stamp" src="{{ $src }}" alt="CC0 (public domain)" loading="lazy" />
+  </a>
+  {{- else -}}
+  <span class="license-stamp-wrap" data-tip="{{ $tip }}" data-identity-tip>
+    <img class="license-stamp" src="{{ $src }}" alt="CC0 (public domain)" loading="lazy" />
+  </span>
+  {{- end -}}
 {{- end -}}

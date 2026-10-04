@@ -11,7 +11,7 @@
   {{ end }}
 
   <article class="card lab-item-detail">
-    {{ partial "license-stamp.html" (dict "license" .Params.license) }}
+    {{ partial "license-stamp.html" (dict "license" .Params.license "link" true) }}
     <header class="lab-header">
       <h1 class="h1">{{ .Title }}</h1>
       <div class="lab-meta">
@@ -119,13 +119,15 @@
     {{ if .Params.source }}
     {{/* Dynamic downloads from files API */}}
     {{ $api := site.Params.files.api }}
-    <div id="downloads" class="downloads-section" data-downloads="{{ .Params.source }}" data-api="{{ $api }}">
+    <div id="downloads" class="downloads-section" data-downloads="{{ .Params.source }}" data-api="{{ $api }}"{{ if .Params.generation }} data-comfy="true"{{ end }}>
       <h2 class="h2">Downloads</h2>
+      {{ partial "cc0-note.html" . }}
       <p class="muted">Loading versions…</p>
     </div>
     {{ else if .Params.downloads }}
     <div id="downloads" class="downloads-section">
       <h2 class="h2">Downloads</h2>
+      {{ partial "cc0-note.html" . }}
       <ul class="download-list">
         {{ range .Params.downloads }}
         <li>
