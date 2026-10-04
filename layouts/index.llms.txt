@@ -1,0 +1,35 @@
+# {{ site.Title }}
+
+> {{ site.Params.tagline }} Marmalade (Mal) is an orange catgirl mascot released under CC0 1.0 (public domain): anyone can use, remix, sell or train on her and her artwork, no permission or credit needed.
+
+Everything on this site is CC0 unless a page says otherwise. The one exception right now: the Marmalade LoRA weights are under the Krea 2 Community License, because they are built on Krea 2 (the character itself is still CC0).
+
+Downloadable files live on https://files.marmalade.you. Each lab page's files can be listed as JSON at {{ site.Params.files.api }}/list/<slug> (the slug is the last part of the page URL).
+
+## Pages
+
+- [Home]({{ site.Home.Permalink }})
+{{- with site.GetPage "/about" }}
+- [{{ .Title }}]({{ .Permalink }}): {{ with .Description }}{{ . }}{{ else }}who Marmalade is and why she's CC0{{ end }}
+{{- end }}
+{{- with site.GetPage "/lab" }}
+- [{{ .Title }}]({{ .Permalink }}): all source files, drawings, stickers, AI generations and the LoRA
+{{- end }}
+{{- with site.GetPage "/community" }}
+- [{{ .Title }}]({{ .Permalink }}): fan art and things other people made with Marmalade
+{{- end }}
+{{- with site.GetPage "/submit" }}
+- [{{ .Title }}]({{ .Permalink }}): send in something you made with her
+{{- end }}
+
+## The Source (lab)
+{{ range (where site.RegularPages "Section" "lab").ByDate.Reverse }}
+{{- $desc := .Params.summary | default .Description -}}
+{{- if not $desc }}{{ with findRE `(?s)<p>.*?</p>` .Content 1 }}{{ $desc = index . 0 }}{{ end }}{{ end }}
+- [{{ .Title }}]({{ .Permalink }}) ({{ .Date.Format "2006-01-02" }}{{ with .Params.tags }}; {{ delimit . ", " }}{{ end }}{{ with .Params.license }}; license: {{ . }}{{ end }}){{ with $desc }}: {{ . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200 | htmlUnescape }}{{ end }}
+{{- end }}
+
+## Optional
+
+- [RSS feed]({{ "index.xml" | absURL }})
+- [Sitemap]({{ "sitemap.xml" | absURL }})

@@ -1,0 +1,10 @@
+# Marmalade is CC0. Everyone is welcome here: people, search engines, AI crawlers and agents.
+User-agent: *
+Allow: /
+
+# Content signals (https://contentsignals.org): yes to search, AI answers and AI training
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+Sitemap: {{ "sitemap.xml" | absURL }}
+
+# Plain-text site map for AI tools: {{ "llms.txt" | absURL }}

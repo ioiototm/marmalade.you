@@ -1,4 +1,4 @@
-baseURL = "http://marmalade.you/"
+baseURL = "https://marmalade.you/"
 languageCode = "en-gb"
 title = "Marmalade"
 enableRobotsTXT = true
@@ -35,6 +35,16 @@ timeZone = "Europe/London"
 
   [params.files]
     api = "https://files.marmalade.you/api"
+
+# llms.txt: a plain-text map of the site for AI tools and agents (layouts/index.llms.txt)
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
+
+[outputs]
+  home = ["html", "rss", "llms"]
 
 [markup]
   [markup.goldmark]
