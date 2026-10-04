@@ -1294,6 +1294,88 @@ end commented out tab styles */
   box-shadow: none;
 }
 
+/* "editable source" badge on .clip / .pngremix / etc. */
+.file-badge {
+  margin-left: 0.6rem;
+  padding: 2px 8px;
+  background: var(--accent);
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-2deg);
+}
+
+/* Name + badge group: badge drops under the name when space runs out */
+.file-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0.6rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.file-main .file-name { overflow-wrap: anywhere; }
+.file-main .file-badge { margin-left: 0; flex-shrink: 0; }
+.file-size { white-space: nowrap; flex-shrink: 0; margin-left: 1rem; }
+.download-icon { flex-shrink: 0; }
+
+/* Instant badge tooltip, shown above so it doesn't fight the image preview */
+.file-badge { position: relative; }
+.file-badge::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  width: max-content;
+  max-width: 240px;
+  padding: 6px 10px;
+  background: var(--card);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: none;
+  line-height: 1.3;
+  white-space: normal;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+  z-index: 40;
+}
+.file-badge:hover::after { opacity: 1; }
+
+.file-badge--comfy { background: #d9ecff; transform: rotate(1.5deg); }
+
+/* CC0 "these are yours" line under the Downloads heading */
+.cc0-note {
+  margin: -0.4rem 0 1rem;
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  font-weight: 700;
+  transform: rotate(-1deg);
+  transform-origin: left center;
+}
+.cc0-note-link {
+  margin-left: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.cc0-note-link:hover { color: var(--ink); }
+
+@media (max-width: 520px) {
+  .download-button { flex-wrap: wrap; gap: 4px; }
+  .file-badge { margin-left: 0; }
+}
+
 .file-size {
   font-weight: 400;
   font-size: 0.9em;
@@ -1901,25 +1983,62 @@ body.viewer-open { overflow: hidden; }
 .thumb-img-wrap img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 2px solid var(--line); border-radius: 6px; margin-bottom: 6px; background: #ddd; }
 .thumb-label { font-size: 0.85rem; font-weight: 600; text-align: center; }
 
-/* License stamp (CC0) */
-.license-stamp {
+/* License stamp (CC0) — the wrapper is positioned, the img sits inside it */
+.license-stamp-wrap {
   position: absolute;
   top: -10px;
   right: -20px;
-  width: 56px;
-  height: auto;
   z-index: 30;
   transform: rotate(10deg);
   transform-origin: top right;
+  display: block;
+  line-height: 0;
+}
+a.license-stamp-wrap { cursor: pointer; }
+
+.license-stamp {
+  display: block;
+  width: 56px;
+  height: auto;
   filter:
     drop-shadow(0 3px 0 rgba(0, 0, 0, 0.15))
     drop-shadow(2px 6px 10px rgba(0, 0, 0, 0.18));
-  pointer-events: none;
   border: 0;
   background: transparent;
   margin: 0;
   aspect-ratio: auto;
+  transition: transform 0.15s;
 }
+.license-stamp-wrap:hover .license-stamp,
+.license-stamp-wrap:focus-visible .license-stamp { transform: scale(1.08) rotate(-4deg); }
+
+/* Hover tooltip */
+.license-stamp-wrap::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: max-content;
+  max-width: 200px;
+  padding: 6px 10px;
+  background: var(--card);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: left;
+  white-space: normal;
+  transform: rotate(-10deg);
+  transform-origin: top right;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.license-stamp-wrap:hover::after,
+.license-stamp-wrap:focus-visible::after { opacity: 1; }
 
 .mini-card .license-stamp,
 .thumb-card .license-stamp {
