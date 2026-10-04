@@ -9,6 +9,8 @@ description: "Marmalade is a CC0 catgirl, so you can use her for basically anyth
     <li><a href="#who">Who is she?</a></li>
     <li><a href="#origin">The Origin Story</a></li>
     <li><a href="#philosophy">Why CC0?</a></li>
+    <li><a href="#public-domain">She is CC0 (Public Domain)</a></li>
+    <li><a href="#show-me">Show me what you made!</a></li>
     <li><a href="#rules">Just Have Fun</a></li>
   </ul>
 </div>
@@ -54,6 +56,8 @@ I got tired of seeing the opposite in some art spaces. The "do not repost, my OC
 
 So here she is, **CC0**. I'm sharing <a class="about-cta-link" href="/lab">*everything*</a> I can (CSP files, timelapses, code, project files) because it's way more fun when you see how stuff is made. I want you to be able to pick things apart and build on top of them, same way I do.
 
+<div id="public-domain"></div>
+
 ### She is CC0 (Public Domain)
 
 <img src="/stickers/CC0-Marmalade-Eye.png" alt="CC0" width="180" style="float: right; margin: 0 0 20px 20px; transform: rotate(5deg);">
@@ -70,7 +74,11 @@ So:
 *   want to print stickers and sell them? **Yes.** (give me a link though, I want some too)
 *   want to completely redesign her? **Please.**
 
+<p id="can-i">And if you're still about to ask me if it's okay: it is. I know "free to use" usually comes with a catch, so asking first is a good habit, but you can drop it here. If you ask anyway the answer is yes, I'll just be a little mad you had to ask. 🧡</p>
+
 This site has two parts: **The Source** is where I drop my files, and **In The Wild** is where you can show off what you've made with her.
+
+<div id="show-me"></div>
 
 ### Show me what you made!
 If you made anything with her (and I mean *anything*), please send it to me! I'd love to see it, and I'll put it up on the <a class="about-cta-link" href="/community">In The Wild</a> page.
