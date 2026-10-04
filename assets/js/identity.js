@@ -7,7 +7,20 @@
     const originalTitle = titleEl.textContent || document.title;
     const storageKey = "marmalade-identity";
 
+    // Anything on the page that should talk to the visitor by name
+    function personalise(name) {
+      document.querySelectorAll("[data-identity-yours]").forEach((el) => {
+        el.textContent = name ? `${name}, these are yours.` : el.dataset.default;
+      });
+      document.querySelectorAll("[data-identity-tip]").forEach((el) => {
+        el.dataset.tip = name
+          ? `Public domain (CC0). It's yours, ${name}, no need to ask.`
+          : "Public domain (CC0). It's yours, no need to ask.";
+      });
+    }
+
     function apply(name) {
+      personalise(name);
       if (name) {
         const label = `${name}'s Marmalade`;
         titleEl.textContent = label;
