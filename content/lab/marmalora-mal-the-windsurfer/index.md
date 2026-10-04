@@ -9,7 +9,7 @@ source: "marmalora-mal-the-windsurfer"
 summary: "Came up with this idea randomly while being bored in a meeting, the rough lines illustration style is absolutely amazing!"
 generation:
   prompt: "digital illustration with rough lines of marmalade the catgirl  at the beach, we see her on a windsurf, in the middle of the water aquaplaning, as if she is gliding. Her face is full of concentration, and she looks very coo, wearing sunglasses, her tongue is out at the corner of her mouth. Her hair is tucked in a bun. She is wearing a spandex suit and a harness that is connected to the windsurf handle"
-  model: "Krea 2 Marmalade v1.0 (+ refusal_reduction_v2 @ 1.0)"
+  model: "Krea 2 Marmalade v1.0 (+ TextFusion v2 @ 1.0)"
   base: "Krea 2 Turbo (fp8)"
   sampler: "euler"
   scheduler: "simple"

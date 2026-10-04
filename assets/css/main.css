@@ -1393,6 +1393,7 @@ end commented out tab styles */
 .recipe-field {
   padding: 10px 14px;
   background: var(--card);
+  min-width: 0; /* let long values wrap instead of stretching the grid past the card */
 }
 
 .recipe-value {
@@ -1400,6 +1401,7 @@ end commented out tab styles */
   font-weight: 700;
   font-size: 0.9rem;
   margin-top: 2px;
+  overflow-wrap: anywhere; /* file names like refusal_reduction_v2 have no spaces to break on */
 }
 
 .recipe-value--mono {

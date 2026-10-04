@@ -36,6 +36,8 @@ The trigger phrase is "Marmalade the catgirl", so just put that in your prompt a
 
 I've been using it at 0.9 strength, on Krea 2 Turbo.
 
+I also use another LoRA alongside it called **Krea2 TextFusion Refusal-Reduction LoRA** at 1.0, and it somehow really makes everything so much better! She gets way more expressive and emotive, and it makes the model actually draw Marmalade instead of sometimes just giving you a cat. It's optional, but I really recommend it. Just search "TextFusion" on Civitai and it should be there. (All my examples use it, so if you drag one into ComfyUI and it complains about a missing LoRA, that's the one!).
+
 ## Can I use it for...?
 
 ![Mal: "You're public domain?" "Yes."](marmachad.png)
