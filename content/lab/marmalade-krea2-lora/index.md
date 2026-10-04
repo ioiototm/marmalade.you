@@ -28,6 +28,8 @@ I have the actual training .yaml file I used below, so if you want to see what s
 
 I did train it for 3000 steps, but it seems the checkpoint at 1500 steps is good and the one I have been using (and the one I am releasing). I tested a lot of the checkpoints together, and later ones maybe are a bit too overfit, although I am not sure.
 
+If you want the full story, I wrote a whole blog post about training it: how I captioned the images, what each checkpoint looked like, and a sweep of what the LoRA strength actually does. [Read it here](https://ioioto.me/posts/marmalade-lora/).
+
 ## How to use it
 
 The trigger phrase is "Marmalade the catgirl", so just put that in your prompt anywhere and she shows up. A few examples are at the top of this page if you didn't catch them. It includes the prompt, settings for ComfyUI - you can just drag the image onto ComfyUI and it should load the config within the image.
