@@ -10,6 +10,10 @@
   function isImage(filename)   { return IMG_EXTS.includes(ext(filename)); }
   function isPreview(filename) { return filename.toLowerCase().startsWith('preview'); }
 
+  // Layered / editable originals: these get an "editable source" badge
+  const SOURCE_EXTS = ['clip','psd','kra','sai','sai2','xcf','procreate','aseprite','pngremix','vrm','vroid','blend','svg'];
+  function isSource(filename) { return SOURCE_EXTS.includes(ext(filename)); }
+
   function icon(filename) {
     const e = ext(filename);
     if (['png','jpg','jpeg','webp','gif','bmp','tiff'].includes(e)) return '🖼️';
@@ -31,14 +35,26 @@
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
+  // Set per page (data-comfy on the downloads box): PNGs there carry a ComfyUI workflow
+  let comfyPage = false;
+
   function buildFileRow(f) {
     const sizeStr = f.size ? `<span class="file-size">(${fmtSize(f.size)})</span>` : '';
     
     // Check if it's an image to show preview
     const previewAttr = isImage(f.path) ? `data-img-preview="${f.url}"` : '';
 
-    return `<a href="${f.url}" class="download-button" download ${previewAttr}>
-      <span class="file-name">${icon(f.path)} ${f.path}</span>
+    const sourceBadge = isSource(f.path)
+      ? `<span class="file-badge" data-tip="The original file I actually worked in. It's here so you can change it.">✎ editable source</span>`
+      : (comfyPage && ext(f.path) === 'png')
+        ? `<span class="file-badge file-badge--comfy" data-tip="Drag this PNG into ComfyUI and the whole workflow loads with it.">⚙ ComfyUI workflow included</span>`
+        : '';
+
+    return `<a href="${f.url}" class="download-button${isSource(f.path) ? ' download-button--source' : ''}" download ${previewAttr}>
+      <span class="file-main">
+        <span class="file-name">${icon(f.path)} ${f.path}</span>
+        ${sourceBadge}
+      </span>
       ${sizeStr}
       <span class="download-icon">↓</span>
     </a>`;
@@ -350,13 +366,15 @@
 
     const latestIdx = Math.max(0, data.versions.findIndex(v => v.version === data.latest));
 
-    // Build downloads UI
+    // Build downloads UI (keep the server-rendered CC0 note)
+    const cc0Note = dlEl.querySelector('.cc0-note');
     dlEl.innerHTML = '';
 
     const heading = document.createElement('h2');
     heading.className = 'h2';
     heading.textContent = 'Downloads';
     dlEl.appendChild(heading);
+    if (cc0Note) dlEl.appendChild(cc0Note);
 
     // Version selector row
     const row = document.createElement('div');
@@ -483,6 +501,7 @@
 
     for (const dlEl of dlContainers) {
       const slug = dlEl.dataset.downloads;
+      comfyPage = dlEl.dataset.comfy === 'true';
       const apiBase = dlEl.dataset.api;
       if (!slug || !apiBase) continue;
 
