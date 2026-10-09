@@ -1,7 +1,7 @@
 ---
 title: "Minimalistic Mal wallpaper"
 date: 2026-10-01
-tags: ["lora", "ai", "wallpaper"]
+tags: ["art", "lora", "ai", "wallpaper"]
 tools: ["comfyui"]
 formats: ["png"]
 license: "CC0"

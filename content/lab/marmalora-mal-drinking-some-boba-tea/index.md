@@ -1,7 +1,7 @@
 ---
 title: "Mal drinking some boba tea"
 date: 2026-09-30
-tags: ["lora", "ai"]
+tags: ["art", "lora", "ai"]
 tools: ["comfyui"]
 formats: ["png"]
 license: "CC0"

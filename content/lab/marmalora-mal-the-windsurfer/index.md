@@ -1,7 +1,7 @@
 ---
 title: "Mal the windsurfer"
 date: 2026-10-02
-tags: ["lora", "ai"]
+tags: ["art", "lora", "ai"]
 tools: ["comfyui"]
 formats: ["png"]
 license: "CC0"

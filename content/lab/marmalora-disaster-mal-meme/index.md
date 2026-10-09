@@ -1,7 +1,7 @@
 ---
 title: "Disaster Mal Meme"
 date: 2026-09-29
-tags: ["lora", "ai"]
+tags: ["art", "lora", "ai"]
 tools: ["comfyui"]
 formats: ["png"]
 license: "CC0"
