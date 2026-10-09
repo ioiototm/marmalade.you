@@ -1,0 +1,5 @@
+{{- /* One snapshot in the About page's origin strip. Expects: (dict "page" "label" "sub" ["attr"]) */ -}}
+<a class="snap" href="{{ .page.RelPermalink }}"{{ with .attr }} {{ . | safeHTMLAttr }}{{ end }}>
+  <img src="{{ partial "lab-image-url.html" (dict "page" .page) }}" alt="{{ .page.Title }}" loading="lazy" />
+  <span class="snap-caption">{{ .label }}<small>{{ .sub }}</small></span>
+</a>

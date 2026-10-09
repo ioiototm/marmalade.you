@@ -2115,6 +2115,153 @@ a.license-stamp-wrap { cursor: pointer; }
 }
 
 /* Community polaroids */
+/* Arriving from the About page's community peek: scroll clear of the sticky header, glow briefly */
+.polaroid-wrapper { scroll-margin-top: 120px; }
+.polaroid-wrapper:target .polaroid { animation: peek-glow 2.4s ease-out 1; }
+@keyframes peek-glow {
+  0%, 40% { box-shadow: 0 0 0 6px rgba(255, 204, 0, 0.75), 3px 3px 8px rgba(0,0,0,0.1); }
+  100% { box-shadow: 3px 3px 8px rgba(0,0,0,0.1); }
+}
+
+/* Snapshots: small taped photos used on the About page (lab-snap, origin-strip, community-peek) */
+.snap {
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  max-width: 100%;
+  padding: 10px 10px 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.12);
+  color: inherit;
+  text-decoration: none;
+  transform: rotate(-2deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.snap::before { /* tape */
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 70px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-3deg);
+  background-color: rgba(240, 230, 140, 0.55);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.snap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: #f4f4f4;
+}
+.snap-caption {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25;
+  text-align: center;
+}
+.snap-caption small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.snap:hover, .snap:focus-visible {
+  transform: rotate(0) scale(1.06);
+  box-shadow: 6px 8px 16px rgba(0,0,0,0.18);
+  z-index: 2;
+}
+.prose a.snap { text-decoration: none; }
+
+/* Floated next to the text */
+.snap--float { width: 220px; }
+.snap--left { float: left; margin: 8px 24px 16px 0; transform: rotate(-2.5deg); }
+.snap--right { float: right; margin: 8px 0 16px 24px; transform: rotate(2.5deg); }
+/* floated snaps show the whole picture (tall posters would lose their headline in a square crop) */
+.snap--float img { aspect-ratio: auto; height: auto; max-height: 360px; object-fit: contain; }
+.snap--peek .snap-caption small { margin-top: 2px; }
+
+/* community-peek: the random cards sit in a display:contents span so they flow in the strip */
+.snap-cards { display: contents; }
+/* the empty "your art here?" frame at the end of the community row */
+.snap--empty { background: transparent; border: 2px dashed #cfc8bd; box-shadow: none; transform: rotate(2deg); }
+.snap--empty::before { background-color: rgba(173, 216, 230, 0.55); }
+.snap-empty-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: repeating-linear-gradient(45deg, transparent 0 10px, rgba(0,0,0,0.025) 10px 20px);
+  font-family: var(--font-head);
+  font-size: 3.5rem;
+  color: #c9c1b5;
+  transition: color 0.2s;
+}
+.snap--empty:hover { border-color: var(--line); background: #fff; }
+.snap--empty:hover .snap-empty-frame { color: var(--ink); }
+
+/* snap-pile: overlapping photos at messy angles; hover pulls one to the front */
+.snap-pile {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 0 2.5rem;
+  clear: both;
+}
+.snap-pile .snap { width: clamp(110px, 22vw, 190px); flex-shrink: 0; }
+.snap-pile .snap + .snap { margin-left: clamp(-60px, -6vw, -36px); }
+.snap-pile .snap:nth-child(5n+1) { transform: rotate(-7deg) translateY(10px); }
+.snap-pile .snap:nth-child(5n+2) { transform: rotate(4deg) translateY(-6px); }
+.snap-pile .snap:nth-child(5n+3) { transform: rotate(-2deg) translateY(16px); }
+.snap-pile .snap:nth-child(5n+4) { transform: rotate(8deg) translateY(0); }
+.snap-pile .snap:nth-child(5n+5) { transform: rotate(-5deg) translateY(-8px); }
+.snap-pile .snap:hover, .snap-pile .snap:focus-visible { transform: rotate(0) translateY(-10px) scale(1.12); z-index: 5; }
+/* captions are faint in the pile (photos overlap them) and turn solid on the one you hover */
+.snap-pile .snap-caption { opacity: 0.35; transition: opacity 0.2s; }
+.snap-pile .snap:hover .snap-caption, .snap-pile .snap:focus-visible .snap-caption { opacity: 1; }
+@media (max-width: 600px) {
+  /* phones: fewer, smaller photos so the pile still fits the width */
+  .snap-pile .snap { width: 26vw; }
+  .snap-pile .snap + .snap { margin-left: -5vw; }
+  .snap-pile .snap:nth-child(n+5) { display: none; }
+  .snap-pile .snap-caption { display: none; } /* too narrow to read, and there's no hover on touch */
+}
+
+/* Section anchors on the About page: start each section below the previous section's floated snap */
+.snap-clear { clear: both; }
+
+/* Origin strip: then → then → now */
+.snap-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 8px;
+  margin: 2rem 0 2.5rem;
+  clear: both;
+}
+.snap-strip .snap { width: 180px; }
+.snap-strip .snap:nth-of-type(2) { transform: rotate(1.5deg); }
+.snap-strip .snap:nth-of-type(3) { transform: rotate(-1deg); }
+.snap-strip .snap:hover { transform: rotate(0) scale(1.06); }
+.snap-arrow { font-family: var(--font-head); font-size: 2rem; color: var(--muted); }
+
+@media (max-width: 600px) {
+  .snap--float { float: none; display: block; width: 70%; margin: 1rem auto 1.5rem; }
+  .snap-strip .snap { width: 42%; }
+  .snap-arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snap, .snap:hover { transition: none; }
+  .polaroid-wrapper:target .polaroid { animation: none; }
+}
+
 .community-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

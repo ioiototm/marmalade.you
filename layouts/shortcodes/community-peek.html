@@ -1,0 +1,37 @@
+{{- /*
+  A centered row of random pieces from In The Wild (data/remixes.yaml), ending with an empty
+  "your art here?" frame that links to Submit. Each snapshot grows on hover and takes you to
+  that piece on the community wall. Without JS it shows the newest.
+
+  {{< community-peek count="3" >}}
+*/ -}}
+{{- $remixes := sort (default (slice) site.Data.remixes.remixes) "date" "desc" -}}
+{{- $count := int (.Get "count" | default 3) -}}
+<div class="snap-strip">
+  <span class="snap-cards" data-peek-row data-count="{{ $count }}">
+    {{- range first $count $remixes }}{{ partial "community-peek-card.html" . }}{{ end }}
+  </span>
+  <a class="snap snap--empty" href="/submit/">
+    <span class="snap-empty-frame" aria-hidden="true">+</span>
+    <span class="snap-caption">Your art here?<small>send it in →</small></span>
+  </a>
+</div>
+{{- if gt (len $remixes) $count }}
+<template data-peek-pool>
+  {{- range $remixes }}{{ partial "community-peek-card.html" . }}{{ end }}
+</template>
+<script>
+(function () {
+  var row = document.querySelector('[data-peek-row]');
+  var pool = document.querySelector('template[data-peek-pool]');
+  if (!row || !pool) return;
+  var cards = Array.prototype.slice.call(pool.content.children);
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var n = parseInt(row.getAttribute('data-count'), 10) || 1;
+  row.replaceChildren.apply(row, cards.slice(0, n).map(function (c) { return c.cloneNode(true); }));
+})();
+</script>
+{{- end }}

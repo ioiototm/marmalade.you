@@ -17,7 +17,7 @@
   {{ range $remixes }}
   {{ $hasLink := and .link (ne (trim .link " ") "") }}
   {{ $author := default "Anonymous" .author }}
-  <div class="polaroid-wrapper">
+  <div class="polaroid-wrapper" id="{{ .title | urlize }}">
     {{ if $hasLink }}
     <a href="{{ .link }}" target="_blank" rel="noopener noreferrer" class="polaroid">
     {{ else }}

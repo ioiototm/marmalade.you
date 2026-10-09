@@ -1,0 +1,5 @@
+{{- /* One In The Wild piece as a snapshot; links to its spot on the community wall. Expects a remixes.yaml entry. */ -}}
+<a class="snap snap--peek" href="/community/#{{ .title | urlize }}">
+  <img src="{{ default .image .thumbnail }}" alt="{{ .title }}" loading="lazy" />
+  <span class="snap-caption">{{ .title }}<small>by {{ default "Anonymous" .author }} →</small></span>
+</a>

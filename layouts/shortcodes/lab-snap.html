@@ -1,0 +1,20 @@
+{{- /*
+  A taped snapshot of a lab entry, floated next to the text, linking to its page.
+
+  {{< lab-snap page="marmalora-mal-in-a-propaganda-poster" side="left" >}}
+  {{< lab-snap page="marmalade-krea2-lora" image="marmachad.png" side="right" caption="Yes." >}}
+
+  page:    folder name under content/lab/
+  image:   optional file from that folder (default: its thumb / image)
+  side:    left | right (default right) | none (no float, e.g. inside a snap-row)
+  caption: optional; default is the page title
+*/ -}}
+{{- $p := site.GetPage (printf "/lab/%s" (.Get "page")) -}}
+{{- if not $p }}{{ errorf "lab-snap: no lab page %q (in %s)" (.Get "page") .Page.File.Path }}{{ end -}}
+{{- $src := partial "lab-image-url.html" (dict "page" $p "image" (.Get "image")) -}}
+{{- $side := .Get "side" | default "right" -}}
+<a class="snap{{ if ne $side "none" }} snap--float snap--{{ $side }}{{ end }}" href="{{ $p.RelPermalink }}">
+  <img src="{{ $src }}" alt="{{ $p.Title }}" loading="lazy" />
+  <span class="snap-caption">{{ .Get "caption" | default $p.Title }}</span>
+</a>
+{{- /**/ -}}

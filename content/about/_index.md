@@ -15,7 +15,7 @@ description: "Marmalade is a CC0 catgirl, so you can use her for basically anyth
   </ul>
 </div>
 
-<div id="who"></div>
+<div id="who" class="snap-clear"></div>
 
 ### Okay, so, who is she?
 
@@ -28,7 +28,7 @@ I mean, what she stands for is what matters. I never sat down and designed her, 
 That's basically what **marmalade.you** means, she is yours.
 
 
-<div id="origin"></div>
+<div id="origin" class="snap-clear"></div>
 
 ### The Origin Story
 
@@ -38,17 +38,19 @@ She never really felt like she was mine - seeing her in different styles and dif
 
 Later I wanted to make something I could release as CC0 without worrying about rights or ownership, as "Gothfield" was way too close to another orange cat. Riding on the "goth" aesthetic, I was trying to come up with a new name. After some brainstorming with ChatGPT, the name "Marmalade" came up, or more importantly, her nickname, "Mal" - it just sounds **goth**, but the full name is the opposite. Once she had a name, she kind of became her own thing. I started drawing her myself, making stickers and variations, and slowly she got a bit of a personality.
 
+{{< origin-strip >}}
+
 > **She's supposed to be for everyone, so everyone can have their own Marmalade.***
 
 <br>
 <hr class="tape-divider">
 <br>
 
-<div id="philosophy"></div>
+<div id="philosophy" class="snap-clear"></div>
 
 ### Why CC0?
 
-<img src="/stickers/marmalade-annoyed.png" alt="Eye roll" width="180" style="float: left; margin: 0 20px 20px 0; transform: rotate(-5deg);">
+{{< lab-snap page="marmalora-mal-in-a-propaganda-poster" side="left" >}}
 
 I come from a coding background, where open source is just normal. If you like someone's project, you fork it and build your own thing on top, or help improve it, nobody thinks twice about it. 
 
@@ -56,7 +58,7 @@ I got tired of seeing the opposite in some art spaces. The "do not repost, my OC
 
 So here she is, **CC0**. I'm sharing <a class="about-cta-link" href="/lab">*everything*</a> I can (CSP files, timelapses, code, project files) because it's way more fun when you see how stuff is made. I want you to be able to pick things apart and build on top of them, same way I do.
 
-<div id="public-domain"></div>
+<div id="public-domain" class="snap-clear"></div>
 
 ### She is CC0 (Public Domain)
 
@@ -68,6 +70,8 @@ Use whatever tools you want. Code, paint, write, sculpt, remix, AI, all good.
 
 <p class="muted">You'll see that green eye pop up around the site, or on Marmalade herself. The vertical pupil is a little "0" and represents the CC0 symbol (<a href="https://creativecommons.org/public-domain/cc0/"><img src="/logos/Cc-zero_white.svg" alt="CC0" class="cc0-inline" /></a>). If it's there, the file's public domain and you're free to use it.</p>
 
+{{< lab-snap page="marmalade-krea2-lora" image="marmachad.png" side="right" caption="You're public domain? Yes." >}}
+
 So:
 *   want to put her in your indie game? **Do it.**
 *   want to stream as her? **Go for it.**
@@ -78,21 +82,31 @@ So:
 
 This site has two parts: **The Source** is where I drop my files, and **In The Wild** is where you can show off what you've made with her.
 
-<div id="show-me"></div>
+<div id="show-me" class="snap-clear"></div>
 
 ### Show me what you made!
+
 If you made anything with her (and I mean *anything*), please send it to me! I'd love to see it, and I'll put it up on the <a class="about-cta-link" href="/community">In The Wild</a> page.
+
+{{< community-peek count="3" >}}
 
 
 <hr class="tape-divider">
 <br>
 
-<div id="rules"></div>
+<div id="rules" class="snap-clear"></div>
 
 ### Just Have Fun
-
-<img src="/stickers/marmalade-smug.png" alt="Marmalade rolling eyes" width="150" style="float: left; margin: 0 20px 20px 0;">
 
 Don't overthink it, just make stuff with her (and be nice to people).
 
 Now go have fun with her!
+
+{{< snap-pile >}}
+{{< lab-snap page="marmalora-mal-the-conspiracy-theorist" side="none" >}}
+{{< lab-snap page="marmalade-close-up" side="none" >}}
+{{< lab-snap page="marmalora-disaster-mal-meme" side="none" >}}
+{{< lab-snap page="marmalade-calico-jojo" side="none" >}}
+{{< lab-snap page="marmalora-mal-the-windsurfer" side="none" >}}
+{{< lab-snap page="marmalade-lurk" side="none" >}}
+{{< /snap-pile >}}

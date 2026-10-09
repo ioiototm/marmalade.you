@@ -1,0 +1,35 @@
+{{- /*
+  "Then → now" strip for the About page: the original design, the first drawing,
+  and one of the 5 newest lab entries, picked at random on each visit
+  (without JS it shows the newest).
+
+  {{< origin-strip >}}
+*/ -}}
+{{- $first := site.GetPage "/lab/marmalade-goth" -}}
+{{- $second := site.GetPage "/lab/marmalade-origin" -}}
+{{- $recent := slice -}}
+{{- range (where site.RegularPages "Section" "lab").ByDate.Reverse -}}
+  {{- if and (lt (len $recent) 5) (ne . $first) (ne . $second) }}{{ $recent = $recent | append . }}{{ end -}}
+{{- end -}}
+
+<div class="snap-strip">
+  {{- with $first }}{{ partial "origin-snap.html" (dict "page" . "label" (.Date.Format "Jan 2006") "sub" "the original design") }}{{ end }}
+  <span class="snap-arrow" aria-hidden="true">→</span>
+  {{- with $second }}{{ partial "origin-snap.html" (dict "page" . "label" (.Date.Format "Jan 2006") "sub" "the evolution") }}{{ end }}
+  <span class="snap-arrow" aria-hidden="true">→</span>
+  {{- with index $recent 0 }}{{ partial "origin-snap.html" (dict "page" . "label" "Now" "sub" .Title "attr" "data-snap-now") }}{{ end }}
+</div>
+{{- if gt (len $recent) 1 }}
+<template data-snap-pool>
+  {{- range $recent }}{{ partial "origin-snap.html" (dict "page" . "label" "Now" "sub" .Title "attr" "data-snap-now") }}{{ end }}
+</template>
+<script>
+(function () {
+  var slot = document.querySelector('[data-snap-now]');
+  var pool = document.querySelector('template[data-snap-pool]');
+  if (!slot || !pool) return;
+  var cards = pool.content.children;
+  slot.replaceWith(cards[Math.floor(Math.random() * cards.length)].cloneNode(true));
+})();
+</script>
+{{- end }}
