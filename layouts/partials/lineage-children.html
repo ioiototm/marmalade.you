@@ -46,7 +46,7 @@
   {{- end -}}
 {{- end -}}
 {{- end -}}
-{{- range default (slice) site.Data.remixes.remixes -}}
+{{- range default (slice) hugo.Data.remixes.remixes -}}
   {{- if in (default (slice) .based_on) $slug }}{{ $remixes = $remixes | append . }}{{ end -}}
 {{- end -}}
 {{- return dict "explicit" $explicit "generated" (sort $generated "Date" "desc") "remixes" $remixes "count" (add (len $explicit) (len $generated) (len $remixes)) -}}

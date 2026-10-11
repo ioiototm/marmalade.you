@@ -10,7 +10,7 @@
     {{- range (where site.RegularPages "Section" "lab").ByDate.Reverse }}
     <tr><td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td><td><code>"{{ .File.ContentBaseName }}"</code></td></tr>
     {{- end }}
-    {{- range sort (default (slice) site.Data.remixes.remixes) "date" "desc" }}
+    {{- range sort (default (slice) hugo.Data.remixes.remixes) "date" "desc" }}
     <tr><td><a href="/community/#{{ .title | urlize }}">{{ .title }}</a> <span class="muted">by {{ default "Anonymous" .author }}</span></td><td><code>"community:{{ .title | urlize }}"</code></td></tr>
     {{- end }}
   </tbody>

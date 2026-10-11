@@ -7,7 +7,7 @@
   </article>
 
   {{ if eq .Section "lab" }}
-    {{ $g := site.Data.gallery }}
+    {{ $g := hugo.Data.gallery }}
     {{ partial "starter-fuel-gallery.html" $g.starterFuel }}
   {{ end }}
 

@@ -29,7 +29,7 @@
       {{ range default (slice) .Params.based_on }}
         {{ if hasPrefix . "community:" }}
           {{ $id := strings.TrimPrefix "community:" . }}
-          {{ range where (default (slice) site.Data.remixes.remixes) "title" "!=" "" }}{{ if eq (.title | urlize) $id }}{{ $parents = $parents | append (dict "title" (printf "%s by %s" .title (default "Anonymous" .author)) "url" (printf "/community/#%s" $id)) }}{{ end }}{{ end }}
+          {{ range where (default (slice) hugo.Data.remixes.remixes) "title" "!=" "" }}{{ if eq (.title | urlize) $id }}{{ $parents = $parents | append (dict "title" (printf "%s by %s" .title (default "Anonymous" .author)) "url" (printf "/community/#%s" $id)) }}{{ end }}{{ end }}
         {{ else }}
           {{ with site.GetPage (printf "/lab/%s" .) }}{{ $parents = $parents | append (dict "title" .Title "url" .RelPermalink) }}{{ end }}
         {{ end }}

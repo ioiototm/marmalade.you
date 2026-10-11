@@ -12,7 +12,7 @@
 
   <div class="thumb-grid">
     {{/* Sort data items by date descending */}}
-    {{ $remixes := default (slice) site.Data.remixes.remixes }}
+    {{ $remixes := default (slice) hugo.Data.remixes.remixes }}
     {{ if eq (len $remixes) 0 }}
       <p class="muted" style="grid-column:1/-1;text-align:center;padding:2rem 0;">Nothing here yet. Be the first to <a class="about-cta-link" href="/submit">submit</a> something!</p>
     {{ else }}

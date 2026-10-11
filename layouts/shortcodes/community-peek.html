@@ -5,7 +5,7 @@
 
   {{< community-peek count="3" >}}
 */ -}}
-{{- $remixes := sort (default (slice) site.Data.remixes.remixes) "date" "desc" -}}
+{{- $remixes := sort (default (slice) hugo.Data.remixes.remixes) "date" "desc" -}}
 {{- $count := int (.Get "count" | default 3) -}}
 <div class="snap-strip">
   <span class="snap-cards" data-peek-row data-count="{{ $count }}">

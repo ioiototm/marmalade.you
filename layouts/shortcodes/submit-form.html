@@ -17,7 +17,7 @@
       "badge" (cond (eq (upper (default "" .Params.license)) "CC0") "CC0" "")
       "free" true) -}}{{/* free = fine to build on (no CC0 warning): all lab pieces are the site owner's */}}
 {{- end -}}
-{{- range sort (default (slice) site.Data.remixes.remixes) "date" "desc" -}}
+{{- range sort (default (slice) hugo.Data.remixes.remixes) "date" "desc" -}}
   {{- $opts = $opts | append (dict
       "id" (printf "community:%s" (.title | urlize))
       "title" .title
