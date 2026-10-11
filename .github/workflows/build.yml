@@ -1,0 +1,28 @@
+# Checks that the site still builds, on every pull request (like someone adding their piece to
+# data/remixes.yaml), and shows a ✅ or ❌ on the PR. It doesn't deploy anything: Cloudflare still
+# builds and deploys master on its own. Keep HUGO_VERSION the same as the one set in Cloudflare.
+name: Build check
+
+on:
+  pull_request:
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.167.0
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Hugo (extended)
+        run: |
+          curl -sSLo "${{ runner.temp }}/hugo.deb" "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${{ runner.temp }}/hugo.deb"
+          hugo version
+
+      - name: Build the site
+        run: hugo --minify

@@ -1,3 +1,6 @@
+<!-- Fixing a typo, a bug or some code instead? Thank you! Just tell me what you changed (and why),
+     and delete the rest of this template. -->
+
 ## What did you make?
 
 <!-- A sentence or two about your piece. Adding it to data/remixes.yaml is all that's needed. -->
