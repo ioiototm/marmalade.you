@@ -1,5 +1,5 @@
 baseURL = "https://marmalade.you/"
-languageCode = "en-gb"
+locale = "en-gb"
 title = "Marmalade"
 enableRobotsTXT = true
 timeZone = "Europe/London"
