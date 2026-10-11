@@ -10,6 +10,13 @@ image: "/images/mal-mewes-hug.png"
 summary: "A cute drawing of Marmalade hugging Mewes, a CC0 mascot."
 license: "CC0"
 source: "marmalade-mewes-hug"
+based_on: ["marmalade-origin"]  # family tree: what this piece grew out of
+inspired_by:  # family tree: outside inspiration, links to whoever made it
+  - name: "Mewes"
+    url: "https://mewes-creativity.github.io/"
+    kind: "mascot"
+    cc0: true
+    note: "A cat and a mouse, CC0 buddies!"
 ---
 
 A cute drawing of Marmalade (based on the original design from the [Marmalade Origin](https://marmalade.you/lab/marmalade-origin/) post) hugging Mewes, a rat/mouse CC0 mascot from [here](https://mewes-creativity.github.io/).

@@ -11,6 +11,14 @@ image: "/images/marmalade-helline-cosplay.png"
 summary: "Marmalade, cosplaying as DocMorb's character Helline."
 license: "CC0"
 source: "marmalade-helline-cosplay"
+based_on: ["marmalade-origin"]  # family tree: what this piece grew out of
+inspired_by:  # family tree: outside inspiration, links to whoever made it
+  - name: "Helline"
+    by: "docmorb"
+    by_url: "https://www.deviantart.com/doctormorbis"
+    url: "https://www.deviantart.com/doctormorbis/art/Helline-feeling-cute-and-stabby-today-1352981082"
+    kind: "character"
+    note: "I found her through a Helline cup design chuk_chan made on his stream!"
 ---
 
 This is Marmalade cosplaying as Helline.

@@ -11,6 +11,7 @@ image: "/images/marmalade-close-up.png"
 summary: "A very cute Marmalade getting all up in your face."
 license: "CC0"
 source: "marmalade-close-up"
+based_on: ["marmalade-origin"]  # family tree: what this piece grew out of
 ---
 
 A very cute Marmalade getting all up in your face, wondering what you're doing.

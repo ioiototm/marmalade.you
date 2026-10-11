@@ -10,13 +10,20 @@ image: "/stickers/expresso-yourself-cc0.png"
 summary: "Marmalade as... a bunny girl? A sticker/design for a cup."
 license: "CC0"
 source: "marmalade-cup-design"
+based_on: ["marmalade-origin"]  # family tree: what this piece grew out of
+inspired_by:  # family tree: outside inspiration, links to whoever made it
+  - name: "Bunny girl Loodie"
+    by: "MimiOS.sys"
+    url: "https://www.instagram.com/mimios_sys/"
+    kind: "art"
+    note: "Yours was a cup design for chuk_chan's stream, of Loodie (the dog girl version of Odie)."
 ---
 
 This is my masterpiece, my magnum opus, the pinnacle of my artistic career... a design of Marmalade as a bunny girl for a cup. Her glasses are even removable!!!
 
 ## The Story
 
-Actually inspired by another cup design for [Chuk Chan](https://www.twitch.tv/chuk_chan)'s stream of [Loodie](https://dearart.blog/loodie-and-orange-cat/) (the dog girl character version of Odie, from Garfield) drawns as a bunny girl by [MimiOS.exe](https://www.instagram.com/MimiOS.exe/). I really liked that design and wanted to do something similar with Marmalade. And yes, v0.5 does say Gothfield, back then Marmalade wasn't a thing, but I gave her the name shortly after, thus the name change to Marmalade's Depresso Espresso. 
+Actually inspired by another cup design for [Chuk Chan](https://www.twitch.tv/chuk_chan)'s stream of [Loodie](https://dearart.blog/loodie-and-orange-cat/) (the dog girl character version of Odie, from Garfield) drawns as a bunny girl by [MimiOS.sys](https://www.instagram.com/mimios_sys/). I really liked that design and wanted to do something similar with Marmalade. And yes, v0.5 does say Gothfield, back then Marmalade wasn't a thing, but I gave her the name shortly after, thus the name change to Marmalade's Depresso Espresso. 
 
 Well, since v1.1, it's "Expresso Yourself" now, because I thought it was a better name, I didn't like the "Depresso" part, and I wanted to make it more positive. With a link to this website, because why not.
 Also, wanted to mention, when updating and changing the text, I had to move her a bit to fit the text, and this "puppet warp" feature in Clip Studio Paint is amazing, it made it so easy to move her without having to redraw anything.

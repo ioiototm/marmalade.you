@@ -10,6 +10,7 @@ image: "/stickers/marmalade-pixelart-bigger-(4x).png"
 summary: "A pixel art bust of Marmalade, drawn in Aseprite."
 license: "CC0"
 source: "marmalade-pixelart-bust"
+based_on: ["marmalade-pngtuber-remix-assets"]  # family tree: what this piece grew out of
 ---
 
 A pixel art bust of Marmalade, rendered at 4x scale twice - a smaller and a bigger version. Added them as stickers to the website as well.

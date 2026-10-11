@@ -10,6 +10,7 @@ image: "/stickers/marmalade-annoyed.png"
 summary: "Just an annoyed Marmalade sticker."
 license: "CC0"
 source: "marmalade-annoyed"
+based_on: ["marmalade-origin"]  # family tree: what this piece grew out of
 ---
 
 An annoyed Marmalade sticker, because why not. 

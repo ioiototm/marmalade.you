@@ -10,6 +10,7 @@ image: "/stickers/marmalade-lurk.png"
 summary: "A super cute tiny Marmalade lurking in a crate."
 license: "CC0"
 source: "marmalade-lurk"
+based_on: ["marmalade-curious"]  # family tree: what this piece grew out of
 ---
 
 A lurking tiny Marmalade sticker ❤️.

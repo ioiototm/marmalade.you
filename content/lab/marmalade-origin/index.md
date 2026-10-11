@@ -9,6 +9,12 @@ image: "/images/marmalade-origin.png"
 summary: "One of my first drawings of Marmalade, done on my phone, Penup."
 license: "CC0"
 source: "marmalade-origin"
+based_on: ["marmalade-cute-sit", "marmalade-goth", "marmalade-point", "the-life-and-loss-of-a-catgirl-named-joy", "marmalade-calico-jojo"]  # family tree: this is the trunk, so these are drawn under the grass as its roots
+inspired_by:  # family tree: outside inspiration, links to whoever made it
+  - name: "Loading Artist"
+    url: "https://loadingartist.com/"
+    kind: "thanks"
+    note: "Your art critique stream is where her very first fan art came from!"
 ---
 
 One of the first "original" drawings of Marmalade, done back in early 2025 on my phone using Penup.

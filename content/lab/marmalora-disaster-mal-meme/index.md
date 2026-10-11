@@ -7,6 +7,10 @@ formats: ["png"]
 license: "CC0"
 source: "marmalora-disaster-mal-meme"
 summary: "Mal recreating the famous Disaster Girl meme"
+inspired_by:  # family tree: outside inspiration, links to whoever made it
+  - name: "Disaster Girl"
+    url: "https://en.wikipedia.org/wiki/Disaster_Girl"
+    kind: "media"
 generation:
   prompt: "Marmalade the catgirl standing in the foreground with a small knowing sinister smirk looking at the camera out of the corner of her eyes, behind her a building is fully on fire with firefighters and neighbors standing around, she is completely unbothered, wearing a hoodie, candid amateur photo style, meme format, cartoon cel shading, clean digital illustration, anime style"
   model: "Krea 2 Marmalade v1.0 (+ TextFusion @ 1.0)"

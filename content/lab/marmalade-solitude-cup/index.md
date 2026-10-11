@@ -4,7 +4,7 @@ date: 2026-07-05T00:00:00+00:00
 lastmod: 2026-07-05T00:00:00+00:00
 draft: false
 timelapse: "D9tIYUoPfCg"
-tags: ["art" , "design"]
+tags: ["art", "design", "timelapse"]
 tools: ["csp"]
 formats: ["png"]
 image: "/images/marmalade-solitude-cup.png"
