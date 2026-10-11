@@ -378,6 +378,77 @@ label { font-weight: 700; font-family: var(--font-head); font-size: 1.1rem; }
 }
 textarea { min-height: 100px; resize: vertical; }
 
+/* Submit form: "Based on" picker (search + a grid of thumbnails, picks become chips; see submit.js) */
+.bo-picker { display: flex; flex-direction: column; gap: 8px; }
+.bo-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.bo-chips:empty { display: none; }
+.bo-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 4px 3px 3px;
+  background: rgba(255, 225, 170, 0.45);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-head); font-weight: 700; font-size: 0.9rem;
+}
+.bo-chip img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; background: #fff; }
+.bo-chip button { border: 0; background: none; font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0 6px; color: var(--muted); }
+.bo-chip button:hover { color: var(--ink); }
+.bo-search-wrap { position: relative; }
+/* floats over the form like a normal dropdown; the submit row lets it overflow downwards (below) */
+.bo-list {
+  position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 6px);
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(104px, 40%), 1fr)); gap: 8px;
+  max-height: 360px; overflow-y: auto; overflow-x: hidden; padding: 8px;
+  background: #fff; border: 2px solid var(--line); border-radius: 8px;
+  box-shadow: 3px 4px 0 rgba(0,0,0,0.1);
+  outline: none;
+}
+.bo-list[hidden] { display: none; } /* author display:grid would otherwise beat the hidden attribute */
+@media (prefers-reduced-motion: no-preference) {
+  .bo-list:not([hidden]) { animation: bo-drop 0.14s ease-out; }
+}
+@keyframes bo-drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+/* .split clips overflow so tilted cards and tape can't cause sideways scrolling; on the submit row
+   only clip sideways, so the picker's dropdown can hang below the card */
+.split.submit-split { overflow-x: clip; overflow-y: visible; }
+.bo-option {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 6px; border: 2px solid transparent; border-radius: 8px;
+  text-align: center; cursor: pointer;
+}
+.bo-option img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: #f4f4f4; }
+.bo-option.is-active, .bo-option:hover { background: rgba(255, 204, 0, 0.2); border-color: var(--line); }
+.bo-option-title {
+  font-family: var(--font-head); font-weight: 700; font-size: 0.82rem; line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.bo-option-meta { font-size: 0.7rem; color: var(--muted); line-height: 1.2; }
+.bo-empty { grid-column: 1 / -1; padding: 10px; font-size: 0.9rem; color: var(--muted); }
+.bo-other-toggle { align-self: flex-start; border: 0; background: none; padding: 0; font-size: 0.85rem; color: var(--muted); text-decoration: underline dashed; cursor: pointer; }
+.bo-other-toggle:hover { color: var(--ink); }
+
+/* Submit page, Git Way: table of every name you can use in based_on (based-on-keys shortcode) */
+.bo-keys { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.75rem; }
+.bo-keys th { text-align: left; font-family: var(--font-head); border-bottom: 2px solid var(--line); padding: 4px 6px; }
+.bo-keys td { padding: 4px 6px; border-bottom: 1px dashed #e2ddd4; vertical-align: top; }
+.bo-keys td:last-child { white-space: nowrap; }
+.bo-keys code { font-size: 0.8rem; }
+
+/* Submit form: CC0 opt-in and its confirmations */
+.form .cc0-opt, .form .cc0-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.form .cc0-opt input, .form .cc0-check input { width: auto; flex-shrink: 0; margin-top: 0.3em; box-shadow: none; transform: scale(1.25); }
+.form .cc0-check { font-family: var(--font-body); font-weight: 400; font-size: 0.95rem; line-height: 1.45; margin-top: 10px; }
+.cc0-box {
+  padding: 14px 16px;
+  border: 2px dashed var(--line);
+  border-radius: 8px;
+  background: rgba(144, 238, 144, 0.12);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.cc0-box p { margin: 0 0 8px; }
+.cc0-warning { padding: 8px 10px; border-radius: 6px; background: rgba(255, 204, 0, 0.3); }
+
 /* Lists */
 .list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
 .list li {
@@ -401,7 +472,7 @@ textarea { min-height: 100px; resize: vertical; }
 /* Home Layout */
 .hero {
   text-align: center;
-  padding: 40px 0 60px;
+  padding: 0 0 60px; /* .wrap already adds 40px above */
   position: relative;
   overflow: hidden;
 }
@@ -579,6 +650,10 @@ textarea { min-height: 100px; resize: vertical; }
 .split > .card:hover {
   transform: rotate(0) scale(1.01);
 }
+/* ...except the card holding the submit form: rotated/scaled text and thumbnails render blurry, and a
+   transform would trap the "Based on" dropdown underneath the next section. Must come after the
+   tilt rules above (same specificity). */
+.split > .card:has(.submit-form), .split > .card:has(.submit-form):hover { transform: none; }
 
 .panel-head {
   display: flex; justify-content: space-between; align-items: baseline;
@@ -668,11 +743,6 @@ textarea { min-height: 100px; resize: vertical; }
   color: #666;
 }
 
-.thumb-placeholder--lab {
-  height: 150px;
-  border-bottom: 2px solid var(--line);
-}
-
 .thumb-image-cover {
   width: 100%;
   height: 100%;
@@ -692,67 +762,164 @@ textarea { min-height: 100px; resize: vertical; }
 
 .thumb-emoji { font-size: 2rem; }
 
-/* Lab filter UI */
-.lab-interface .filter-bar {
-  margin-bottom: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
+/* The Source (/lab/): a pinned note, filters as strips of washi tape, the pieces as crooked taped photos */
+.src-head .title {
+  display: inline-block;
+  padding-bottom: 14px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'%3E%3Cpath d='M3 9C30 3 52 13 80 7s50-4 75 2 42-1 42-4' fill='none' stroke='%23ffcc00' stroke-width='5' stroke-linecap='round' stroke-opacity='.75'/%3E%3C/svg%3E") left bottom / 200px 14px no-repeat;
 }
-
-.lab-interface .filter-label {
-  font-weight: 700;
-  margin-right: 0.5rem;
+.src-note {
+  position: relative;
+  float: right;
+  width: 224px;
+  margin: 6px 4px 16px 24px;
+  padding: 22px 14px 12px;
+  background: #fff3a0;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.16);
   font-family: var(--font-head);
+  font-size: 1.05rem;
+  line-height: 1.35;
+  rotate: 3deg;
 }
+.src-note::before { /* the pin */
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  margin-left: -6.5px;
+  border-radius: 50%;
+  background: #d63b3b;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.src-note p { margin: 0; }
+.src-note p + p { margin-top: 8px; }
+.src-note a { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; white-space: nowrap; }
+.src-note-eye { width: 30px; height: auto; vertical-align: -8px; }
 
+.lab-interface .filter-bar { clear: both; display: flex; flex-direction: column; gap: 8px; margin: 8px 0 2rem; }
+.lab-interface .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.lab-interface .filter-label { flex-shrink: 0; width: 92px; font-family: var(--font-head); font-size: 1.05rem; color: var(--muted); }
 .lab-interface .filter-btn {
-  background: transparent;
-  border: 2px solid var(--line);
-  padding: 0.25rem 0.75rem;
+  padding: 2px 13px 3px;
+  border: 0;
+  background: none;
   cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.3;
+  rotate: -1.5deg;
+  transition: rotate 0.12s ease, translate 0.12s ease;
+}
+.lab-interface .filter-btn:nth-child(3n) { rotate: 1.5deg; }
+.lab-interface .filter-btn:nth-child(4n) { rotate: -0.5deg; }
+.lab-interface .filter-btn:hover { translate: 0 -2px; }
+.lab-interface .filter-btn:hover::before { filter: saturate(1.6) brightness(0.96); }
+.lab-interface .filter-btn.active { font-weight: 700; rotate: -3deg; translate: 0 -2px; }
+.lab-interface .filter-btn.active::before { filter: saturate(2.4) brightness(0.9); }
+.lab-interface .filter-btn:focus-visible { outline: 2px solid var(--line); outline-offset: 2px; }
+
+.src-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 40px 28px; margin: 0 0 24px; padding: 14px 8px 0; }
+.src-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 12px;
+  background: #fff;
+  border: 1px solid #e6e0d3;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.12);
+  color: inherit;
+  text-decoration: none;
+  rotate: -1.2deg;
+  transition: rotate 0.2s ease, translate 0.2s ease, box-shadow 0.2s ease;
+}
+.src-card:nth-child(3n+2) { rotate: 1deg; margin-top: 14px; }
+.src-card:nth-child(3n) { rotate: 1.8deg; }
+.src-card:nth-child(4n) { rotate: -2deg; }
+.src-card:hover, .src-card:focus-visible { z-index: 3; rotate: 0deg; translate: 0 -4px; box-shadow: 4px 10px 20px rgba(0, 0, 0, 0.16); }
+.src-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.src-card::before { /* tape */
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -10px;
+  left: 50%;
+  width: 66px;
+  height: 20px;
+  margin-left: -33px;
+  background-color: rgba(255, 204, 0, 0.5);
+  background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255, 255, 255, 0.4) 6px 12px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  rotate: -4deg;
+}
+.src-card:nth-child(3n+2)::before { background-color: rgba(133, 183, 235, 0.6); rotate: 3deg; }
+.src-card:nth-child(3n)::before { background-color: rgba(237, 147, 177, 0.55); rotate: -2deg; }
+.src-card:nth-child(4n)::before { background-color: rgba(124, 174, 92, 0.5); rotate: 4deg; }
+.src-card .license-stamp-wrap { top: -14px; right: -14px; }
+.src-card .license-stamp { width: 42px; }
+.src-photo { position: relative; display: block; aspect-ratio: 1; background: #f7f1e3; }
+.src-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; } /* absolute, so a tall poster can't stretch the square */
+.src-title { margin-top: 8px; font-family: var(--font-head); font-weight: 700; font-size: 1.12rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.src-date { margin-top: 2px; font-size: 0.78rem; color: var(--muted); }
+.src-tags { margin-top: 6px; font-size: 0.78rem; color: #6b665f; }
+.src-tags span { white-space: nowrap; }
+/* stickers on the photo */
+.src-sticker { position: absolute; z-index: 2; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-family: var(--font-head); font-weight: 700; line-height: 1; pointer-events: none; }
+.src-sticker--new, .src-sticker--updated { top: -10px; left: -16px; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; font-size: 0.95rem; rotate: -14deg; }
+.src-sticker--new { background: #ffcc00; color: var(--ink); }
+.src-sticker--updated { width: 58px; height: 58px; background: #85b7eb; color: #10304f; font-size: 0.85rem; }
+.src-sticker--timelapse { right: 8px; bottom: 8px; padding: 4px 9px; border-radius: 999px; background: #e9564c; color: #fff; font-size: 0.85rem; rotate: 5deg; }
+/* the summary: a note stuck on the photo while you hover (or tab to) a card */
+.src-summary {
+  position: absolute;
+  z-index: 3;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 8px 10px 9px;
+  background: #fff6bd;
+  box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.18);
   font-family: var(--font-head);
-  font-weight: 700;
-  transition: transform 0.1s, background-color 0.1s;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  rotate: -1.5deg;
+  opacity: 0;
+  translate: 0 8px;
+  transition: opacity 0.18s ease, translate 0.18s ease;
+  pointer-events: none;
 }
-
-.lab-interface .filter-btn:hover {
-  background: #eee;
-  transform: translateY(-2px);
+.src-card:hover .src-summary, .src-card:focus-visible .src-summary { opacity: 1; translate: 0 0; }
+@media (hover: none) {
+  .src-summary { display: none; } /* no hover on touch screens; the page itself has the whole story */
 }
-
-.lab-interface .filter-btn.active {
-  background: var(--line);
-  color: #fff;
+@media (max-width: 899px) {
+  .src-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 20px; }
+  .src-card:nth-child(3n+2) { margin-top: 0; }
+  .src-card:nth-child(even) { margin-top: 12px; }
 }
-
-.lab-legend {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 10px 0 16px;
-  padding: 6px 10px;
-  border: 2px dashed rgba(0,0,0,0.15);
-  border-radius: 999px;
-  background: rgba(255,255,255,0.7);
-  font-size: 0.9rem;
-  color: var(--muted);
+@media (max-width: 600px) {
+  .src-head { display: flex; flex-direction: column; }
+  .src-head .title { align-self: flex-start; }
+  .src-note { order: 3; float: none; width: auto; max-width: 250px; margin: 4px 6px 18px auto; }
+  .lab-interface .filter-label { width: 100%; }
+  .src-grid { gap: 30px 16px; padding: 12px 2px 0; }
+  .src-card { padding: 7px 7px 9px; }
+  .src-title { font-size: 1rem; }
+  .src-tags { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .src-sticker--new, .src-sticker--updated { width: 40px; height: 40px; font-size: 0.85rem; }
+  .src-sticker--updated { width: 50px; height: 50px; font-size: 0.75rem; }
+  .src-sticker--timelapse { font-size: 0.75rem; }
 }
-
-.lab-legend-icon {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
+@media (max-width: 340px) {
+  .src-grid { grid-template-columns: minmax(0, 1fr); }
 }
-
-.mini-tags {
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: #666;
+@media (prefers-reduced-motion: reduce) {
+  .src-card, .src-summary, .lab-interface .filter-btn { transition: none; }
 }
-
-.mini-tag { margin-right: 0.25rem; }
 
 .lab-interface .empty-state {
   padding: 2rem;
@@ -2231,6 +2398,418 @@ a.license-stamp-wrap { cursor: pointer; }
   .snap-pile .snap + .snap { margin-left: -5vw; }
   .snap-pile .snap:nth-child(n+5) { display: none; }
   .snap-pile .snap-caption { display: none; } /* too narrow to read, and there's no hover on touch */
+}
+
+/* Washi tape with something written on it: inspiration credits on lab pages, grafts on the family
+   tree. The tape itself is the ::before (torn ends via clip-path), so a focus outline on the link
+   isn't clipped. Colour by kind: green characters and art, mint mascots, yellow pop culture,
+   pink styles, blue thanks. */
+.washi { --tape: rgba(124, 174, 92, 0.5); --tape-ink: #24461a; position: relative; isolation: isolate; color: var(--tape-ink); font-family: var(--font-head); text-decoration: none; }
+.washi::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--tape);
+  background-image: repeating-linear-gradient(45deg, transparent 0 7px, rgba(255, 255, 255, 0.4) 7px 14px);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 4px) 25%, 100% 50%, calc(100% - 4px) 75%, 100% 100%, 0 100%, 4px 75%, 0 50%, 4px 25%);
+}
+a.washi[href]:hover::before { filter: saturate(1.6) brightness(0.96); }
+.washi--mascot, .washi--mint { --tape: rgba(64, 190, 160, 0.42); --tape-ink: #0f4d3a; }
+.washi--media, .washi--yellow { --tape: rgba(255, 204, 0, 0.55); --tape-ink: #5a4500; }
+.washi--style, .washi--pink { --tape: rgba(237, 147, 177, 0.5); --tape-ink: #6b2340; }
+.washi--thanks, .washi--blue { --tape: rgba(133, 183, 235, 0.55); --tape-ink: #1d3f66; }
+.washi--seed, .washi--kraft { --tape: rgba(168, 134, 95, 0.45); --tape-ink: #4a3519; }
+.washi--spark, .washi--orange { --tape: rgba(240, 140, 50, 0.5); --tape-ink: #6b3505; }
+
+/* Lab page header: credits taped across the top of the card (replacing its plain tape), and
+   "grew from X · ⑂ forked N times" in the date line */
+.lab-item-detail:has(.lab-credits)::before { display: none; }
+.lab-credits { position: relative; z-index: 7; display: flex; flex-wrap: wrap; gap: 6px 12px; margin: -40px 0 14px -10px; }
+.credit-tape { display: inline-block; padding: 4px 20px 5px; font-size: 1rem; line-height: 1.3; rotate: -2deg; }
+.credit-tape:nth-child(even) { rotate: 1.5deg; }
+.credit-tape b { font-weight: 700; }
+.lab-meta a { color: var(--ink); }
+.lab-meta a[href^="/family/"] { white-space: nowrap; }
+
+/* Family tree (/family/). One nested list, two looks:
+   wide screens: a real tree, root at the bottom, branches growing up (an org chart flipped
+   upside down, with every card flipped back so it reads normally);
+   phones: an indented list with dashed connectors. */
+.family-tree { --bark: #a8865f; margin: 1.5rem 0 1rem; }
+.family-tree ul { list-style: none; margin: 0; padding: 0; }
+.family-tree li.ft-node { position: relative; }
+.ft-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  padding: 6px 14px 6px 6px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 2px 3px 0 rgba(0,0,0,0.08);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, rotate 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+.ft-card > img:not(.ft-eye), .ft-stack img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; background: #f4f4f4; flex-shrink: 0; }
+.ft-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.ft-title { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; }
+.ft-meta { font-size: 0.8rem; color: var(--muted); }
+.ft-eye { width: 22px; height: auto; margin-left: 2px; flex-shrink: 0; opacity: 0.85; }
+.ft-node--community > .ft-card { border-style: dashed; border-color: #c9a27e; background: #fffaf3; }
+.ft-node { scroll-margin-top: 120px; }
+.ft-node:target > .ft-card, .ft-node:target > details > .ft-card { animation: peek-glow 2.4s ease-out 1; }
+/* the AI generations collapse into one card with a little fan of thumbnails */
+.ft-gen > summary { list-style: none; }
+.ft-gen > summary::-webkit-details-marker { display: none; }
+.ft-stack { display: inline-flex; }
+.ft-stack img + img { margin-left: -36px; }
+.ft-stack img { border: 2px solid #fff; box-shadow: 1px 1px 3px rgba(0,0,0,0.15); }
+.ft-stack img:nth-child(1) { transform: rotate(-6deg); }
+.ft-stack img:nth-child(3) { transform: rotate(6deg); }
+.ft-gen[open] > summary .ft-meta { visibility: hidden; }
+.family-loose { margin-top: 2rem; }
+
+/* Grafts: inspiration from outside Mal's tree (a lab page's `inspired_by`), as washi tape that
+   links out to whoever made the thing. Under the card on phones, wrapped round the branch on wide screens. */
+.ft-grafts { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 6px 0 0 4px; }
+.ft-graft { display: inline-flex; align-items: baseline; gap: 6px; max-width: 100%; padding: 2px 14px 3px; font-size: 0.82rem; line-height: 1.2; }
+.ft-graft-name { font-weight: 700; }
+.ft-graft-sub { font-size: 0.85em; }
+
+/* Under the grass: the roots (what the trunk grew out of, the drawings from before she had a name)
+   and the seed they all came from. On phones a plain list under the tree. */
+.ft-under {
+  --root: #8a6a4a;
+  --rootlet: #a88866;
+  position: relative;
+  margin-top: 22px;
+  padding: 16px 14px 20px;
+  background:
+    radial-gradient(rgba(110, 80, 45, 0.2) 1px, transparent 1.6px) 0 0 / 11px 11px,
+    radial-gradient(rgba(255, 250, 240, 0.35) 1px, transparent 1.6px) 5px 8px / 17px 17px,
+    #ece1cc;
+  border-radius: 0 0 28px 28px;
+}
+.ft-under::before { /* the grass along the top */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 16'%3E%3Cpath d='M0 12q15-4 30 0t30 0 30 0 30 0' fill='none' stroke='%238fb36b' stroke-width='2.5'/%3E%3Cpath d='M14 12l-2-6M17 12v-8M20 12l3-5M74 12l-3-6M77 12l1-9M80 12l3-5' fill='none' stroke='%238fb36b' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") left bottom / 120px 16px repeat-x;
+  pointer-events: none;
+}
+.ft-under--bare { height: 14px; padding: 0; }
+.ft-under-note { display: block; margin-bottom: 6px; font-family: var(--font-head); font-size: 1.05rem; color: #6b5236; rotate: -3deg; }
+.ft-roots { margin: 0; padding: 0; list-style: none; }
+.ft-rootling .ft-card > img:not(.ft-eye) { filter: sepia(0.35) saturate(0.85); transition: filter 0.2s ease; } /* faded like old photos */
+.ft-rootling .ft-card:hover > img:not(.ft-eye) { filter: none; }
+.ft-seeds { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 14px; }
+.ft-seed {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 8px 16px 9px 46px;
+  background: #fff8e6;
+  border: 2px dashed var(--root);
+  border-radius: 14px;
+  color: #4a3519;
+  font-family: var(--font-head);
+  line-height: 1.2;
+  text-decoration: none;
+}
+.ft-seed::before { /* the seed */
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 18px;
+  height: 26px;
+  margin-top: -13px;
+  background: var(--root);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  rotate: -20deg;
+}
+a.ft-seed[href]:hover { background: #fff1cc; border-style: solid; }
+.ft-seed-name { font-weight: 700; font-size: 1.1rem; }
+.ft-seed-by { font-size: 0.85rem; }
+.ft-seed-note { font-size: 0.8rem; color: #7a6248; }
+.ft-seed--spark::before { /* a little sparkle instead of the seed (the joke it all started from) */
+  left: 13px;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  background: #e8892f;
+  border-radius: 0;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  rotate: 0deg;
+}
+
+/* Mal's inspirations (/family/): a thank-you postcard to every outside inspiration. The Mal pieces
+   it led to are the stamps; the creator gets the address (their website) and the link. */
+.inspirations { margin-top: 3.5rem; }
+.pc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 32px 28px; margin-top: 1.5rem; padding: 4px; }
+.postcard {
+  display: flex; /* the card stretches to its row's tallest one, so the paper has to stretch too */
+  flex-direction: column;
+  padding: 7px;
+  /* airmail border */
+  background: repeating-linear-gradient(135deg, #d64545 0 10px, #fffdf7 10px 17px, #3b6fb6 17px 27px, #fffdf7 27px 34px);
+  box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.14);
+  rotate: -1.5deg;
+  transition: rotate 0.2s ease, translate 0.2s ease, box-shadow 0.2s ease;
+}
+.pc-grid > .postcard:nth-child(even) { rotate: 1.2deg; }
+.pc-grid > .postcard:nth-child(3n) { rotate: -0.6deg; }
+.postcard:hover { rotate: 0deg; translate: 0 -3px; box-shadow: 5px 9px 18px rgba(0, 0, 0, 0.18); }
+.pc-inner { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); gap: 12px; min-height: 200px; padding: 12px 14px; background: #fffdf7; }
+.pc-message { font-family: var(--font-head); font-size: 1.02rem; line-height: 1.35; }
+.pc-message p { margin: 0 0 0.45em; }
+.pc-sign { font-weight: 700; }
+.pc-message .pc-ps { margin-top: 0.7em; font-size: 0.86rem; color: var(--muted); }
+.pc-divider { background: #ddd3c3; }
+.pc-back { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+/* the stamps overlap more the more there are, so the pile (and the postmark and its wavy lines on
+   the left, 76px) stays on its half of the card: each stamp's box shrinks and its paper sticks out
+   to the right, under the next one (the last one keeps its whole width) */
+.pc-stamps { position: relative; display: flex; justify-content: flex-end; align-self: flex-end; max-width: calc(100% - 76px); }
+.pc-stamp { display: block; flex: 0 1 auto; width: 46px; min-width: 12px; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35)); transition: rotate 0.15s ease; }
+.pc-stamp:last-child { flex-shrink: 0; width: 60px; }
+.pc-stamp-paper {
+  display: block;
+  width: 60px;
+  height: 70px;
+  padding: 5px;
+  background: #fff;
+  /* perforated edges: holes along the padding, the picture kept whole (the shadow on .pc-stamp follows them) */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, radial-gradient(circle 3px, #0000 96%, #000) -4px -4px / 8px 8px round;
+  mask: linear-gradient(#000 0 0) content-box, radial-gradient(circle 3px, #0000 96%, #000) -4px -4px / 8px 8px round;
+}
+.pc-stamp img { display: block; width: 100%; height: 100%; object-fit: cover; background: #f3ecdc; }
+.pc-stamp + .pc-stamp { rotate: 6deg; }
+.pc-stamp + .pc-stamp + .pc-stamp { rotate: -5deg; }
+.pc-stamp:hover { z-index: 2; rotate: -3deg; } /* comes to the front of the pile */
+.pc-postmark {
+  position: absolute;
+  z-index: 1;
+  top: 28px;
+  left: -36px;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(60, 60, 60, 0.4);
+  border-radius: 50%;
+  color: rgba(60, 60, 60, 0.7);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  rotate: -14deg;
+  pointer-events: none;
+}
+.pc-postmark::after { /* wavy cancellation lines */
+  content: "";
+  position: absolute;
+  right: calc(100% - 4px);
+  top: 13px;
+  width: 44px;
+  height: 22px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 22'%3E%3Cpath d='M0 4q5.5-4 11 0t11 0 11 0 11 0M0 11q5.5-4 11 0t11 0 11 0 11 0M0 18q5.5-4 11 0t11 0 11 0 11 0' fill='none' stroke='%23555' stroke-opacity='.45' stroke-width='2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.pc-address { margin-top: auto; }
+.pc-line { overflow: hidden; border-bottom: 1px solid #ddd3c3; font-family: var(--font-head); font-size: 1rem; line-height: 1.75; text-overflow: ellipsis; white-space: nowrap; }
+.pc-line a { color: #3b6fb6; }
+.pc-to { font-weight: 700; }
+.pc-to a { color: inherit; }
+.pc-kind { margin-top: 4px; font-size: 0.75rem; color: var(--muted); }
+@media (max-width: 420px) {
+  .pc-inner { grid-template-columns: minmax(0, 1fr); }
+  .pc-divider { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .postcard, .pc-stamp { transition: none; }
+}
+
+/* Phones: indented list */
+@media (max-width: 899px) {
+  .family-tree li.ft-node { padding: 6px 0; }
+  .family-tree .ft-children .ft-children, .ft-gen-list { margin-left: 12px; padding-left: 12px; }
+  .ft-children .ft-children > li.ft-node::before, .ft-children .ft-children > li.ft-node::after,
+  .ft-gen-list > li.ft-node::before, .ft-gen-list > li.ft-node::after { content: ""; position: absolute; left: -12px; }
+  .ft-children .ft-children > li.ft-node::before, .ft-gen-list > li.ft-node::before { top: 0; bottom: 0; border-left: 2px dashed #cfc8bd; }
+  .ft-children .ft-children > li.ft-node:last-child::before, .ft-gen-list > li.ft-node:last-child::before { bottom: auto; height: 30px; }
+  .ft-children .ft-children > li.ft-node::after, .ft-gen-list > li.ft-node::after { top: 28px; width: 10px; border-top: 2px dashed #cfc8bd; }
+  .ft-card > img:not(.ft-eye), .ft-stack img { width: 44px; height: 44px; }
+  .ft-eye { width: 18px; }
+  .ft-card:hover { transform: translateY(-2px); }
+  .ft-tip { display: none; }
+}
+
+/* Wide screens: a tree growing upwards */
+@media (min-width: 900px) {
+  /* the frame breaks out of the text column, so the tree gets the whole window width
+     (--sbw is the scrollbar's width, set by family-tree.js) */
+  .ft-frame { position: relative; width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - 50vw + var(--sbw, 0px) / 2); }
+  .family-tree { --twig: 34px; overflow-x: auto; overflow-anchor: none; padding: 14px 24px 16px; scrollbar-width: thin; scrollbar-color: #c9b59a transparent; } /* room for the CC0 eyes that poke out of the end cards, and for the ground */
+  .family-tree .ft-root { transform: scaleY(-1); width: max-content; margin: 0 auto; }
+  .family-tree .ft-children { display: flex; justify-content: center; position: relative; padding-top: var(--twig); }
+  .family-tree .ft-root { padding-top: 0; }
+  .ft-children > li.ft-node { display: flex; flex-direction: column; align-items: center; padding: calc(var(--twig) + var(--graft-room, 0px)) 4px 0; }
+  /* branch lines: each child draws half of the horizontal bar on either side plus its own twig */
+  .ft-children > li.ft-node::before, .ft-children > li.ft-node::after {
+    content: ""; position: absolute; top: 0; width: 50%; height: calc(var(--twig) + var(--graft-room, 0px)); border-top: 3px solid var(--bark);
+  }
+  .ft-children > li.ft-node::before { right: 50%; }
+  .ft-children > li.ft-node::after { left: 50%; border-left: 3px solid var(--bark); margin-left: -1.5px; }
+  .ft-children > li.ft-node:first-child::before, .ft-children > li.ft-node:last-child::after { border-top: 0; }
+  .ft-children > li.ft-node:last-child::after { border-left: 0; }
+  .ft-children > li.ft-node:last-child::before { border-right: 3px solid var(--bark); margin-right: -1.5px; border-top-right-radius: 8px; }
+  .ft-children > li.ft-node:first-child:not(:only-child)::after { border-top-left-radius: 8px; }
+  /* an only child is also the last child: keep just its straight vertical twig (these come after
+     the :last-child rules on purpose, so they win) */
+  .ft-children > li.ft-node:only-child::before { display: none; }
+  .ft-children > li.ft-node:only-child::after { border-top: 0; border-left: 3px solid var(--bark); border-radius: 0; }
+  .ft-root > li.ft-node::after { display: none; }
+  .ft-root > li.ft-node { padding-top: 0; }
+  /* the trunk from a card up to its children's bar */
+  .ft-children .ft-children::before { content: ""; position: absolute; top: 0; left: 50%; height: var(--twig); border-left: 3px solid var(--bark); margin-left: -1.5px; }
+
+  /* compact upright cards */
+  .ft-card { z-index: 1; transform: scaleY(-1); flex-direction: column; gap: 4px; width: 118px; padding: 8px 6px 6px; text-align: center; }
+  .ft-card:hover { transform: scaleY(-1) translateY(-4px); box-shadow: 3px 5px 0 rgba(0,0,0,0.12); }
+  /* every card is a photo taped onto the tree, a little crooked (straightens on hover) */
+  .ft-card::before {
+    content: ""; position: absolute; z-index: 2; top: -8px; left: 50%; width: 42px; height: 14px; margin-left: -21px;
+    background: rgba(240, 230, 140, 0.75); box-shadow: 0 1px 2px rgba(0,0,0,0.1); rotate: -4deg; pointer-events: none;
+  }
+  .ft-children > li.ft-node:nth-child(3n+1) > .ft-card, .ft-children > li.ft-node:nth-child(3n+1) > details > .ft-card { rotate: -1.5deg; }
+  .ft-children > li.ft-node:nth-child(3n+2) > .ft-card, .ft-children > li.ft-node:nth-child(3n+2) > details > .ft-card { rotate: 1deg; }
+  .ft-children > li.ft-node:nth-child(3n) > .ft-card, .ft-children > li.ft-node:nth-child(3n) > details > .ft-card { rotate: 2deg; }
+  .ft-children > li.ft-node:nth-child(even) > .ft-card::before, .ft-children > li.ft-node:nth-child(even) > details > .ft-card::before { rotate: 3deg; background: rgba(133, 183, 235, 0.6); }
+  .ft-children > li.ft-node:nth-child(3n) > .ft-card::before, .ft-children > li.ft-node:nth-child(3n) > details > .ft-card::before { background: rgba(255, 204, 0, 0.5); }
+  .family-tree .ft-card:hover { rotate: 0deg; }
+  .ft-gen-list .ft-card::before { display: none; }
+  .ft-card > img:not(.ft-eye) { width: 76px; height: 76px; }
+  .ft-text { align-items: center; }
+  .ft-title { font-size: 0.85rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ft-meta { font-size: 0.68rem; }
+  .ft-eye { position: absolute; top: -9px; right: -11px; width: 26px; margin: 0; transform: rotate(10deg); }
+  .ft-stack { padding: 6px 0 2px; }
+  .ft-stack img { width: 58px; height: 58px; }
+  .ft-stack img + img { margin-left: -42px; }
+  /* the trunk stands on the grass (the top edge of .ft-under, below) */
+  .ft-root > li.ft-node > .ft-card { width: 148px; border-width: 3px; }
+  .ft-world { width: max-content; margin: 0 auto; } /* the canopy and the roots zoom together */
+
+  /* under the grass: the roots hang off the trunk like an upside-down tree (not flipped, unlike the
+     branches) and meet again at the seed */
+  .ft-under { margin-top: 0; padding: 0 56px 28px; border-radius: 0 0 50% 50% / 0 0 64px 64px; }
+  .ft-roots-wrap { position: relative; width: max-content; margin: 0 auto; }
+  .ft-under-note { position: absolute; top: 10px; right: calc(100% + 6px); margin: 0; white-space: nowrap; }
+  .ft-roots { position: relative; display: flex; justify-content: center; padding-top: 44px; }
+  .ft-roots::before { /* from the trunk down to the roots */
+    content: ""; position: absolute; top: 0; left: 50%; height: 44px; margin-left: -1.5px; border-left: 3px solid var(--root);
+  }
+  .ft-rootling { display: flex; flex-direction: column; align-items: center; padding: 28px 8px 0; }
+  .ft-rootling::before, .ft-rootling::after {
+    content: ""; position: absolute; top: 0; width: 50%; height: 28px; border-top: 3px solid var(--root);
+  }
+  .ft-rootling::before { right: 50%; }
+  .ft-rootling::after { left: 50%; margin-left: -1.5px; border-left: 3px solid var(--root); }
+  .ft-rootling:first-child::before, .ft-rootling:last-child::after { border-top: 0; }
+  .ft-rootling:last-child::after { border-left: 0; }
+  .ft-rootling:last-child::before { margin-right: -1.5px; border-right: 3px solid var(--root); border-top-right-radius: 16px; }
+  .ft-rootling:first-child:not(:only-child)::after { border-top-left-radius: 16px; }
+  .ft-rootling:only-child::before { display: none; }
+  .ft-rootling:only-child::after { border-top: 0; border-left: 3px solid var(--root); border-radius: 0; }
+  .ft-under .ft-card { transform: none; }
+  .ft-under .ft-card:hover { transform: translateY(-4px); }
+  .ft-rootling:nth-child(odd) > .ft-card { rotate: -2deg; }
+  .ft-rootling:nth-child(even) > .ft-card { rotate: 1.5deg; }
+  .ft-under .ft-card::before { background: rgba(168, 134, 95, 0.45); rotate: -3deg; } /* kraft tape */
+  /* the rootlets under the cards join up and run down to the seed */
+  .ft-tip { position: relative; flex: 1; align-self: stretch; min-height: 26px; margin: 0 -8px; }
+  .ft-tip::before, .ft-tip::after { content: ""; position: absolute; bottom: 0; width: 50%; height: 100%; border-bottom: 2px dashed var(--rootlet); }
+  .ft-tip::before { right: 50%; }
+  .ft-tip::after { left: 50%; margin-left: -1px; border-left: 2px dashed var(--rootlet); }
+  .ft-rootling:first-child .ft-tip::before, .ft-rootling:last-child .ft-tip::after { border-bottom: 0; }
+  .ft-rootling:last-child .ft-tip::after { border-left: 0; }
+  .ft-rootling:last-child .ft-tip::before { margin-right: -1px; border-right: 2px dashed var(--rootlet); }
+  .ft-rootling:only-child .ft-tip::before { display: none; }
+  .ft-rootling:only-child .ft-tip::after { border-bottom: 0; border-left: 2px dashed var(--rootlet); }
+  .ft-seeds { position: relative; margin-top: 0; padding-top: 24px; }
+  .ft-seeds::before { content: ""; position: absolute; top: 0; left: 50%; height: 24px; margin-left: -1px; border-left: 2px dashed var(--rootlet); }
+  /* grafts hang on the branch under the card, so every card in that row sits a bit higher */
+  .family-tree li.ft-node { --graft-room: 0px; }
+  .family-tree .ft-children:has(> li.ft-node > .ft-grafts) > li.ft-node { --graft-room: 46px; }
+  .family-tree .ft-children:has(> li.ft-node > .ft-grafts > :nth-child(2)) > li.ft-node { --graft-room: 96px; }
+  .ft-root > li.ft-node:has(> .ft-grafts) { padding-top: calc(var(--twig) + var(--graft-room)); }
+  .ft-root > li.ft-node:has(> .ft-grafts)::after { display: block; } /* a bit of trunk between the grass and the card, for the tape */
+  .family-tree .ft-grafts {
+    position: absolute; z-index: 2; top: 0; left: 0; right: 0; height: calc(var(--twig) + var(--graft-room));
+    flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 4px; margin: 0;
+    transform: scaleY(-1); pointer-events: none;
+  }
+  .family-tree .ft-graft {
+    flex-direction: column; align-items: center; gap: 0; max-width: 124px; padding: 3px 13px 4px; font-size: 0.8rem; line-height: 1.15;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15)); rotate: -3deg; pointer-events: auto;
+  }
+  .family-tree li.ft-node:nth-child(even) > .ft-grafts .ft-graft { rotate: 2.5deg; }
+  .family-tree .ft-graft + .ft-graft { rotate: 2deg; }
+  .family-tree .ft-graft-name { max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: center; }
+  .family-tree .ft-graft-sub { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .family-tree .ft-gen-list .ft-grafts { display: none; }
+
+  /* zoom buttons (only when the tree is wider than the window), under the tree on the right; they
+     stick to the bottom of the screen while you look around a tall tree */
+  .ft-tools {
+    position: sticky; bottom: 16px; z-index: 5; display: flex; align-items: center; gap: 4px;
+    width: max-content; margin: -6px 24px 0 auto; padding: 4px;
+    background: rgba(255, 255, 255, 0.94); border: 2px solid var(--line); border-radius: 999px; box-shadow: 2px 3px 0 rgba(0,0,0,0.1);
+  }
+  .ft-tools[hidden] { display: none; }
+  .ft-tool {
+    min-width: 34px; height: 34px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent;
+    color: var(--ink); font-family: var(--font-head); font-weight: 700; font-size: 1rem; line-height: 1; cursor: pointer;
+  }
+  .ft-tool:hover:not(:disabled) { background: rgba(255, 204, 0, 0.35); }
+  .ft-tool:disabled { opacity: 0.35; cursor: default; }
+  .ft-tool:focus-visible { outline: 2px solid var(--line); outline-offset: 1px; }
+  .ft-hint { padding: 0 6px 0 10px; color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+  .ft-frame:not(.is-pannable) .ft-hint { display: none; }
+  /* drag to pan */
+  .ft-frame.is-pannable .family-tree { cursor: grab; user-select: none; }
+  .ft-frame.is-dragging .family-tree, .ft-frame.is-dragging .ft-card { cursor: grabbing; }
+  .ft-frame.is-pannable img { -webkit-user-drag: none; }
+  /* soft fades on the sides that have more tree */
+  .ft-frame::before, .ft-frame::after {
+    content: ""; position: absolute; z-index: 3; top: 0; bottom: 0; width: 56px;
+    pointer-events: none; opacity: 0; transition: opacity 0.2s;
+  }
+  .ft-frame::before { left: 0; background: linear-gradient(to right, var(--bg), rgba(253, 251, 247, 0)); }
+  .ft-frame::after { right: 0; background: linear-gradient(to left, var(--bg), rgba(253, 251, 247, 0)); }
+  .ft-frame.more-left::before, .ft-frame.more-right::after { opacity: 1; }
+  /* opened generations: a small grid of thumbnails above the card (above, because the tree is flipped) */
+  .ft-gen { display: flex; flex-direction: column; align-items: center; }
+  .ft-gen-list { display: grid; grid-template-columns: repeat(2, 46px); gap: 6px; margin-top: 10px; } /* 2 wide: stays within the card's column */
+  .ft-gen-list > li.ft-node { padding: 0; }
+  .ft-gen-list .ft-card { width: 46px; padding: 2px; border-width: 2px; }
+  .ft-gen-list .ft-card > img:not(.ft-eye) { width: 38px; height: 38px; }
+  .ft-gen-list .ft-text, .ft-gen-list .ft-eye, .ft-gen-list .ft-children { display: none; }
+}
+@media (min-width: 900px) and (prefers-reduced-motion: reduce) {
+  .ft-card:hover { transform: scaleY(-1); }
+  .ft-under .ft-card:hover { transform: none; }
 }
 
 /* Section anchors on the About page: start each section below the previous section's floated snap */
