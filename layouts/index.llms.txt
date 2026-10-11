@@ -15,6 +15,9 @@ Downloadable files live on https://files.marmalade.you. Each lab page's files ca
 {{- with site.GetPage "/lab" }}
 - [{{ .Title }}]({{ .Permalink }}): all source files, drawings, stickers, AI generations and the LoRA
 {{- end }}
+{{- with site.GetPage "/family" }}
+- [{{ .Title }}]({{ .Permalink }}): which piece grew out of which (lab pages list theirs under "based_on"), plus the outside work that inspired them ("inspired_by", which belongs to its creators)
+{{- end }}
 {{- with site.GetPage "/community" }}
 - [{{ .Title }}]({{ .Permalink }}): fan art and things other people made with Marmalade
 {{- end }}
@@ -26,7 +29,7 @@ Downloadable files live on https://files.marmalade.you. Each lab page's files ca
 {{ range (where site.RegularPages "Section" "lab").ByDate.Reverse }}
 {{- $desc := .Params.summary | default .Description -}}
 {{- if not $desc }}{{ with findRE `(?s)<p>.*?</p>` .Content 1 }}{{ $desc = index . 0 }}{{ end }}{{ end }}
-- [{{ .Title }}]({{ .Permalink }}) ({{ .Date.Format "2006-01-02" }}{{ with .Params.tags }}; {{ delimit . ", " }}{{ end }}{{ with .Params.license }}; license: {{ . }}{{ end }}){{ with $desc }}: {{ . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200 | htmlUnescape }}{{ end }}
+- [{{ .Title }}]({{ .Permalink }}) ({{ .Date.Format "2006-01-02" }}{{ with .Params.tags }}; {{ delimit . ", " }}{{ end }}{{ with .Params.license }}; license: {{ . }}{{ end }}{{ with .Params.inspired_by }}; inspired by: {{ range $i, $g := . }}{{ if $i }}, {{ end }}{{ $g.name }}{{ with $g.by }} by {{ . }}{{ end }}{{ with $g.from }} ({{ . }}){{ end }}{{ end }}{{ end }}){{ with $desc }}: {{ . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200 | htmlUnescape }}{{ end }}
 {{- end }}
 
 ## Optional
