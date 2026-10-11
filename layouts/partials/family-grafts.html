@@ -1,0 +1,29 @@
+{{- /*
+  Grafts on the family tree: a lab page's `inspired_by` as strips of washi tape wrapped round the
+  branch under its card (like real grafting tape), linking out to whoever made the thing. The tape
+  colour says what kind of inspiration it is. At most two strips; past that, the second one
+  becomes "+N more" and links to the page.
+  Expects: the lab page.
+*/ -}}
+{{- $p := . -}}
+{{- $grafts := slice -}}
+{{- range default (slice) $p.Params.inspired_by }}{{ if not (in (slice "seed" "spark") .kind) }}{{ $grafts = $grafts | append . }}{{ end }}{{ end -}}
+{{- /* (seeds and sparks are drawn under the roots instead, see family-roots.html) */ -}}
+{{- with $grafts }}
+{{- $show := cond (gt (len .) 2) (first 1 .) . }}
+<div class="ft-grafts">
+  {{- range $show }}
+  {{- $i := partial "graft-info.html" . }}
+  <a class="ft-graft washi washi--{{ $i.kind }}"{{ with .url }} href="{{ . }}" target="_blank" rel="noopener noreferrer"{{ end }} title="{{ $i.title }}">
+    <span class="ft-graft-name">{{ .name }}{{ if .url }}&nbsp;↗{{ end }}</span>
+    <span class="ft-graft-sub">{{ with .by }}by {{ . }}{{ else }}{{ $i.who | default $i.label }}{{ end }}</span>
+  </a>
+  {{- end }}
+  {{- if gt (len .) 2 }}
+  <a class="ft-graft washi" href="{{ $p.RelPermalink }}" title="See everything that inspired {{ $p.Title }}">
+    <span class="ft-graft-name">+{{ sub (len .) 1 }} more</span>
+    <span class="ft-graft-sub">inspirations</span>
+  </a>
+  {{- end }}
+</div>
+{{- end -}}

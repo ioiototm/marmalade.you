@@ -1,13 +1,14 @@
 {{- /*
   Picture URL for a lab page, sized for small cards.
-  Expects: (dict "page" <lab page> "image" <optional file name in the page folder>)
+  Expects: (dict "page" <lab page> "image" <optional file name in the page folder> "width" <optional px, default 600>)
   Order: the named file, then the bundle thumb, then front matter `image:`.
-  Bundle images are resized to 600px WebP (originals can be 1-2 MB PNGs).
+  Bundle images are resized to WebP (originals can be 1-2 MB PNGs).
 */ -}}
 {{- $p := .page -}}
+{{- $width := .width | default 600 -}}
 {{- $res := false -}}
 {{- with .image }}{{ $res = $p.Resources.Get . }}{{ end -}}
 {{- if not $res }}{{ $res = $p.Resources.GetMatch "*thumb*" }}{{ end -}}
 {{- $url := "" -}}
-{{- with $res }}{{ $url = (.Resize "600x webp").RelPermalink }}{{ else }}{{ with $p.Params.image }}{{ $url = . }}{{ end }}{{ end -}}
+{{- with $res }}{{ $url = (.Resize (printf "%dx webp" $width)).RelPermalink }}{{ else }}{{ with $p.Params.image }}{{ $url = . }}{{ end }}{{ end -}}
 {{- return $url -}}

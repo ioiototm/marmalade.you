@@ -4,12 +4,14 @@ remixes:
   # - title: "Hand-drawn sticker sheet"
   #   author: ""            # blank/omitted = Anonymous
   #   link: ""              # optional
-  #   license: "CC0"        # optional (when "CC0", shows the CC0 stamp)
+  #   license: "CC0"        # optional: "CC0" releases it to the public domain (permanent!) and shows
+  #                         # the CC0 eye. Only with the artist's consent (form or Pull Request boxes).
   #   image: "/images/remixes/sticker-sheet.png"  # add file under static/images/remixes/
   #   thumbnail: "/images/remixes/sticker-sheet-thumb.png"  # optional still frame (for GIFs)
   #   note: "Scanned from paper, cleaned up in Krita."
   #   type: "Art"
   #   date: "2026-01-11"
+  #   based_on: ["marmalade-origin"]  # optional: lab page(s) it grew out of (family tree)
   #
   # - title: "Marmalade fan animation"
   #   author: "@yourhandle"
@@ -28,6 +30,7 @@ remixes:
     note: "A clean retraced lineart of [one of the earliest Marmalade drawings](/lab/marmalade-origin/)."
     type: "Art"
     date: "2025-02-19"
+    based_on: ["marmalade-origin"]
 
   - title: "Marmalade Bead Art"
     author: "Nycto"
@@ -38,3 +41,4 @@ remixes:
     note: "A slideshow of the bead art process Nycto made from start to finish (click to view). Based on the [original pixel art](/lab/marmalade-pixelart-bust)."
     type: "Bead Art"
     date: "2026-06-08"
+    based_on: ["marmalade-pixelart-bust"]

@@ -10,6 +10,7 @@ image: "/stickers/marmalade-uppies.png"
 summary: "A super cute tiny Marmalade looking up and asking for her uppies."
 license: "CC0"
 source: "marmalade-uppies"
+based_on: ["marmalade-curious"]  # family tree: what this piece grew out of
 ---
 
 A tiny Marmalade sticker of her looking up and asking for her uppies.

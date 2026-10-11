@@ -1,0 +1,44 @@
+{{- /*
+  One branch of the family tree: a lab page and, nested under it, everything that grew out of it.
+  Expects: (dict "page" <lab page> "depth" <int>)
+  Recursive; stops at depth 10 so a based_on loop can't hang the build.
+  Markup is a plain nested list: CSS draws it as a tree growing upwards on wide screens
+  and as an indented list on phones.
+*/ -}}
+{{- $p := .page -}}
+{{- $depth := .depth | default 0 -}}
+{{- $kids := partial "lineage-children.html" (dict "page" $p) -}}
+<li class="ft-node" id="ft-{{ $p.File.ContentBaseName }}">
+  {{ partial "family-card.html" $p }}
+  {{- partial "family-grafts.html" $p }}
+  {{- if and (lt $depth 10) (or $kids.explicit $kids.remixes $kids.generated) }}
+  <ul class="ft-children">
+    {{- range sort $kids.explicit "Date" }}
+    {{ partial "family-node.html" (dict "page" . "depth" (add $depth 1)) }}
+    {{- end }}
+    {{- range $kids.remixes }}
+    {{ partial "family-community-node.html" (dict "remix" . "depth" (add $depth 1)) }}
+    {{- end }}
+    {{- with $kids.generated }}
+    <li class="ft-node">
+      <details class="ft-gen">
+        <summary class="ft-card">
+          <span class="ft-stack">
+            {{- range first 3 . }}<img src="{{ partial "lab-image-url.html" (dict "page" . "width" 160) }}" alt="" loading="lazy" />{{ end -}}
+          </span>
+          <span class="ft-text">
+            <span class="ft-title">{{ len . }} generations</span>
+            <span class="ft-meta">made with this · click to open</span>
+          </span>
+        </summary>
+        <ul class="ft-gen-list">
+          {{- range . }}
+          {{ partial "family-node.html" (dict "page" . "depth" (add $depth 2)) }}
+          {{- end }}
+        </ul>
+      </details>
+    </li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</li>

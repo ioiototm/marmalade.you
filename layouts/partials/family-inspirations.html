@@ -1,0 +1,71 @@
+{{- /*
+  Mal's inspirations (bottom of /family/): a thank-you postcard for every graft, from every lab
+  page's `inspired_by` (matched by name; styles don't get one, there's nobody to write to). The Mal
+  pieces it inspired are the stamps; the creator gets
+  the address (their website) and the link. Text and links only: their work belongs to them, so we
+  send people their way instead of showing it here.
+  Expects: the /family/ page. The text above the postcards is its `inspirations` front matter.
+*/ -}}
+{{- $page := . -}}
+{{- $groups := dict -}}
+{{- $order := dict "spark" 1 "seed" 2 "mascot" 3 "character" 4 "art" 5 "media" 6 "style" 7 "thanks" 8 -}}
+{{- range (where site.RegularPages "Section" "lab").ByDate -}}
+  {{- $p := . -}}
+  {{- range where (default (slice) .Params.inspired_by) "kind" "!=" "style" -}}
+    {{- $key := urlize .name -}}
+    {{- with index $groups $key -}}
+      {{- $groups = merge $groups (dict $key (merge . (dict "pieces" (.pieces | append $p)))) -}}
+    {{- else -}}
+      {{- $kind := default "character" .kind -}}
+      {{- $groups = merge $groups (dict $key (dict "g" . "pieces" (slice $p) "sort" (printf "%d %s" (index $order $kind | default 9) (lower .name)))) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $groups }}
+{{- $list := slice -}}
+{{- range . }}{{ $list = $list | append . }}{{ end -}}
+<section class="inspirations" id="inspirations">
+  <h2 class="h2">Mal's inspirations</h2>
+  {{- with $page.Params.inspirations }}
+  {{ $page.RenderString (dict "display" "block") . }}
+  {{- end }}
+  <div class="pc-grid">
+    {{- range sort $list "sort" }}
+    {{- $g := .g }}
+    {{- $pieces := .pieces }}
+    {{- $i := partial "graft-info.html" $g }}
+    {{- $to := $g.by | default $g.from | default $g.name }}
+    {{- $thing := cond (eq $to $g.name) (index (dict "style" "the style" "thanks" "all the help") $i.kind | default "the inspiration") $g.name }}
+    {{- $first := index $pieces 0 }}
+    <article class="postcard" id="inspiration-{{ urlize $g.name }}">
+      <div class="pc-inner">
+        <div class="pc-message">
+          <p>Dear {{ $to }},</p>
+          <p>{{ with $g.message }}{{ . }}{{ else }}thank you for {{ $thing }}! Look what came out of it →{{ end }}</p>
+          <p class="pc-sign">♡ Mal</p>
+          {{- with $g.note }}
+          <p class="pc-ps">P.S. {{ . }}</p>
+          {{- end }}
+        </div>
+        <span class="pc-divider" aria-hidden="true"></span>
+        <div class="pc-back">
+          <div class="pc-stamps">
+            <span class="pc-postmark" aria-hidden="true">{{ $first.Date.Format "Jan" }}<br>{{ $first.Date.Format "2006" }}</span>
+            {{- range $pieces }}
+            <a class="pc-stamp" href="{{ .RelPermalink }}" title="{{ .Title }}"><span class="pc-stamp-paper"><img src="{{ partial "lab-image-url.html" (dict "page" . "width" 120) }}" alt="{{ .Title }}" loading="lazy" /></span></a>
+            {{- end }}
+          </div>
+          <div class="pc-address">
+            <div class="pc-line pc-to">{{ with $g.by_url }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $to }}</a>{{ else }}{{ $to }}{{ end }}</div>
+            {{- with $g.url }}
+            <div class="pc-line"><a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ strings.TrimPrefix "www." (urls.Parse .).Host }} ↗</a></div>
+            {{- end }}
+            <div class="pc-kind">{{ $i.label }}</div>
+          </div>
+        </div>
+      </div>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end -}}

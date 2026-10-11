@@ -10,6 +10,7 @@ image: "/stickers/marmalade-smug.png"
 summary: "A smug looking Marmalade sticker."
 license: "CC0"
 source: "marmalade-smug"
+based_on: ["marmalade-rock"]  # family tree: what this piece grew out of
 ---
 
 A smug Marmalade sticker, nice and simple.

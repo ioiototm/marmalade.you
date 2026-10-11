@@ -10,6 +10,7 @@ image: "/stickers/marmalade-snug.png"
 summary: "A super cute tiny Marmalade sleeping cozily under a blanket."
 license: "CC0"
 source: "marmalade-snug"
+based_on: ["marmalade-curious"]  # family tree: what this piece grew out of
 ---
 
 A tiny Marmalade sticker of her under a blanket.

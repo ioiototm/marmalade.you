@@ -13,11 +13,46 @@
   <article class="card lab-item-detail">
     {{ partial "license-stamp.html" (dict "license" .Params.license "link" true) }}
     <header class="lab-header">
+      {{/* Credits: outside inspiration as washi tape stuck across the top of the card (see partials/graft-info.html) */}}
+      {{ with .Params.inspired_by }}
+      <div class="lab-credits">
+        {{ range . }}
+          {{ $i := partial "graft-info.html" . }}
+          <a class="credit-tape washi washi--{{ $i.kind }}"{{ with .url }} href="{{ . }}" target="_blank" rel="noopener noreferrer"{{ end }} title="{{ $i.title }}">{{ lower $i.lead }} <b>{{ .name }}</b>{{ with $i.who }} · {{ . }}{{ end }}{{ if .url }} ↗{{ end }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
       <h1 class="h1">{{ .Title }}</h1>
+      {{/* Family tree: what this grew out of, and how often it's been built on */}}
+      {{ $kids := partial "lineage-children.html" (dict "page" .) }}
+      {{ $parents := slice }}
+      {{ range default (slice) .Params.based_on }}
+        {{ if hasPrefix . "community:" }}
+          {{ $id := strings.TrimPrefix "community:" . }}
+          {{ range where (default (slice) site.Data.remixes.remixes) "title" "!=" "" }}{{ if eq (.title | urlize) $id }}{{ $parents = $parents | append (dict "title" (printf "%s by %s" .title (default "Anonymous" .author)) "url" (printf "/community/#%s" $id)) }}{{ end }}{{ end }}
+        {{ else }}
+          {{ with site.GetPage (printf "/lab/%s" .) }}{{ $parents = $parents | append (dict "title" .Title "url" .RelPermalink) }}{{ end }}
+        {{ end }}
+      {{ end }}
       <div class="lab-meta">
         Added {{ .Date.Format "January 2, 2006" }}
         {{ if ne .Lastmod .Date }}
           <span class="lab-meta-sep">·</span> Updated {{ .Lastmod.Format "January 2, 2006" }}
+        {{ end }}
+        {{ with $parents }}
+          <span class="lab-meta-sep">·</span>
+          {{ if and (eq $.File.ContentBaseName site.Params.familyTrunk) (gt (len .) 1) }}
+            grew from <a href="/family/#roots">{{ len . }} early drawings</a>
+          {{ else if gt (len .) 3 }}
+            grew from <a href="/family/#ft-{{ $.File.ContentBaseName }}">{{ len . }} pieces</a>
+          {{ else }}
+            grew from {{ range $i, $p := . }}{{ if $i }} and {{ end }}<a href="{{ $p.url }}">{{ $p.title }}</a>{{ end }}
+          {{ end }}
+        {{ end }}
+        {{ if gt $kids.count 0 }}
+          <span class="lab-meta-sep">·</span> <a href="/family/#ft-{{ .File.ContentBaseName }}">⑂ forked {{ $kids.count }} time{{ if ne $kids.count 1 }}s{{ end }}</a>
+        {{ else if $parents }}
+          <span class="lab-meta-sep">·</span> <a href="/family/#ft-{{ .File.ContentBaseName }}">⑂ family tree</a>
         {{ end }}
       </div>
       {{/* Tool / format full-name lookup */}}

@@ -1,0 +1,14 @@
+{{- /*
+  One card on the family tree: a lab page's picture, title, date and licence, with the CC0 eye.
+  Used by family-node.html (the branches) and family-roots.html (the roots). Expects: the lab page.
+*/ -}}
+{{- $p := . -}}
+{{- $licence := cond (eq (upper (default "" $p.Params.license)) "CC0") "CC0" (default "" $p.Params.license) -}}
+<a class="ft-card" href="{{ $p.RelPermalink }}" title="{{ $p.Title }}">
+  <img src="{{ partial "lab-image-url.html" (dict "page" $p "width" 160) }}" alt="" loading="lazy" />
+  <span class="ft-text">
+    <span class="ft-title">{{ $p.Title }}</span>
+    <span class="ft-meta">{{ $p.Date.Format "Jan 2006" }}{{ with $licence }} · {{ . }}{{ end }}</span>
+  </span>
+  {{- if eq $licence "CC0" }}<img class="ft-eye" src="/stickers/CC0-Marmalade-Eye.png" alt="CC0" />{{ end }}
+</a>

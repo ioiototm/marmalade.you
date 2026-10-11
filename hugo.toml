@@ -8,6 +8,11 @@ timeZone = "Europe/London"
   lastmod = ["lastmod", ":default"]
 
 [params]
+  # Family tree (/family/): the trunk stands on the grass. Everything without its own `based_on` grows
+  # out of it, and the pieces in its own `based_on` are drawn under the grass as its roots, with the
+  # main root (the goth design) in the middle.
+  familyTrunk = "marmalade-origin"
+  familyRoot = "marmalade-goth"
   tagline = "Marmalade, a CC0 catgirl anyone can use for anything."
   modeLabel = "decorate"
   cc0StampSrc = "/stickers/CC0-Marmalade-Eye.png"

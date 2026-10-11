@@ -1,0 +1,52 @@
+{{- /*
+  What grew out of a piece, for the family tree and the "forked N times" line.
+  Expects: (dict "page" <lab page>) or (dict "key" "community:<urlized title>") for an In The Wild piece.
+  A piece's children are whatever lists its key in `based_on`: a lab page's key is its folder
+  name, an In The Wild piece's key is "community:" + its urlized title.
+  Returns: dict with
+    "explicit"  lab pages whose `based_on` lists this key. For the family trunk (params.familyTrunk)
+                this also includes pieces with no `based_on` that have their own descendants:
+                everything is Mal, so they grow out of her origin. (Not the trunk's own roots,
+                the pieces in its `based_on`: those sit under the grass.)
+    "generated" lab pages made with it (pages with `generation:` carrying its `related_tag`, e.g. the LoRA)
+    "remixes"   In The Wild entries (data/remixes.yaml) whose `based_on` lists this key
+    "count"     total of the three
+*/ -}}
+{{- $p := .page -}}
+{{- $slug := .key -}}
+{{- if not $slug }}{{ $slug = $p.File.ContentBaseName }}{{ end -}}
+{{- $trunk := site.Params.familyTrunk | default "marmalade-origin" -}}
+{{- $lab := where site.RegularPages "Section" "lab" -}}
+{{- $explicit := slice -}}
+{{- $generated := slice -}}
+{{- $remixes := slice -}}
+{{- range $lab -}}
+  {{- if in (default (slice) .Params.based_on) $slug }}{{ $explicit = $explicit | append . }}{{ end -}}
+{{- end -}}
+{{- if eq $slug $trunk -}}
+  {{- $roots := default (slice) $p.Params.based_on -}}
+  {{- range $lab -}}
+    {{- if and (ne .File.ContentBaseName $trunk) (not (in $roots .File.ContentBaseName)) (not .Params.based_on) (not .Params.generation) -}}
+      {{- if gt (partial "lineage-children.html" (dict "page" .)).count 0 }}{{ $explicit = $explicit | append . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $p -}}
+{{- with .Params.related_tag -}}
+  {{- $tag := . -}}
+  {{- range $lab -}}
+    {{- if and (ne .RelPermalink $p.RelPermalink) .Params.generation (in .Params.tags $tag) (not .Params.based_on) -}}
+      {{- /* a generation someone built on gets its own branch instead of hiding in the collapsed group */ -}}
+      {{- if gt (partial "lineage-children.html" (dict "page" .)).count 0 -}}
+        {{- $explicit = $explicit | append . -}}
+      {{- else -}}
+        {{- $generated = $generated | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- range default (slice) site.Data.remixes.remixes -}}
+  {{- if in (default (slice) .based_on) $slug }}{{ $remixes = $remixes | append . }}{{ end -}}
+{{- end -}}
+{{- return dict "explicit" $explicit "generated" (sort $generated "Date" "desc") "remixes" $remixes "count" (add (len $explicit) (len $generated) (len $remixes)) -}}

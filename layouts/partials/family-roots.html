@@ -1,0 +1,57 @@
+{{- /*
+  Under the grass, below the trunk (params.familyTrunk, the origin drawing): its roots are the pieces
+  the trunk grew out of (its `based_on`), the drawings from before she had a name. The main root
+  (params.familyRoot) goes in the middle, the others by date around it, older on the left.
+  Under them, the seed (`inspired_by` entries with kind "seed" on the roots: the Gothfield LoRA), and
+  under that, the spark it came from (kind "spark": the Gothfield trend). Text and a link only, like
+  every other outside inspiration.
+  Expects: (dict "trunk" <trunk page> "main" <main root's folder name>)
+*/ -}}
+{{- $trunk := .trunk -}}
+{{- $roots := slice -}}
+{{- range default (slice) $trunk.Params.based_on }}{{ with site.GetPage (printf "/lab/%s" .) }}{{ $roots = $roots | append . }}{{ end }}{{ end -}}
+{{- $mainRoot := slice -}}
+{{- $others := slice -}}
+{{- range $roots }}{{ if eq .File.ContentBaseName $.main }}{{ $mainRoot = $mainRoot | append . }}{{ else }}{{ $others = $others | append . }}{{ end }}{{ end -}}
+{{- $others = sort $others "Date" -}}
+{{- $half := div (len $others) 2 -}}
+{{- $ordered := (first $half $others) | append $mainRoot | append (after $half $others) -}}
+{{- $seeds := slice -}}
+{{- $sparks := slice -}}
+{{- $seen := slice -}}
+{{- range $roots }}{{ range default (slice) .Params.inspired_by }}
+  {{- $key := printf "%s/%s" .kind (urlize .name) -}}
+  {{- if not (in $seen $key) -}}
+    {{- if eq .kind "seed" }}{{ $seeds = $seeds | append . }}{{ $seen = $seen | append $key }}{{ end -}}
+    {{- if eq .kind "spark" }}{{ $sparks = $sparks | append . }}{{ $seen = $seen | append $key }}{{ end -}}
+  {{- end -}}
+{{- end }}{{ end -}}
+<div class="ft-under{{ if not $ordered }} ft-under--bare{{ end }}" id="roots">
+  {{- with $ordered }}
+  <div class="ft-roots-wrap">
+    <span class="ft-under-note">before she had a name…</span>
+    <ul class="ft-roots">
+      {{- range . }}
+      <li class="ft-node ft-rootling" id="ft-{{ .File.ContentBaseName }}">
+        {{ partial "family-card.html" . }}
+        <span class="ft-tip" aria-hidden="true"></span>
+      </li>
+      {{- end }}
+    </ul>
+  </div>
+  {{- end }}
+  {{- range slice $seeds $sparks }}
+  {{- with . }}
+  <div class="ft-seeds">
+    {{- range . }}
+    {{- $note := cond (eq .kind "spark") "the spark: where it all started" (cond (gt (len $sparks) 0) "the seed" "the seed: where it all started") }}
+    <a class="ft-seed ft-seed--{{ .kind }}"{{ with .url }} href="{{ . }}" target="_blank" rel="noopener noreferrer"{{ end }} title="{{ .name }}{{ with .by }} by {{ . }}{{ end }}: {{ $note }}">
+      <span class="ft-seed-name">{{ .name }}{{ if .url }}&nbsp;↗{{ end }}</span>
+      {{ with .from }}<span class="ft-seed-by">{{ . }}</span>{{ else }}{{ with .by }}<span class="ft-seed-by">by {{ . }}</span>{{ end }}{{ end }}
+      <span class="ft-seed-note">{{ $note }}</span>
+    </a>
+    {{- end }}
+  </div>
+  {{- end }}
+  {{- end }}
+</div>

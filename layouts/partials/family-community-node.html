@@ -1,0 +1,29 @@
+{{- /*
+  An In The Wild piece in the family tree (dashed card), plus anything based on it.
+  Expects: (dict "remix" <remixes.yaml entry> "depth" <int>). Its key is "community:" + urlized title.
+*/ -}}
+{{- $r := .remix -}}
+{{- $depth := .depth | default 0 -}}
+{{- $id := $r.title | urlize -}}
+{{- $cc0 := eq (upper (default "" $r.license)) "CC0" -}}
+{{- $kids := partial "lineage-children.html" (dict "key" (printf "community:%s" $id)) -}}
+<li class="ft-node ft-node--community" id="ft-community-{{ $id }}">
+  <a class="ft-card" href="/community/#{{ $id }}" title="{{ $r.title }}">
+    <img src="{{ default $r.image $r.thumbnail }}" alt="" loading="lazy" />
+    <span class="ft-text">
+      <span class="ft-title">{{ $r.title }}</span>
+      <span class="ft-meta">by {{ default "Anonymous" $r.author }} · {{ if $cc0 }}CC0{{ else }}all rights theirs{{ end }}</span>
+    </span>
+    {{- if $cc0 }}<img class="ft-eye" src="/stickers/CC0-Marmalade-Eye.png" alt="CC0" />{{ end }}
+  </a>
+  {{- if and (lt $depth 10) (or $kids.explicit $kids.remixes) }}
+  <ul class="ft-children">
+    {{- range sort $kids.explicit "Date" }}
+    {{ partial "family-node.html" (dict "page" . "depth" (add $depth 1)) }}
+    {{- end }}
+    {{- range $kids.remixes }}
+    {{ partial "family-community-node.html" (dict "remix" . "depth" (add $depth 1)) }}
+    {{- end }}
+  </ul>
+  {{- end }}
+</li>

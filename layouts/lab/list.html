@@ -1,39 +1,63 @@
 {{ define "main" }}
-  <div class="page-head">
+  <div class="page-head src-head">
+    {{/* Pinned note: what the eye means, and the way to the family tree */}}
+    <aside class="src-note">
+      <p><img class="src-note-eye" src="{{ site.Params.cc0StampSrc | default "/stickers/CC0-Marmalade-Eye.png" }}" alt="The green CC0 eye" /> = CC0, it's yours!</p>
+      {{ with site.GetPage "/family" }}<p><a href="{{ .RelPermalink }}">⑂ see the family tree →</a></p>{{ end }}
+    </aside>
     <h1 class="title">{{ .Title }}</h1>
     <div class="prose">
       {{ .Content }}
     </div>
   </div>
 
-  {{/* Collect all tags, tools, and formats from the pages in this section */}}
+  {{/* Collect the tags, tools and formats from the pages in this section: one row of filters each */}}
   {{ $tags := slice }}
+  {{ $tools := slice }}
+  {{ $formats := slice }}
   {{ range .Pages }}
-    {{ if .Params.tags }}{{ $tags = $tags | append .Params.tags }}{{ end }}
-    {{ if .Params.tools }}{{ $tags = $tags | append .Params.tools }}{{ end }}
-    {{ if .Params.formats }}{{ $tags = $tags | append .Params.formats }}{{ end }}
+    {{ with .Params.tags }}{{ $tags = $tags | append . }}{{ end }}
+    {{ with .Params.tools }}{{ $tools = $tools | append . }}{{ end }}
+    {{ with .Params.formats }}{{ $formats = $formats | append . }}{{ end }}
   {{ end }}
-  {{ $tags = $tags | uniq | sort }}
+
+  {{/* Tool / format full names (tooltips), and short labels for the long ones */}}
+  {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" "comfyui" "ComfyUI" }}
+  {{ $toolLabels := dict "csp" "clip studio" "davinci-resolve" "resolve" }}
+  {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" "md" "Markdown document" "pdf" "PDF document" "safetensors" "Safetensors model" }}
 
   <div class="lab-interface">
-    {{/* Filter Controls */}}
-    <div class="filter-bar">
-      <span class="filter-label">Filter:</span>
-      <button class="filter-btn active" data-filter="all">All</button>
-      {{ range $tags }}
-        <button class="filter-btn" data-filter="{{ lower . }}">{{ . | humanize }}</button>
+    {{/* Filter Controls: strips of washi tape (lab-filter.js only needs .filter-btn and data-filter) */}}
+    <div class="filter-bar" role="group" aria-label="Filter the pieces">
+      <div class="filter-row">
+        <span class="filter-label">what</span>
+        <button type="button" class="filter-btn washi washi--yellow active" data-filter="all">all</button>
+        {{ range $tags | uniq | sort }}
+          <button type="button" class="filter-btn washi washi--yellow" data-filter="{{ lower . }}">{{ replace (lower .) "-" " " }}</button>
+        {{ end }}
+      </div>
+      {{ with $tools | uniq | sort }}
+      <div class="filter-row">
+        <span class="filter-label">made with</span>
+        {{ range . }}
+          <button type="button" class="filter-btn washi" data-filter="{{ lower . }}"{{ with index $toolNames . }} title="{{ . }}"{{ end }}>{{ index $toolLabels . | default (replace (lower .) "-" " ") }}</button>
+        {{ end }}
+      </div>
+      {{ end }}
+      {{ with $formats | uniq | sort }}
+      <div class="filter-row">
+        <span class="filter-label">files</span>
+        {{ range . }}
+          <button type="button" class="filter-btn washi washi--blue" data-filter="{{ lower . }}"{{ with index $formatNames . }} title="{{ . }}"{{ end }}>.{{ lower . }}</button>
+        {{ end }}
+      </div>
       {{ end }}
     </div>
-    <div class="lab-legend">
-      <img src="/stickers/CC0-Marmalade-Eye.png" alt="CC0 eye" class="lab-legend-icon" />
-      <span>Eye mark = CC0 / public domain</span>
-    </div>
 
-    {{/* Tool / format full-name lookup */}}
-    {{ $toolNames := dict "csp" "Clip Studio Paint" "penup" "Samsung PENUP" "aseprite" "Aseprite" "davinci-resolve" "DaVinci Resolve" "pngtube-remix" "PNGTube Remix" "comfyui" "ComfyUI" }}
-    {{ $formatNames := dict "clip" "Clip Studio Paint file" "png" "PNG image" "gif" "Animated GIF" "pngremix" "PNGTube Remix file" "md" "Markdown document" "pdf" "PDF document" "safetensors" "Safetensors model" }}
-
-    <div class="mini-grid" id="lab-grid">
+    {{/* The pieces, as photos taped to the page. "new!" and "updated!" go by the last build, so they
+         drop off on the first rebuild after 30 days. */}}
+    {{ $fresh := now.AddDate 0 0 -30 }}
+    <div class="src-grid" id="lab-grid">
       {{ range .Pages.ByLastmod.Reverse }}
         {{/* Create a space-separated string of tags for the data attribute */}}
         {{ $allTags := slice }}
@@ -44,36 +68,23 @@
         {{ range $allTags }}{{ $lowerTags = $lowerTags | append (lower .) }}{{ end }}
         {{ $pageTags := delimit $lowerTags " " }}
 
-        <a class="mini-card lab-item" href="{{ .RelPermalink }}" data-tags="{{ $pageTags }}">
+        <a class="src-card lab-item" href="{{ .RelPermalink }}" data-tags="{{ $pageTags }}">
           {{ partial "license-stamp.html" (dict "license" .Params.license) }}
-
-          {{/* Thumbnail: prefer a bundled *thumb* resource, fallback to .Params.image */}}
-          {{ $thumb := "" }}
-          {{ if .Params.image }}
-            {{ $thumb = .Params.image }}
-          {{ end }}
-          
-          {{ $resources := .Resources.Match "*thumb*" }}
-          {{ if gt (len $resources) 0 }}
-             {{ $thumb = ($resources.GetMatch "*thumb*").RelPermalink }}
-          {{ end }}
-
-          {{ partial "thumb-placeholder.html" (dict "src" $thumb "alt" .Title "variant" "thumb-placeholder--lab" "fit" "contain") }}
-          
-          <div class="mini-meta">
-            <div class="mini-title">{{ .Title }}</div>
-            <div class="mini-date">{{ if ne .Lastmod .Date }}Updated {{ .Lastmod.Format "Jan 2, 2006" }}{{ else }}{{ .Date.Format "Jan 2, 2006" }}{{ end }}</div>
-            <div class="mini-note">{{ .Summary | truncate 60 }}</div>
-            <div class="mini-tags">
-              {{ range .Params.tags }}
-                <span class="mini-tag">#{{ . }}</span>
-              {{ end }}
-            </div>
-          </div>
+          <span class="src-photo">
+            {{ with partial "lab-image-url.html" (dict "page" . "width" 560) }}<img src="{{ . }}" alt="" loading="lazy" />{{ end }}
+            {{ if .Date.After $fresh }}<span class="src-sticker src-sticker--new">new!</span>
+            {{ else if .Lastmod.After $fresh }}<span class="src-sticker src-sticker--updated">updated!</span>{{ end }}
+            {{ with .Params.timelapse }}<span class="src-sticker src-sticker--timelapse">▶ timelapse</span>{{ end }}
+            {{/* the summary, as a note stuck on the photo when you hover */}}
+            {{ with .Summary | plainify | htmlUnescape | strings.TrimSpace }}<span class="src-summary">{{ . | truncate 160 | htmlUnescape }}</span>{{ end }}
+          </span>
+          <span class="src-title">{{ .Title }}</span>
+          <span class="src-date">{{ if ne .Lastmod .Date }}Updated {{ .Lastmod.Format "Jan 2, 2006" }}{{ else }}{{ .Date.Format "Jan 2, 2006" }}{{ end }}</span>
+          {{ with .Params.tags }}<span class="src-tags">{{ range . }}<span>#{{ . }}</span> {{ end }}</span>{{ end }}
         </a>
       {{ end }}
     </div>
-    
+
     {{ if eq (len .Pages) 0 }}
       <div class="empty-state">
         <p>The lab is currently empty. Check back soon for starter fuel!</p>

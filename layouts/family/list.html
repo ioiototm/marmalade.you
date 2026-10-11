@@ -1,0 +1,51 @@
+{{ define "main" }}
+<div class="page-head">
+  <h1 class="title">{{ .Title }}</h1>
+  <div class="prose">{{ .Content }}</div>
+</div>
+
+{{- /*
+  The trunk (params.familyTrunk, the origin drawing) stands on the grass: everything above grows out
+  of it, everything under the grass is what it grew out of (its roots, see family-roots.html).
+  lineage-children.html hangs pieces without a `based_on` that have descendants off the trunk;
+  pieces with no connections at all are left out and counted at the bottom.
+  On wide screens the frame spans the whole window and assets/js/family-tree.js handles
+  fitting, zooming and drag-to-pan.
+*/ -}}
+{{- $trunkSlug := site.Params.familyTrunk | default "marmalade-origin" -}}
+{{- with site.GetPage (printf "/lab/%s" $trunkSlug) }}
+{{- $trunk := . }}
+<div class="ft-frame" data-ft-frame>
+  <div class="family-tree" data-family-tree tabindex="0" role="region" aria-label="Mal's family tree">
+    <div class="ft-world">
+      <ul class="ft-children ft-root">
+        {{ partial "family-node.html" (dict "page" $trunk) }}
+      </ul>
+      {{ partial "family-roots.html" (dict "trunk" $trunk "main" (site.Params.familyRoot | default "")) }}
+    </div>
+  </div>
+  <div class="ft-tools" data-ft-tools hidden>
+    <span class="ft-hint">drag to look around</span>
+    <button type="button" class="ft-tool" data-zoom="out" aria-label="Zoom out" title="Zoom out">−</button>
+    <button type="button" class="ft-tool" data-zoom="in" aria-label="Zoom in" title="Zoom in">+</button>
+    <button type="button" class="ft-tool ft-tool--fit" data-zoom="fit">See it all</button>
+  </div>
+</div>
+{{ $js := resources.Get "js/family-tree.js" }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+
+{{- $roots := default (slice) $trunk.Params.based_on -}}
+{{- $branches := (partial "lineage-children.html" (dict "page" $trunk)).explicit -}}
+{{- $loose := 0 -}}
+{{- range where site.RegularPages "Section" "lab" -}}
+  {{- if and (ne .File.ContentBaseName $trunkSlug) (not (in $roots .File.ContentBaseName)) (not .Params.based_on) (not .Params.generation) (not (in $branches .)) -}}
+    {{- $loose = add $loose 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt $loose 0 }}
+<p class="family-loose muted">…and {{ $loose }} more pieces in <a href="/lab/">The Source</a> that don't have any branches yet. Make something based on one and send it in: that's how the tree grows.</p>
+{{- end }}
+
+{{ partial "family-inspirations.html" $ }}
+{{- end }}
+{{ end }}

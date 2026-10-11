@@ -4,6 +4,31 @@
 {{- end -}}
 {{- $turnstileKey := site.Params.submit.turnstilekey -}}
 
+{{- /* Everything you can pick under "Based on": lab pieces (key = folder name) and
+       In The Wild pieces (key = "community:" + urlized title), newest first */ -}}
+{{- $opts := slice -}}
+{{- range (where site.RegularPages "Section" "lab").ByDate.Reverse -}}
+  {{- $opts = $opts | append (dict
+      "id" .File.ContentBaseName
+      "title" .Title
+      "thumb" (partial "lab-image-url.html" (dict "page" . "width" 120))
+      "meta" (.Date.Format "Jan 2006")
+      "tags" (delimit (default (slice) .Params.tags) " ")
+      "badge" (cond (eq (upper (default "" .Params.license)) "CC0") "CC0" "")
+      "free" true) -}}{{/* free = fine to build on (no CC0 warning): all lab pieces are the site owner's */}}
+{{- end -}}
+{{- range sort (default (slice) site.Data.remixes.remixes) "date" "desc" -}}
+  {{- $opts = $opts | append (dict
+      "id" (printf "community:%s" (.title | urlize))
+      "title" .title
+      "thumb" (default .image .thumbnail)
+      "meta" (printf "by %s" (default "Anonymous" .author))
+      "tags" (printf "community %s" (default "" .type))
+      "author" (default "Anonymous" .author)
+      "badge" (cond (eq (upper (default "" .license)) "CC0") "CC0" "")
+      "free" (eq (upper (default "" .license)) "CC0")) -}}
+{{- end -}}
+
 <form class="form submit-form" data-submit-endpoint="{{ $endpoint }}">
   <div class="submit-honeypot" aria-hidden="true">
     <label>Do not fill this field</label>
@@ -18,6 +43,44 @@
 
   <label>Short Note</label>
   <textarea name="message" placeholder="What did you make? If you have no link, tell me how I can get the file." maxlength="2000"></textarea>
+
+  {{- /* Based on: searchable picker with thumbnails; picks become chips (submit.js) */}}
+  <label for="based-on-search">Based on any Mal pieces? (optional)</label>
+  <div class="bo-picker" data-based-on>
+    <div class="bo-chips" data-bo-chips></div>
+    <div class="bo-search-wrap">
+      <input id="based-on-search" type="text" autocomplete="off" placeholder="Search: sticker, pixel, glam rock…"
+             role="combobox" aria-expanded="false" aria-controls="based-on-list" aria-autocomplete="list" data-bo-search />
+      {{- /* divs, not ul/li: the submit cards style every list (forced display, bullets, margins) */}}
+      <div id="based-on-list" class="bo-list" role="listbox" hidden data-bo-list></div>
+    </div>
+    <button type="button" class="bo-other-toggle" data-bo-other-toggle>Something else / not sure?</button>
+    <input type="text" name="based_on_other" class="bo-other" maxlength="300" hidden
+           placeholder="Describe it, e.g. &quot;the one with the guitar&quot;" data-bo-other />
+  </div>
+  <script type="application/json" data-bo-options>{{ $opts | jsonify | safeJS }}</script>
+
+  {{- /* CC0: opt-in, with an explanation and two required confirmations (checked in submit.js).
+         The text inside [data-cc0-statement] is saved with the submission as the record of
+         what they agreed to; bump data-cc0-version whenever the wording changes. */}}
+  <label class="cc0-opt">
+    <input type="checkbox" name="cc0" data-cc0-toggle />
+    <span>I'd like to release my piece as <strong>CC0</strong> too 💚</span>
+  </label>
+  <div class="cc0-box" hidden data-cc0-box data-cc0-version="cc0-consent-2026-10">
+    <div data-cc0-statement>
+      <p><strong>What this means:</strong> CC0 puts your piece in the public domain, like Mal. Anyone can use it, change it, sell it, or train on it, without asking you or crediting you. <strong>This can't be undone:</strong> once it's out there, it stays free, even if you change your mind later.</p>
+      <p class="cc0-warning" hidden data-cc0-warning></p>
+      <label class="cc0-check">
+        <input type="checkbox" name="cc0_own" />
+        <span><strong>This is my own work</strong>, and I have the right to give it away. It doesn't include anyone else's art, characters or photos that aren't free to use.</span>
+      </label>
+      <label class="cc0-check">
+        <input type="checkbox" name="cc0_permanent" />
+        <span><strong>I understand CC0 is permanent</strong> and I'm waiving my copyright in this piece, as described in the <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0 Universal deed</a>.</span>
+      </label>
+    </div>
+  </div>
 
   {{- if $turnstileKey }}
   <div class="cf-turnstile" data-sitekey="{{ $turnstileKey }}" data-theme="light"></div>

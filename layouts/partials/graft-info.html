@@ -1,0 +1,27 @@
+{{- /*
+  Display bits for one graft: an entry in a lab page's `inspired_by`, something from outside Mal's
+  tree that inspired the piece. Front matter:
+    inspired_by:
+      - name: "Helline"              # required
+        by: "docmorb"                # who made it (a person)
+        by_url: "https://..."        # their page (optional)
+        from: "It's Always Sunny..." # or the show/game/book it comes from
+        url: "https://..."           # where to see it (optional)
+        kind: "character"            # character · art · mascot · media · style · thanks (sets the tape colour)
+                                     # or "seed": what the roots grew from, drawn under them
+                                     # or "spark": what the seed came from, drawn under that
+        cc0: true                    # only if it's CC0 too (e.g. another CC0 mascot)
+        note: "..."                  # the P.S. on its thank-you postcard
+        message: "..."               # your own postcard message, instead of "thank you for …!"
+  Expects: one entry. Returns a dict: kind, label (kind in words), lead ("Inspired by"...),
+  who (by, from, or "CC0 mascot": the second line on the tape), title (one sentence for tooltips).
+*/ -}}
+{{- $g := . -}}
+{{- $kind := default "character" $g.kind -}}
+{{- $label := index (dict "character" "character" "art" "artwork" "mascot" (cond (eq $g.cc0 true) "CC0 mascot" "mascot") "media" "pop culture" "style" "style" "thanks" "thanks!" "seed" "the seed" "spark" "the spark") $kind | default $kind -}}
+{{- $lead := index (dict "thanks" "Thanks to" "style" "Style:" "spark" "Sparked by") $kind | default "Inspired by" -}}
+{{- $who := $g.by | default $g.from | default (cond (eq $kind "mascot") $label "") -}}
+{{- $title := printf "%s %s" $lead $g.name -}}
+{{- with $g.by }}{{ $title = printf "%s by %s" $title . }}{{ end -}}
+{{- with $g.from }}{{ $title = printf "%s, from %s" $title . }}{{ end -}}
+{{- return dict "kind" $kind "label" $label "lead" $lead "who" $who "title" $title -}}

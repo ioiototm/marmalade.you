@@ -1,0 +1,17 @@
+{{- /*
+  Every name you can put in `based_on`, generated from the site: lab pieces by folder name,
+  In The Wild pieces as "community:" + urlized title. For the Git Way instructions on /submit/.
+
+  {{< based-on-keys >}}
+*/ -}}
+<table class="bo-keys">
+  <thead><tr><th>Piece</th><th>Use in <code>based_on</code></th></tr></thead>
+  <tbody>
+    {{- range (where site.RegularPages "Section" "lab").ByDate.Reverse }}
+    <tr><td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td><td><code>"{{ .File.ContentBaseName }}"</code></td></tr>
+    {{- end }}
+    {{- range sort (default (slice) site.Data.remixes.remixes) "date" "desc" }}
+    <tr><td><a href="/community/#{{ .title | urlize }}">{{ .title }}</a> <span class="muted">by {{ default "Anonymous" .author }}</span></td><td><code>"community:{{ .title | urlize }}"</code></td></tr>
+    {{- end }}
+  </tbody>
+</table>
