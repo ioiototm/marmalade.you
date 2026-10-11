@@ -15,7 +15,7 @@ This is the source code for [marmalade.you](https://marmalade.you), where I shar
 
 ## Run locally
 
-You need [Hugo](https://gohugo.io/) (extended edition recommended).
+You need [Hugo](https://gohugo.io/) (extended edition, 0.158 or newer).
 
 ```bash
 hugo server -D
